@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="-175dp">
+
+
+    <RelativeLayout
+        android:layout_width="200dp"
+        android:layout_height="172dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/bg_attendance">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/img_loc"
+            android:layout_width="200dp"
+            android:layout_height="170dp"
+            android:alpha="0.3"
+            android:padding="15dp"
+            android:scaleType="fitCenter"
+
+            android:src="@drawable/icon_attendance"
+            app:riv_corner_radius="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/nunito_semibold"
+            android:gravity="center"
+            android:text="Attendance"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

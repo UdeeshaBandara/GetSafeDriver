@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "lk.hd192.getsafedriver"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -43,10 +43,10 @@ dependencies {
     //Picasso : image render engine
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
     //lottie animation
     implementation 'com.airbnb.android:lottie:3.5.0'
-
+    implementation "androidx.cardview:cardview:1.0.0"
 
     //YOYO animation
     implementation 'com.daimajia.androidanimations:library:2.4@aar'

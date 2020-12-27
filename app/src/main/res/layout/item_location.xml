@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:layout_width="200dp"
+        android:layout_height="260dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_loc">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/img_loc"
+            android:layout_width="200dp"
+            android:layout_height="260dp"
+            android:alpha="0.3"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_road"
+            app:riv_corner_radius="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/nunito_semibold"
+            android:text="Map"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
