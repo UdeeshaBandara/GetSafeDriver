@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "lk.hd192.getsafedriver"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -26,8 +26,37 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'com.google.firebase:firebase-database:19.6.0'
+    implementation 'com.google.firebase:firebase-messaging:21.0.1'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'com.google.firebase:firebase-bom:26.2.0'
+    implementation 'com.google.firebase:firebase-analytics:18.0.0'
+
+    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    //Rounded Image View
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+
+    //Picasso : image render engine
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+
+    //lottie animation
+    implementation 'com.airbnb.android:lottie:3.5.0'
+
+
+    //YOYO animation
+    implementation 'com.daimajia.androidanimations:library:2.4@aar'
+
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-core:18.0.0'
+
+
 
 }
+
+apply plugin: 'com.google.gms.google-services'
