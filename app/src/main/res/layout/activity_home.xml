@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-
+android:background="@color/white"
     android:layout_height="match_parent"
     tools:context=".Home">
 
@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/img_head"
         android:layout_marginHorizontal="10dp"
+     android:background="@color/white"
 
         android:clipToPadding="false"
         android:overScrollMode="never" />

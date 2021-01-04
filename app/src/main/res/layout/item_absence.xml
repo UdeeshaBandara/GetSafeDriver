@@ -1,39 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cell_msg"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    >
 
 
-    <RelativeLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="200dp"
-        android:layout_height="170dp"
-        android:layout_margin="5dp"
-        android:background="@drawable/bg_absence">
+        android:layout_height="260dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:cardUseCompatPadding="true"
 
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/img_loc"
-            android:layout_width="200dp"
-            android:layout_height="170dp"
-            android:alpha="0.3"
-            app:riv_corner_radius="20dp"
-            android:padding="15dp"
+        >
 
-            android:scaleType="fitCenter"
-            android:src="@drawable/icon_absence" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_absence">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/nunito_semibold"
-            android:text="Absence"
-            android:gravity="center"
-            android:layout_marginBottom="5dp"
-            android:layout_centerInParent="true"
-            android:layout_alignParentBottom="true"
-            android:textColor="@color/black"
-            android:textSize="22sp" />
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/img_loc"
+                android:layout_width="200dp"
+                android:layout_height="260dp"
+                android:alpha="0.3"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_absence"
+                />
 
-    </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/nunito_regular"
+                android:gravity="center"
+                android:text="Absence"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 public class Home extends AppCompatActivity {
@@ -47,9 +49,11 @@ public class Home extends AppCompatActivity {
     }
 
     class MessageViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout cellMsg;
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
+            cellMsg = itemView.findViewById(R.id.cell_msg);
         }
     }
 
@@ -133,6 +137,20 @@ public class Home extends AppCompatActivity {
 
                         break;
                     case 1:
+
+                        break;
+                    case 2:
+
+                        break;
+                    case 3:
+                        MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
+                        messageViewHolder.cellMsg.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(getApplicationContext(), Message.class));
+
+                            }
+                        });
 
                         break;
                 }
