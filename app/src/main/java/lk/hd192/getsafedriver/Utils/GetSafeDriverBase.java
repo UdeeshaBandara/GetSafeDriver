@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import lk.hd192.getsafedriver.R;
 
-class GetSafeDriverBase extends AppCompatActivity {
+public class GetSafeDriverBase extends AppCompatActivity {
 
 
 
@@ -100,7 +100,7 @@ class GetSafeDriverBase extends AppCompatActivity {
 
 
 
-    public void showWarningToast(final Dialog dialog, String msg, int type) {
+    public void showToast(final Dialog dialog, String msg, int type) {
 
 
         // Setting dialogview

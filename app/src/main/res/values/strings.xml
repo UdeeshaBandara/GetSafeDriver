@@ -8,13 +8,10 @@
 
 
     <string name="BASE_URL">http://192.168.1.4:8000/v1/getsafe/api</string>
-    <string name="SAVE_USER">/register/saveuser</string>
-    <string name="REGISTER_SEND_OTP">/register/sendotp</string>
-    <string name="REGISTER_VALIDATE_OTP">/register/validateotp</string>
+    <string name="SAVE_DRIVER">/newdriver/save</string>
+    <string name="DRIVER_OTP">/driverlogin/sendotp</string>
 
-    <string name="USER_SEND_OTP">/user/sendotp</string>
-    <string name="USER_VALIDATE_OTP">/user/validateotp</string>
-
-
-    <string name="VALIDATE_TOKEN">/login</string>
+    <string name="VALIDATE_TOKEN">/driver</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

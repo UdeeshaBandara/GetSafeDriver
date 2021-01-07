@@ -19,7 +19,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-class GetSafeDriverServices extends GetSafeDriverBase {
+public class GetSafeDriverServices extends GetSafeDriverBase {
 
     String requestResponse = "";
 

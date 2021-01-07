@@ -3,8 +3,179 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/rlt"
+
+
     android:layout_height="match_parent"
     tools:context=".Login">
+
+    <ImageView
+        android:id="@+id/img_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/logo_home" />
+
+    <TextView
+        android:id="@+id/login_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img_head"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="15dp"
+
+        android:layout_marginTop="20dp"
+
+        android:fontFamily="@font/nunito_bold"
+        android:text="Login"
+        android:textColor="@color/dark_blue"
+        android:textSize="30sp" />
+
+    <LinearLayout
+        android:id="@+id/lnr_number"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_below="@id/login_heading"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_login_number"
+        android:orientation="horizontal"
+        android:paddingHorizontal="10dp">
+
+
+        <EditText
+            android:id="@+id/country_code"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1.5"
+            android:ellipsize="end"
+            android:enabled="false"
+            android:gravity="center"
+            android:hint="+94"
+            android:inputType="number"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/txt_number_one"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:digits="123456789"
+            android:gravity="center"
+            android:hint="7"
+            android:inputType="number"
+            android:maxLength="1"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/txt_number_two"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="7"
+            android:inputType="number"
+            android:maxLength="1"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/txt_number_three"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="X"
+            android:inputType="number"
+            android:maxLength="1"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/txt_number_four"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="X"
+            android:inputType="number"
+            android:maxLength="1"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/txt_number_five"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="X"
+            android:inputType="number"
+            android:maxLength="1"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/txt_number_six"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="X"
+            android:inputType="number"
+            android:maxLength="1" />
+
+        <EditText
+            android:id="@+id/txt_number_seven"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="X"
+            android:inputType="number"
+            android:maxLength="1"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/txt_number_eight"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="X"
+            android:inputType="number"
+            android:maxLength="1"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/txt_number_nine"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="X"
+            android:inputType="number"
+            android:maxLength="1"
+            android:maxLines="1" />
+
+
+    </LinearLayout>
+
+    <Button
+
+        android:id="@+id/btn_login_next"
+        android:layout_width="120dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/lnr_number"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/bg_btn_next_forward"
+        android:drawableRight="@drawable/icon_forward"
+        android:fontFamily="@font/nunito_semibold"
+        android:paddingRight="15dp"
+        android:text="Next"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
 
 
 

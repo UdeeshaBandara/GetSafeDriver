@@ -1,0 +1,121 @@
+package lk.hd192.getsafedriver;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+
+import com.airbnb.lottie.LottieAnimationView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import lk.hd192.getsafedriver.Utils.AddDriverSecond;
+import lk.hd192.getsafedriver.Utils.NonSwappableViewPager;
+
+public class Register extends AppCompatActivity {
+    private NonSwappableViewPager nonSwappableViewPager;
+
+    LottieAnimationView driverAnimation, locationAnimation, doneAnimation, btnNext;
+    AddDriverFirst addDriverFirst;
+    AddDriverSecond addDriverSecond;
+    AddDriverThird addDriverThird;
+    TextView txtSubHeading;
+    public static boolean firstCompleted = false, secondCompleted = false;
+    int currentPage = 1;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+        addDriverFirst= new AddDriverFirst();
+        addDriverSecond= new AddDriverSecond();
+        addDriverThird= new AddDriverThird();
+
+        nonSwappableViewPager = findViewById(R.id.view_pager_container);
+        btnNext = findViewById(R.id.btn_next);
+        driverAnimation = findViewById(R.id.driver_animation);
+        doneAnimation = findViewById(R.id.done_animation);
+        locationAnimation = findViewById(R.id.location_animation);
+        txtSubHeading = findViewById(R.id.txt_sub_heading);
+
+        nonSwappableViewPager.setOffscreenPageLimit(1);
+        setupViewPager(nonSwappableViewPager);
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (currentPage == 1) {
+//                    addDriverFirst.validateFields();
+                    if (firstCompleted & currentPage == 1) {
+//                        addDriverFirst.addKidBasicDetails();
+
+                        nonSwappableViewPager.setCurrentItem(1);
+                        txtSubHeading.setText("Location Details");
+                        driverAnimation.setVisibility(View.GONE);
+                        doneAnimation.setVisibility(View.GONE);
+                        locationAnimation.setVisibility(View.VISIBLE);
+                        currentPage = 2;
+                    }
+                } else if (currentPage == 2) {
+
+//                    addDriverSecond.validateFields();
+
+                    if (secondCompleted) {
+//                        addDriverSecond.addKidLocationDetails();
+//                        addDriverThird.updateFields();
+                        nonSwappableViewPager.setCurrentItem(2);
+                        txtSubHeading.setText("Confirm Details");
+                        doneAnimation.setVisibility(View.VISIBLE);
+                        locationAnimation.setVisibility(View.GONE);
+                        driverAnimation.setVisibility(View.GONE);
+                        currentPage = 3;
+
+                        btnNext.setVisibility(View.GONE);
+                    }
+                }
+
+            }
+        });
+
+    }
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            return mFragmentList.get(position);
+
+        }
+
+        public void addFragment(Fragment fragment) {
+            mFragmentList.add(fragment);
+        }
+
+        @Override
+        public int getCount() {
+
+            return 3;
+        }
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        SectionsPagerAdapter sectionsPager = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        sectionsPager.addFragment(addDriverFirst);
+        sectionsPager.addFragment(addDriverSecond);
+        sectionsPager.addFragment(addDriverThird);
+
+        viewPager.setAdapter(sectionsPager);
+    }
+}
