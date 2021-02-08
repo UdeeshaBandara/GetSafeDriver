@@ -1,6 +1,5 @@
 package lk.hd192.getsafedriver;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -15,16 +14,17 @@ import com.airbnb.lottie.LottieAnimationView;
 import java.util.ArrayList;
 import java.util.List;
 
-import lk.hd192.getsafedriver.Utils.AddDriverSecond;
+import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
 import lk.hd192.getsafedriver.Utils.NonSwappableViewPager;
 
-public class Register extends AppCompatActivity {
+public class Register extends GetSafeDriverBase {
     private NonSwappableViewPager nonSwappableViewPager;
 
     LottieAnimationView driverAnimation, locationAnimation, doneAnimation, btnNext;
     AddDriverFirst addDriverFirst;
     AddDriverSecond addDriverSecond;
     AddDriverThird addDriverThird;
+    AddDriverFourth addDriverFourth;
     TextView txtSubHeading;
     public static boolean firstCompleted = false, secondCompleted = false;
     int currentPage = 1;
@@ -35,6 +35,7 @@ public class Register extends AppCompatActivity {
         addDriverFirst= new AddDriverFirst();
         addDriverSecond= new AddDriverSecond();
         addDriverThird= new AddDriverThird();
+        addDriverFourth= new AddDriverFourth();
 
         nonSwappableViewPager = findViewById(R.id.view_pager_container);
         btnNext = findViewById(R.id.btn_next);
@@ -51,7 +52,7 @@ public class Register extends AppCompatActivity {
 
                 if (currentPage == 1) {
 //                    addDriverFirst.validateFields();
-                    if (firstCompleted & currentPage == 1) {
+//                    if (firstCompleted & currentPage == 1) {
 //                        addDriverFirst.addKidBasicDetails();
 
                         nonSwappableViewPager.setCurrentItem(1);
@@ -60,23 +61,38 @@ public class Register extends AppCompatActivity {
                         doneAnimation.setVisibility(View.GONE);
                         locationAnimation.setVisibility(View.VISIBLE);
                         currentPage = 2;
-                    }
+//                    }
                 } else if (currentPage == 2) {
 
 //                    addDriverSecond.validateFields();
 
-                    if (secondCompleted) {
+//                    if (secondCompleted) {
 //                        addDriverSecond.addKidLocationDetails();
 //                        addDriverThird.updateFields();
                         nonSwappableViewPager.setCurrentItem(2);
-                        txtSubHeading.setText("Confirm Details");
+                        txtSubHeading.setText("Vehicle Details");
                         doneAnimation.setVisibility(View.VISIBLE);
                         locationAnimation.setVisibility(View.GONE);
                         driverAnimation.setVisibility(View.GONE);
                         currentPage = 3;
 
-                        btnNext.setVisibility(View.GONE);
-                    }
+//                    }
+                } else if (currentPage == 3) {
+
+//                    addDriverSecond.validateFields();
+
+//                    if (secondCompleted) {
+//                        addDriverSecond.addKidLocationDetails();
+//                        addDriverThird.updateFields();
+                    nonSwappableViewPager.setCurrentItem(3);
+                    txtSubHeading.setText("Vehicle Details");
+                    doneAnimation.setVisibility(View.VISIBLE);
+                    locationAnimation.setVisibility(View.GONE);
+                    driverAnimation.setVisibility(View.GONE);
+                    currentPage = 4;
+
+                    btnNext.setVisibility(View.GONE);
+//                    }
                 }
 
             }
@@ -105,7 +121,7 @@ public class Register extends AppCompatActivity {
         @Override
         public int getCount() {
 
-            return 3;
+            return 4;
         }
     }
 
@@ -115,6 +131,7 @@ public class Register extends AppCompatActivity {
         sectionsPager.addFragment(addDriverFirst);
         sectionsPager.addFragment(addDriverSecond);
         sectionsPager.addFragment(addDriverThird);
+        sectionsPager.addFragment(addDriverFourth);
 
         viewPager.setAdapter(sectionsPager);
     }

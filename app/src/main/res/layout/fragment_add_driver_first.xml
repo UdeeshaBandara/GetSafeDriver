@@ -65,22 +65,22 @@
                                 android:layout_height="match_parent"
 
                                 android:layout_marginTop="10dp"
-                                app:libIZO_clearIconTint="#8f1f15"
-                                app:libIZO_setBorderColor="#A37C07"
-                                app:libIZO_setBorderView="true"
-                                app:libIZO_setClearIconVisible="true"
-                                app:libIZO_setCornerRadius="4dp"
-                                app:libIZO_setStrokeWidth="1dp"
                                 android:fontFamily="@font/nunito_bold"
                                 android:imeOptions="actionDone"
-
-
                                 android:paddingHorizontal="10dp"
                                 android:paddingVertical="5dp"
                                 android:singleLine="true"
-
                                 android:textColor="@color/black"
-                                android:textSize="18sp" />
+                                android:textSize="18sp"
+                                app:libIZO_clearIconTint="#8f1f15"
+
+
+                                app:libIZO_setBorderColor="#A37C07"
+                                app:libIZO_setBorderView="true"
+                                app:libIZO_setClearIconVisible="true"
+
+                                app:libIZO_setCornerRadius="4dp"
+                                app:libIZO_setStrokeWidth="1dp" />
 
 
                         </LinearLayout>
@@ -156,21 +156,21 @@
                                 android:layout_height="match_parent"
 
                                 android:layout_marginTop="10dp"
-                                app:libIZO_clearIconTint="#8f1f15"
-                                app:libIZO_setBorderColor="#A37C07"
-                                app:libIZO_setBorderView="true"
-                                app:libIZO_setClearIconVisible="true"
-                                app:libIZO_setCornerRadius="4dp"
-                                app:libIZO_setStrokeWidth="1dp"
                                 android:fontFamily="@font/nunito_bold"
                                 android:imeOptions="actionDone"
                                 android:paddingHorizontal="10dp"
                                 android:paddingVertical="5dp"
-
                                 android:singleLine="true"
-                                android:text="udeeshabandara@gmail.com"
                                 android:textColor="@color/black"
-                                android:textSize="18sp" />
+                                android:textSize="18sp"
+                                app:libIZO_clearIconTint="#8f1f15"
+                                app:libIZO_setBorderColor="#A37C07"
+                                app:libIZO_setBorderView="true"
+
+                                app:libIZO_setClearIconVisible="true"
+
+                                app:libIZO_setCornerRadius="4dp"
+                                app:libIZO_setStrokeWidth="1dp" />
 
                         </LinearLayout>
 
@@ -242,16 +242,16 @@
                                 android:id="@+id/edit_text_license_no_main"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:fontFamily="@font/nunito_semibold"
                                 android:layout_marginTop="10dp"
+                                android:fontFamily="@font/nunito_semibold"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
                                 app:libIZO_clearIconTint="#8f1f15"
                                 app:libIZO_setBorderColor="#A37C07"
                                 app:libIZO_setBorderView="true"
                                 app:libIZO_setClearIconVisible="true"
                                 app:libIZO_setCornerRadius="4dp"
-                                app:libIZO_setStrokeWidth="1dp"
-                                android:textColor="@color/black"
-                                android:textSize="18sp" />
+                                app:libIZO_setStrokeWidth="1dp" />
 
                         </LinearLayout>
 
@@ -297,7 +297,6 @@
                     android:orientation="vertical">
 
 
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -328,9 +327,9 @@
                                 android:layout_marginTop="10dp"
                                 android:fontFamily="@font/nunito_semibold"
                                 android:inputType="phone"
+                                android:maxLength="10"
                                 android:textColor="@color/black"
                                 android:textSize="18sp"
-                                android:maxLength="10"
                                 app:libIZO_clearIconTint="#8f1f15"
                                 app:libIZO_setBorderColor="#A37C07"
                                 app:libIZO_setBorderView="true"
@@ -411,12 +410,15 @@
                                 android:id="@+id/txt_driver_birthday"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-
+                                android:layout_marginTop="10dp"
+                                android:clickable="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
                                 android:fontFamily="@font/nunito_semibold"
                                 android:hint="YYYY/MM/dd"
+                                android:inputType="none"
                                 android:textColor="@color/black"
                                 android:textSize="18sp"
-                                android:layout_marginTop="10dp"
                                 app:libIZO_clearIconTint="#8f1f15"
                                 app:libIZO_setBorderColor="#A37C07"
                                 app:libIZO_setBorderView="true"
@@ -494,17 +496,17 @@
                                 android:id="@+id/txt_email"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
                                 android:fontFamily="@font/nunito_semibold"
                                 android:inputType="textEmailAddress"
                                 android:textColor="@color/black"
-                                android:layout_marginTop="10dp"
+                                android:textSize="18sp"
                                 app:libIZO_clearIconTint="#8f1f15"
                                 app:libIZO_setBorderColor="#A37C07"
                                 app:libIZO_setBorderView="true"
                                 app:libIZO_setClearIconVisible="true"
                                 app:libIZO_setCornerRadius="4dp"
-                                app:libIZO_setStrokeWidth="1dp"
-                                android:textSize="18sp" />
+                                app:libIZO_setStrokeWidth="1dp" />
 
                         </LinearLayout>
 
@@ -549,7 +551,6 @@
                     android:orientation="vertical">
 
 
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -577,16 +578,20 @@
                                 android:id="@+id/txt_type"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:fontFamily="@font/nunito_semibold"
                                 android:layout_marginTop="10dp"
+                                android:clickable="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:fontFamily="@font/nunito_semibold"
+                                android:inputType="none"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
                                 app:libIZO_clearIconTint="#8f1f15"
                                 app:libIZO_setBorderColor="#A37C07"
                                 app:libIZO_setBorderView="true"
                                 app:libIZO_setClearIconVisible="true"
                                 app:libIZO_setCornerRadius="4dp"
-                                app:libIZO_setStrokeWidth="1dp"
-                                android:textColor="@color/black"
-                                android:textSize="18sp" />
+                                app:libIZO_setStrokeWidth="1dp" />
 
                         </LinearLayout>
 

@@ -1,14 +1,712 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddDriverThird">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_below="@id/lnr_image"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingBottom="60dp"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:id="@+id/add_one"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="Vehicle Type"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+
+                            <com.libizo.CustomEditText
+                                android:id="@+id/edit_txt_add_one"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:layout_marginTop="10dp"
+                                android:fontFamily="@font/nunito_bold"
+                                android:imeOptions="actionDone"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:libIZO_clearIconTint="#8f1f15"
+
+
+                                app:libIZO_setBorderColor="#A37C07"
+                                app:libIZO_setBorderView="true"
+                                app:libIZO_setClearIconVisible="true"
+
+                                app:libIZO_setCornerRadius="4dp"
+                                app:libIZO_setStrokeWidth="1dp" />
+
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+
+                                android:text="Edited"
+                                android:visibility="invisible" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/add_two"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/add_one"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="Make"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+
+                            <com.libizo.CustomEditText
+                                android:id="@+id/edit_txt_add_two"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:layout_marginTop="10dp"
+                                android:fontFamily="@font/nunito_bold"
+                                android:imeOptions="actionDone"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:libIZO_clearIconTint="#8f1f15"
+
+
+                                app:libIZO_setBorderColor="#A37C07"
+                                app:libIZO_setBorderView="true"
+                                app:libIZO_setClearIconVisible="true"
+
+                                app:libIZO_setCornerRadius="4dp"
+                                app:libIZO_setStrokeWidth="1dp" />
+
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+
+                                android:text="Edited"
+                                android:visibility="invisible" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/model"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/add_two"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="Model"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+
+                            <com.libizo.CustomEditText
+                                android:id="@+id/edit_txt_pick"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:clickable="true"
+
+                                android:fontFamily="@font/nunito_bold"
+                                android:imeOptions="actionDone"
+
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:libIZO_clearIconTint="#8f1f15"
+                                app:libIZO_setBorderColor="#A37C07"
+                                app:libIZO_setBorderView="true"
+                                app:libIZO_setClearIconVisible="true"
+                                app:libIZO_setCornerRadius="4dp"
+                                app:libIZO_setStrokeWidth="1dp" />
+
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+
+                                android:text="Edited"
+                                android:visibility="invisible" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/registration_no"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/model"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="Vehicle Registration no"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+
+                            <com.libizo.CustomEditText
+                                android:id="@+id/edit_txt_registration_no"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:clickable="true"
+
+                                android:fontFamily="@font/nunito_bold"
+                                android:imeOptions="actionDone"
+
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:libIZO_clearIconTint="#8f1f15"
+                                app:libIZO_setBorderColor="#A37C07"
+                                app:libIZO_setBorderView="true"
+                                app:libIZO_setClearIconVisible="true"
+                                app:libIZO_setCornerRadius="4dp"
+                                app:libIZO_setStrokeWidth="1dp" />
+
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+
+                                android:text="Edited"
+                                android:visibility="invisible" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/seating"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/registration_no"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="Seating capacity"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+
+                            <com.libizo.CustomEditText
+                                android:id="@+id/edit_txt_seating"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:clickable="true"
+                    
+                                android:fontFamily="@font/nunito_bold"
+                                android:imeOptions="actionDone"
+                                android:inputType="number"
+                                android:maxLength="2"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:libIZO_clearIconTint="#8f1f15"
+                                app:libIZO_setBorderColor="#A37C07"
+                                app:libIZO_setBorderView="true"
+                                app:libIZO_setClearIconVisible="true"
+                                app:libIZO_setCornerRadius="4dp"
+                                app:libIZO_setStrokeWidth="1dp" />
+
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+
+                                android:text="Edited"
+                                android:visibility="invisible" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ac"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/seating"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="A/C or Non-A/C"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp"
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
+
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="45dp"
+                                    android:layout_weight="5">
+
+                                    <TextView
+                                        android:id="@+id/txt_ac"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="45dp"
+                                        android:fontFamily="@font/nunito_regular"
+                                        android:text="A/C"
+                                        android:background="@drawable/bg_btn_left_radio_deselect"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:textColor="@color/dark_blue"
+                                        android:textSize="18sp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="45dp"
+                                    android:layout_weight="5">
+
+                                    <TextView
+                                        android:id="@+id/txt_non_ac"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="45dp"
+                                        android:layout_gravity="center"
+                                        android:fontFamily="@font/nunito_regular"
+                                        android:gravity="center"
+                                        android:background="@drawable/bg_btn_right_radio_deselect"
+                                        android:text="Non - A/C"
+                                        android:textColor="@color/dark_blue"
+                                        android:textSize="18sp" />
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+
+                                android:text="Edited"
+                                android:visibility="invisible" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/camera"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/ac"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="Camera availability"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp"
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
+
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="45dp"
+                                    android:layout_weight="5">
+
+                                    <TextView
+                                        android:id="@+id/txt_cam"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="45dp"
+                                        android:fontFamily="@font/nunito_regular"
+                                        android:text="Camera"
+                                        android:background="@drawable/bg_btn_left_radio_deselect"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:textColor="@color/dark_blue"
+                                        android:textSize="18sp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="45dp"
+                                    android:layout_weight="5">
+
+                                    <TextView
+                                        android:id="@+id/txt_non_cam"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="45dp"
+                                        android:layout_gravity="center"
+                                        android:fontFamily="@font/nunito_regular"
+                                        android:gravity="center"
+                                        android:background="@drawable/bg_btn_right_radio_deselect"
+                                        android:text="No Camera"
+                                        android:textColor="@color/dark_blue"
+                                        android:textSize="18sp" />
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+
+                                android:text="Edited"
+                                android:visibility="invisible" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+
+            </RelativeLayout>
+
+
+
+    </ScrollView>
 
 </FrameLayout>

@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 
-public class Home extends AppCompatActivity {
+import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
+
+public class Home extends GetSafeDriverBase {
 
     RecyclerView recyclerHome;
     StaggeredGridLayoutManager staggeredGridLayoutManager;

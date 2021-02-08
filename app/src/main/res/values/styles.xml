@@ -8,7 +8,7 @@
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">#E9CE1D</item>
+        <item name="android:statusBarColor">@color/yellow</item>
     </style>
 
     <style name="DialogAnimation">

@@ -1,25 +1,20 @@
 package lk.hd192.getsafedriver;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
+
+
 import android.app.Dialog;
-import android.content.DialogInterface;
+
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.Observable;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -32,29 +27,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
-import com.esafirm.imagepicker.features.ImagePicker;
-import com.esafirm.imagepicker.features.ImagePickerInteractionListener;
-import com.esafirm.imagepicker.features.ReturnMode;
-
-import com.esafirm.imagepicker.model.Image;
-import com.squareup.picasso.Picasso;
-
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import lk.hd192.getsafedriver.Utils.CapturandroCallback;
 import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
 import lk.hd192.getsafedriver.Utils.GetSafeDriverServices;
 import lk.hd192.getsafedriver.Utils.TinyDB;
 import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 
-import static androidx.core.graphics.TypefaceCompatUtil.getTempFile;
 
 
 public class Login extends GetSafeDriverBase {
@@ -86,10 +69,10 @@ public class Login extends GetSafeDriverBase {
         getSafeDriverServices = new GetSafeDriverServices();
         requestFocus();
 
-        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+//        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
         findViewById(R.id.btn_login_next).setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("RestrictedApi")
+
             @Override
             public void onClick(View v) {
 
@@ -126,48 +109,48 @@ public class Login extends GetSafeDriverBase {
     }
 
 
-    public void captureImageCameraOrGallery() {
-
-        final CharSequence[] options = {"Take photo", "Choose from library",
-                "Cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(
-                Login.this);
-
-        builder.setTitle("Select");
-
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // TODO Auto-generated method stub
-                if (options[which].equals("Take photo")) {
-                    try {
-                        Intent cameraIntent = new Intent(
-                                android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(cameraIntent, 1);
-                    } catch (Exception ex) {
-                        String errorMessage = "Whoops - your device doesn't support capturing images!";
-
-                    }
-
-                } else if (options[which].equals("Choose from library")) {
-                    Intent intent = new Intent(
-                            Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, 2);
-                } else if (options[which].equals("Cancel")) {
-                    dialog.dismiss();
-
-                }
-
-            }
-        });
-        dialog = builder.create();
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-        dialog.show();
-
-    }
+//    public void captureImageCameraOrGallery() {
+//
+//        final CharSequence[] options = {"Take photo", "Choose from library",
+//                "Cancel"};
+//        AlertDialog.Builder builder = new AlertDialog.Builder(
+//                Login.this);
+//
+//        builder.setTitle("Select");
+//
+//        builder.setItems(options, new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                // TODO Auto-generated method stub
+//                if (options[which].equals("Take photo")) {
+//                    try {
+//                        Intent cameraIntent = new Intent(
+//                                android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                        startActivityForResult(cameraIntent, 1);
+//                    } catch (Exception ex) {
+//                        String errorMessage = "Whoops - your device doesn't support capturing images!";
+//
+//                    }
+//
+//                } else if (options[which].equals("Choose from library")) {
+//                    Intent intent = new Intent(
+//                            Intent.ACTION_PICK,
+//                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                    startActivityForResult(intent, 2);
+//                } else if (options[which].equals("Cancel")) {
+//                    dialog.dismiss();
+//
+//                }
+//
+//            }
+//        });
+//        dialog = builder.create();
+//        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+//
+//        dialog.show();
+//
+//    }
 
     public void onActivityResult(int requestcode, int resultcode, Intent intent) {
         super.onActivityResult(requestcode, resultcode, intent);
@@ -446,8 +429,8 @@ public class Login extends GetSafeDriverBase {
                     if (result.getBoolean("otp_sent_status")) {
 
 
-                    } else
-                        showToast(dialog, "Something went wrong. Please try again", 0);
+                    }
+//                        showToast(dialog, "Something went wrong. Please try again", 0);
 
 
                 } catch (Exception e) {
@@ -458,4 +441,5 @@ public class Login extends GetSafeDriverBase {
         });
 
     }
+
 }

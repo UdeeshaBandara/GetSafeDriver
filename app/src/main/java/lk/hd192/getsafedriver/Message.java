@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class Message extends AppCompatActivity {
+import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
+
+public class Message extends GetSafeDriverBase {
 
     RecyclerView recyclerStudents;
     @Override

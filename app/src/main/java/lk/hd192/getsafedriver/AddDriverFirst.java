@@ -1,5 +1,7 @@
 package lk.hd192.getsafedriver;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,8 +12,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
@@ -25,8 +29,10 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
     int year;
     int month;
     int day;
+    TypeBottomSheet typeBottomSheet;
     SimpleDateFormat simpleDateFormat;
-    TextView txtDriverBirthday;
+    TextView txtDriverBirthday,txtType;
+
     public AddDriverFirst() {
         // Required empty public constructor
     }
@@ -54,7 +60,8 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
         day = c.get(Calendar.DAY_OF_MONTH);
         simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
-        txtDriverBirthday=view.findViewById(R.id.txt_driver_birthday);
+        txtDriverBirthday = view.findViewById(R.id.txt_driver_birthday);
+        txtType = view.findViewById(R.id.txt_type);
 
         txtDriverBirthday.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +69,61 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
                 showDate(year, month, day, R.style.DatePickerSpinner);
             }
         });
+        txtType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //...
+                TypeBottomSheet typeBottomSheet = new TypeBottomSheet(getActivity());
+                typeBottomSheet.setContentView(R.layout.bottom_sheet_type);
+                typeBottomSheet.show();
+
+            }
+        });
+
+    }
+    public void validateFields(){
+
+
+
+
+    }
+
+    public class TypeBottomSheet extends BottomSheetDialog {
+        public TypeBottomSheet(@NonNull Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onStart() {
+            super.onStart();
+            getBehavior().setPeekHeight(350, true);
+            getBehavior().setDraggable(false);
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+
+            findViewById(R.id.school_search).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    txtType.setText("School Transport");
+                }
+            });
+            findViewById(R.id.staff_search).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    txtType.setText("Staff Transport");
+                }
+            });
+//
+        }
+        //            txtSchool=v.findViewById(R.id.school_search);
+//            txtStaff=v.findViewById(R.id.staff_search);
+//
+//            txtSchool.setOnClickListener(new View.OnClickListener());
 
     }
 
@@ -70,6 +132,7 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
         Calendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
         txtDriverBirthday.setHint(simpleDateFormat.format(calendar.getTime()));
     }
+
     @VisibleForTesting
     void showDate(int year, int monthOfYear, int dayOfMonth, int spinnerTheme) {
         new SpinnerDatePickerDialogBuilder()
