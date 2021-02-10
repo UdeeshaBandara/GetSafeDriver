@@ -3,7 +3,10 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
     buildToolsVersion "30.0.2"
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     
     defaultConfig {
         applicationId "lk.hd192.getsafedriver"
@@ -50,9 +53,9 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.3.0'
 //Image uploader
 
-    implementation 'com.github.nguyenhoanglam:ImagePicker:1.4.3'
+//    implementation 'com.github.nguyenhoanglam:ImagePicker:1.4.3'
     //Picasso : image render engine
-    implementation 'com.squareup.picasso:picasso:2.71828'
+//    implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     //lottie animation
@@ -74,9 +77,12 @@ dependencies {
     //spinner date picker
     implementation 'com.github.drawers:SpinnerDatePicker:2.0.1'
 
-    implementation 'com.github.esafirm.android-image-picker:imagepicker:2.3.2'
-    // for experimental rx picker
-    implementation 'com.github.esafirm.android-image-picker:rximagepicker:2.3.2'
+    implementation 'com.github.vansikrishna:Multimager:1.0.8'
+
+
+    //dialog
+    implementation 'com.shreyaspatil:MaterialDialog:2.1'
+
     
 
 
