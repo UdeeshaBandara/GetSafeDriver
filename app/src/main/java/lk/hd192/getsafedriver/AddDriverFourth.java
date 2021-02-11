@@ -30,6 +30,9 @@ import com.vlk.multimager.utils.Constants;
 import com.vlk.multimager.utils.Image;
 import com.vlk.multimager.utils.Params;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,7 +41,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import lk.hd192.getsafedriver.Utils.GetSafeDriverServices;
+import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -48,6 +55,8 @@ public class AddDriverFourth extends Fragment {
 
     public ImageView imageDriver, imgLicOne, imgLicTwo, imgIdOne, imgIdTwo;
     ArrayList<Image> imagesList, imagesToUpload;
+    ArrayList<String> imagesBase64;
+    GetSafeDriverServices getSafeDriverServices;
     Boolean fromIdOne = false, fromIdTwo = false, fromLicOne = false, fromLicTwo = false, fromDriverPic = false;
 
     public AddDriverFourth() {
@@ -72,6 +81,7 @@ public class AddDriverFourth extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getSafeDriverServices = new GetSafeDriverServices();
         imageDriver = view.findViewById(R.id.image_driver);
         imgLicTwo = view.findViewById(R.id.img_lic_two);
         imgLicOne = view.findViewById(R.id.img_lic_one);
@@ -276,5 +286,134 @@ public class AddDriverFourth extends Fragment {
         return encImage;
 
     }
+
+    private void convertToBase64AndUpload() throws IOException {
+
+        for (int g = 0; g < imagesToUpload.size(); g++) {
+            imagesBase64.add(g, encodeImage(imagesToUpload.get(g).imagePath));
+        }
+        addDriverImage();
+        addDriverIdFront();
+        addDriverIdBack();
+        addDriverLicence();
+
+    }
+
+    private void addDriverImage() {
+
+
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("id", AddDriverFirst.driverId);
+        tempParam.put("image", imagesBase64.get(0));
+
+
+        getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_IMAGE), 2, new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    if (result.getBoolean("saved_status")) {
+
+                    }
+
+
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
+
+
+            }
+        });
+
+    }
+
+    private void addDriverIdFront() {
+
+
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("id", AddDriverFirst.driverId);
+        tempParam.put("image", imagesBase64.get(1));
+
+
+        getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_IMAGE), 2, new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    if (result.getBoolean("saved_status")) {
+
+                    }
+
+
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
+
+
+            }
+        });
+
+    }
+
+    private void addDriverIdBack() {
+
+
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("id", AddDriverFirst.driverId);
+        tempParam.put("image", imagesBase64.get(2));
+
+
+        getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_NIC_BACK), 2, new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    if (result.getBoolean("saved_status")) {
+
+                    }
+
+
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
+
+
+            }
+        });
+
+    }
+
+    private void addDriverLicence() {
+
+
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("id", AddDriverFirst.driverId);
+        tempParam.put("image", imagesBase64.get(3));
+
+
+        getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_LICENCE), 2, new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    if (result.getBoolean("saved_status")) {
+
+                    }
+
+
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
+
+
+            }
+        });
+
+    }
+
 
 }

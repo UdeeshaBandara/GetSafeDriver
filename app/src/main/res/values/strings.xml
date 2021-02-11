@@ -12,6 +12,12 @@
     <string name="DRIVER_OTP">/driverlogin/sendotp</string>
 
     <string name="VALIDATE_TOKEN">/driver</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="DRIVER_SAVE">/newdriver/save</string>
+    <string name="DRIVER_LOCATION">/newdriver/location</string>
+    <string name="DRIVER_VEHICLE">/newdriver/vehicle</string>
+    <string name="DRIVER_IMAGE">/newdriver/driverimg</string>
+    <string name="DRIVER_NIC_FRONT">/newdriver/nicfront</string>
+    <string name="DRIVER_NIC_BACK">/newdriver/nicback</string>
+    <string name="DRIVER_LICENCE">/newdriver/license</string>
+
 </resources>
