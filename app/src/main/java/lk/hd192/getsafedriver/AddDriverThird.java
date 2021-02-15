@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.libizo.CustomEditText;
 
@@ -32,7 +34,8 @@ public class AddDriverThird extends Fragment {
     CustomEditText edit_txt_vehicle_type, edit_txt_vehicle_make, edit_txt_vehicle_model, edit_txt_registration_no, edit_txt_seating;
     TypeBottomSheet typeBottomSheet;
     GetSafeDriverServices getSafeDriverServices;
-    String isAc="",isCam="";
+    String isAc = "", isCam = "";
+    public boolean isThirdValidated = false;
 
     public AddDriverThird() {
         // Required empty public constructor
@@ -66,7 +69,7 @@ public class AddDriverThird extends Fragment {
         edit_txt_vehicle_model = view.findViewById(R.id.edit_txt_vehicle_model);
         edit_txt_registration_no = view.findViewById(R.id.edit_txt_registration_no);
         edit_txt_seating = view.findViewById(R.id.edit_txt_seating);
-        getSafeDriverServices= new GetSafeDriverServices();
+        getSafeDriverServices = new GetSafeDriverServices();
 
         edit_txt_vehicle_type.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +86,7 @@ public class AddDriverThird extends Fragment {
             public void onClick(View v) {
                 txtAc.setBackgroundResource(R.drawable.bg_btn_left_radio_select);
                 txtNonAc.setBackgroundResource(R.drawable.bg_btn_right_radio_deselect);
-                isAc="true";
+                isAc = "true";
 
             }
         });
@@ -92,7 +95,7 @@ public class AddDriverThird extends Fragment {
             public void onClick(View v) {
                 txtNonAc.setBackgroundResource(R.drawable.bg_btn_right_radio_select);
                 txtAc.setBackgroundResource(R.drawable.bg_btn_left_radio_deselect);
-                isAc="false";
+                isAc = "false";
 
             }
         });
@@ -101,7 +104,7 @@ public class AddDriverThird extends Fragment {
             public void onClick(View v) {
                 txtCam.setBackgroundResource(R.drawable.bg_btn_left_radio_select);
                 txtNonCam.setBackgroundResource(R.drawable.bg_btn_right_radio_deselect);
-                isCam="true";
+                isCam = "true";
 
             }
         });
@@ -110,28 +113,56 @@ public class AddDriverThird extends Fragment {
             public void onClick(View v) {
                 txtNonCam.setBackgroundResource(R.drawable.bg_btn_right_radio_select);
                 txtCam.setBackgroundResource(R.drawable.bg_btn_left_radio_deselect);
-                isCam="false";
+                isCam = "false";
 
             }
         });
     }
 
-    public void validateFields() {
+    public boolean validateFields() {
         if (TextUtils.isEmpty(edit_txt_vehicle_type.getText().toString())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_txt_vehicle_type);
+            edit_txt_vehicle_type.setError("Please enter address two");
+            return false;
         } else if (TextUtils.isEmpty(edit_txt_vehicle_make.getText().toString())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_txt_vehicle_make);
+            edit_txt_vehicle_make.setError("Please enter address two");
+            return false;
         } else if (TextUtils.isEmpty(edit_txt_vehicle_model.getText().toString())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_txt_vehicle_model);
+            edit_txt_vehicle_model.setError("Please enter address two");
+            return false;
         } else if (TextUtils.isEmpty(edit_txt_registration_no.getText().toString())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_txt_registration_no);
+            edit_txt_registration_no.setError("Please enter address two");
+            return false;
         } else if (TextUtils.isEmpty(edit_txt_seating.getText().toString())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_txt_seating);
+            edit_txt_seating.setError("Please enter address two");
+            return false;
         } else if (isAc.equals("")) {
+            return false;
         } else if (isCam.equals("")) {
+            return false;
         } else {
 
             registerVehicle();
 
         }
-
+        return false;
     }
-    private void registerVehicle() {
+
+    private boolean registerVehicle() {
 
 
         HashMap<String, String> tempParam = new HashMap<>();
@@ -152,18 +183,19 @@ public class AddDriverThird extends Fragment {
                 try {
 
                     if (result.getBoolean("saved_status")) {
-
+                        isThirdValidated = true;
                     }
 
 
                 } catch (JSONException ex) {
                     ex.printStackTrace();
+                    isThirdValidated = false;
                 }
 
 
             }
         });
-
+        return isThirdValidated;
     }
 
 

@@ -12,6 +12,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,6 +31,12 @@ import android.widget.RelativeLayout;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONObject;
 import java.util.HashMap;
@@ -46,8 +54,9 @@ public class Login extends GetSafeDriverBase {
     ImageView img_head;
     Dialog dialog;
     RelativeLayout rlt;
-    Uri picUri;
+    private FirebaseAuth mAuth;
     TinyDB tinyDB;
+
     GetSafeDriverServices getSafeDriverServices;
 
     @Override
@@ -65,6 +74,7 @@ public class Login extends GetSafeDriverBase {
         nine = findViewById(R.id.txt_number_nine);
         img_head = findViewById(R.id.img_head);
         rlt = findViewById(R.id.rlt);
+        mAuth = FirebaseAuth.getInstance();
         tinyDB = new TinyDB(getApplicationContext());
         getSafeDriverServices = new GetSafeDriverServices();
         requestFocus();
@@ -87,7 +97,14 @@ public class Login extends GetSafeDriverBase {
                         !TextUtils.isEmpty(eight.getText().toString()) &
                         !TextUtils.isEmpty(nine.getText().toString())) {
 
+                    if (tinyDB.getBoolean("isLogged")){
+                        driverSendOtp();
+                    }
+                    else{
+                        startActivity(new Intent(getApplicationContext(),Register.class));
+                    }
 
+                    getDeviceToken();
 //                    firebaseLogin();
 
                 } else {
@@ -96,107 +113,68 @@ public class Login extends GetSafeDriverBase {
                             .playOn(findViewById(R.id.lnr_number));
 
 //                    captureImageCameraOrGallery();
-                    if (tinyDB.getBoolean("isLogged")){
 
-                    }
-                    else{
-                        startActivity(new Intent(getApplicationContext(),Register.class));
-                    }
 
                 }
             }
         });
     }
 
+    public void getDeviceToken() {
 
-//    public void captureImageCameraOrGallery() {
-//
-//        final CharSequence[] options = {"Take photo", "Choose from library",
-//                "Cancel"};
-//        AlertDialog.Builder builder = new AlertDialog.Builder(
-//                Login.this);
-//
-//        builder.setTitle("Select");
-//
-//        builder.setItems(options, new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                // TODO Auto-generated method stub
-//                if (options[which].equals("Take photo")) {
-//                    try {
-//                        Intent cameraIntent = new Intent(
-//                                android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//                        startActivityForResult(cameraIntent, 1);
-//                    } catch (Exception ex) {
-//                        String errorMessage = "Whoops - your device doesn't support capturing images!";
-//
-//                    }
-//
-//                } else if (options[which].equals("Choose from library")) {
-//                    Intent intent = new Intent(
-//                            Intent.ACTION_PICK,
-//                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                    startActivityForResult(intent, 2);
-//                } else if (options[which].equals("Cancel")) {
-//                    dialog.dismiss();
-//
-//                }
-//
-//            }
-//        });
-//        dialog = builder.create();
-//        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-//
-//        dialog.show();
-//
-//    }
 
-    public void onActivityResult(int requestcode, int resultcode, Intent intent) {
-        super.onActivityResult(requestcode, resultcode, intent);
-        if (resultcode == RESULT_OK) {
-            if (requestcode == 1) {
-                picUri = intent.getData();
-                startCropImage();
-            } else if (requestcode == 2) {
-                Bitmap photo = (Bitmap) intent.getExtras().get("data");
-                Drawable drawable = new BitmapDrawable(photo);
-                rlt.setBackgroundDrawable(drawable);
-            } else if (requestcode == 3) {
-                Uri selectedImage = intent.getData();
-                String[] filePath = {MediaStore.Images.Media.DATA};
-                Cursor c = getContentResolver().query(selectedImage, filePath,
-                        null, null, null);
-                c.moveToFirst();
-                int columnIndex = c.getColumnIndex(filePath[0]);
-                String picturePath = c.getString(columnIndex);
-                c.close();
-                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
-                Drawable drawable = new BitmapDrawable(thumbnail);
-                rlt.setBackgroundDrawable(drawable);
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            showToast(dialog, "Please try again", 0);
 
+
+                            return;
+
+
+                        } else {
+
+                            updateUserFcmToken(task.getResult().getToken());
+
+
+                        }
+
+                    }
+                });
+    }
+
+    private void updateUserFcmToken(String token) {
+    }
+    private void firebaseLogin(){
+
+        mAuth.signInWithEmailAndPassword( tinyDB.getString("email"), one.getText().toString() +
+                two.getText().toString() +
+                three.getText().toString() +
+                four.getText().toString() +
+                five.getText().toString() +
+                six.getText().toString() +
+                seven.getText().toString() +
+                eight.getText().toString() +
+                nine.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+
+                    Log.e("firebase login","success");
+
+                } else {
+
+                }
             }
-        }
+        });
+
+
+
+
     }
 
-    private void startCropImage() {
-        try {
-            Intent cropIntent = new Intent("com.android.camera.action.CROP");
-            cropIntent.setDataAndType(picUri, "image/*");
-            cropIntent.putExtra("crop", "true");
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
-            // indicate output X and Y
-            cropIntent.putExtra("outputX", 256);
-            cropIntent.putExtra("outputY", 256);
-            // retrieve data on return
-            cropIntent.putExtra("return-data", true);
-            // start the activity - we handle returning in onActivityResult
-            startActivityForResult(cropIntent, 4);
-        } catch (Exception e) {
-
-        }
-    }
 
 
     private void requestFocus() {

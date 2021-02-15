@@ -244,19 +244,110 @@
                                 android:id="@+id/edit_txt_pick"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
                                 android:clickable="true"
                                 android:cursorVisible="false"
                                 android:focusable="false"
-                                android:layout_marginTop="10dp"
                                 android:fontFamily="@font/nunito_bold"
                                 android:imeOptions="actionDone"
+                                android:inputType="none"
                                 android:paddingHorizontal="10dp"
                                 android:paddingVertical="5dp"
                                 android:singleLine="true"
                                 android:textColor="@color/black"
                                 android:textSize="18sp"
                                 app:libIZO_clearIconTint="#8f1f15"
+                                app:libIZO_setBorderColor="#A37C07"
+                                app:libIZO_setBorderView="true"
+                                app:libIZO_setClearIconVisible="true"
+                                app:libIZO_setCornerRadius="4dp"
+                                app:libIZO_setStrokeWidth="1dp" />
+
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+
+                                android:text="Edited"
+                                android:visibility="invisible" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/add_dis"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/add_pick"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:gravity="center_vertical"
+                                android:hint="Drop off district"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+
+                            <com.libizo.CustomEditText
+                                android:id="@+id/edit_txt_district"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:clickable="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:fontFamily="@font/nunito_bold"
+                                android:imeOptions="actionDone"
                                 android:inputType="none"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:libIZO_clearIconTint="#8f1f15"
                                 app:libIZO_setBorderColor="#A37C07"
                                 app:libIZO_setBorderView="true"
                                 app:libIZO_setClearIconVisible="true"

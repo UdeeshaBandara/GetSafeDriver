@@ -18,7 +18,16 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.libizo.CustomEditText;
 import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
@@ -33,6 +42,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import lk.hd192.getsafedriver.Utils.GetSafeDriverServices;
+import lk.hd192.getsafedriver.Utils.TinyDB;
 import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 
 public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateSetListener {
@@ -43,8 +53,11 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
     TypeBottomSheet typeBottomSheet;
     GetSafeDriverServices getSafeDriverServices;
     SimpleDateFormat simpleDateFormat;
-    boolean isValidated = false;
+    public boolean isValidated = false;
     public static String driverId;
+    TinyDB tinyDB;
+    private DatabaseReference firebaseDatabase;
+    private FirebaseAuth mAuth;
     CustomEditText txtDriverBirthday, txtType, edit_txt_name, edit_txt_nic, edit_text_license_no_main, edit_text_telephone, txt_email;
 
     public AddDriverFirst() {
@@ -73,8 +86,9 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
         simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        mAuth = FirebaseAuth.getInstance();
         getSafeDriverServices = new GetSafeDriverServices();
-
+        tinyDB = new TinyDB(getActivity());
         txtDriverBirthday = view.findViewById(R.id.txt_driver_birthday);
         txtType = view.findViewById(R.id.txt_type);
         edit_txt_name = view.findViewById(R.id.edit_txt_name);
@@ -103,32 +117,67 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
 
     }
 
-    public void validateFields() {
+    public boolean validateFields() {
 
         if (TextUtils.isEmpty(edit_txt_name.getText().toString())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_txt_name);
+            edit_txt_name.setError("Please enter name");
+            return false;
         } else if (TextUtils.isEmpty(edit_txt_nic.getText().toString())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_txt_nic);
+            edit_txt_nic.setError("Please enter NIC number");
+            return false;
         } else if (TextUtils.isEmpty(edit_text_license_no_main.getText().toString())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_text_license_no_main);
+            edit_text_license_no_main.setError("Please enter License number");
+            return false;
         } else if (TextUtils.isEmpty(edit_text_telephone.getText().toString())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_text_telephone);
+            edit_text_telephone.setError("Please enter contact number");
+            return false;
         } else if (TextUtils.isEmpty(txtDriverBirthday.getText().toString())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(txtDriverBirthday);
+            txtDriverBirthday.setError("Please select birthday");
+            return false;
         } else if (TextUtils.isEmpty(txt_email.getText().toString())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_txt_name);
+            txt_email.setError("Please enter email");
+            return false;
         } else if (TextUtils.isEmpty(txtType.getText().toString())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(txtType);
+            txtType.setError("Please select transport type");
+            return false;
         } else {
-            registerDriverBasic();
+            return registerDriverBasic();
         }
 
     }
 
-    private void registerDriverBasic() {
+    private boolean registerDriverBasic() {
 
 
         HashMap<String, String> tempParam = new HashMap<>();
-        tempParam.put("name", "");
-        tempParam.put("nic", "");
-        tempParam.put("license_no", "");
-        tempParam.put("phone", "");
-        tempParam.put("birthday", "");
-        tempParam.put("email", "");
-        tempParam.put("type", "");
+        tempParam.put("name", edit_txt_name.getText().toString());
+        tempParam.put("nic", edit_txt_nic.getText().toString());
+        tempParam.put("license_no", edit_text_license_no_main.getText().toString());
+        tempParam.put("phone", edit_text_telephone.getText().toString());
+        tempParam.put("birthday", txtDriverBirthday.getText().toString());
+        tempParam.put("email", txt_email.getText().toString());
+        tempParam.put("type", txtType.getText().toString());
 
 
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_SAVE), 2, new VolleyJsonCallback() {
@@ -138,20 +187,59 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
                 try {
 
                     if (result.getBoolean("saved_status")) {
-
+                        tinyDB.putString("phone_no", edit_text_telephone.getText().toString());
+                        tinyDB.putString("email", txt_email.getText().toString());
+                        registerFirebaseUser();
+                        isValidated = true;
 
                     }
 
 
                 } catch (JSONException ex) {
                     ex.printStackTrace();
+                    isValidated = false;
                 }
 
 
             }
         });
+        return isValidated;
 
     }
+    private void registerFirebaseUser() {
+        mAuth.createUserWithEmailAndPassword( tinyDB.getString("email"),tinyDB.getString("phone_no"))
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                            String Uid = currentUser.getUid();
+                            firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(Uid);
+                            HashMap<String, String> userMap = new HashMap<>();
+                            userMap.put("Image", "Default");
+                            firebaseDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+
+//                                        startActivity(new Intent(getApplicationContext(), Messaging.class));
+//                                        finishAffinity();
+
+                                    }
+                                }
+                            });
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+
+
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
 
     public class TypeBottomSheet extends BottomSheetDialog {
         public TypeBottomSheet(@NonNull Context context) {
