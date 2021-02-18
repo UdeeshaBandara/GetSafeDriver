@@ -10,6 +10,7 @@
     <string name="BASE_URL">http://192.168.1.4:8000/v1/getsafe/api</string>
     <string name="SAVE_DRIVER">/newdriver/save</string>
     <string name="DRIVER_OTP">/driverlogin/sendotp</string>
+    <string name="DRIVER_VALIDATE_OTP">/driverlogin/validateotp</string>
 
     <string name="VALIDATE_TOKEN">/driver</string>
     <string name="DRIVER_SAVE">/newdriver/save</string>

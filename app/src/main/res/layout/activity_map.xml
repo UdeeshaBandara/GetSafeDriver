@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Message">
+    tools:context=".Map">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -29,51 +29,27 @@
             android:background="@drawable/bg_messaging_behind">
 
 
-
-                <EditText
-                    android:id="@+id/txt_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="20dp"
-
-                    android:background="@drawable/bg_search"
-                    android:drawableStart="@drawable/icon_search"
-                    android:drawablePadding="10dp"
-                    android:elevation="10dp"
-                    android:hint="Search Student"
-                    android:imeOptions="actionSearch"
-                    android:inputType="textNoSuggestions"
-                    android:maxLines="1"
-                    android:paddingStart="20dp"
-                    android:textSize="12sp" />
-
-
-
-
-            <RelativeLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/rlt_calendar"
-                android:layout_marginTop="80dp"
-                android:background="@drawable/bg_messaging">
+                android:layout_marginTop="40dp"
+                android:elevation="10dp"
+                android:layout_marginBottom="-40dp"
+                app:cardCornerRadius="70dp">
 
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_students"
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/mapView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:requiresFadingEdge="horizontal|vertical"
-                    android:layout_marginTop="15dp"
-                    android:overScrollMode="never" />
 
-            </RelativeLayout>
+
+
+                    />
+            </androidx.cardview.widget.CardView>
 
 
         </RelativeLayout>
     </RelativeLayout>
-
 
     <ImageView
         android:id="@+id/btn_back"
@@ -82,15 +58,36 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="40dp"
         android:src="@drawable/icon_back" />
-    <!--    <ScrollView-->
+</RelativeLayout>
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/btn_back"-->
+    <!--        android:layout_width="25dp"-->
+    <!--        android:layout_height="25dp"-->
+    <!--        android:layout_marginLeft="20dp"-->
+    <!--        android:layout_marginTop="20dp"-->
+    <!--        android:src="@drawable/icon_back" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/img_head"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:scaleType="centerCrop"-->
+    <!--        android:src="@drawable/logo_home" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/btn_back"-->
+    <!--        android:layout_width="25dp"-->
+    <!--        android:layout_height="25dp"-->
+    <!--        android:src="@drawable/icon_back"-->
+    <!--        android:layout_marginTop="35dp"-->
+    <!--        android:layout_marginLeft="35dp"/>-->
+    <!--    <RelativeLayout-->
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="match_parent"-->
     <!--        android:layout_below="@id/img_head"-->
-    <!--        android:overScrollMode="never">-->
-
-    <!--      -->
-
-    <!--    </ScrollView>-->
+    <!--        android:layout_marginTop="10dp">-->
 
 
-</RelativeLayout>
+    <!--    </RelativeLayout>-->
+

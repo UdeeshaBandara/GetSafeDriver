@@ -44,9 +44,11 @@ public class Home extends GetSafeDriverBase {
     }
 
     class LocationViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout cell_location;
 
         public LocationViewHolder(@NonNull View itemView) {
             super(itemView);
+            cell_location = itemView.findViewById(R.id.cell_location);
         }
     }
 
@@ -61,22 +63,29 @@ public class Home extends GetSafeDriverBase {
 
     class AbsenceViewHolder extends RecyclerView.ViewHolder {
 
+        RelativeLayout cell_absence;
+
         public AbsenceViewHolder(@NonNull View itemView) {
             super(itemView);
+            cell_absence = itemView.findViewById(R.id.cell_absence);
         }
     }
 
     class PaymentViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout cell_payment;
 
         public PaymentViewHolder(@NonNull View itemView) {
             super(itemView);
+            cell_payment = itemView.findViewById(R.id.cell_payment);
         }
     }
 
     class AttendanceViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout cell_attendance;
 
         public AttendanceViewHolder(@NonNull View itemView) {
             super(itemView);
+            cell_attendance = itemView.findViewById(R.id.cell_attendance);
         }
     }
 
@@ -136,13 +145,34 @@ public class Home extends GetSafeDriverBase {
                 switch (holder.getItemViewType()) {
 
                     case 0:
+                        AbsenceViewHolder absenceViewHolder = (AbsenceViewHolder) holder;
+                        absenceViewHolder.cell_absence.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(getApplicationContext(), Absence.class));
 
+                            }
+                        });
                         break;
                     case 1:
+                        LocationViewHolder locationViewHolder = (LocationViewHolder) holder;
+                        locationViewHolder.cell_location.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(getApplicationContext(), Map.class));
 
+                            }
+                        });
                         break;
                     case 2:
+                        PaymentViewHolder paymentViewHolder = (PaymentViewHolder) holder;
+                        paymentViewHolder.cell_payment.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(getApplicationContext(), Payment.class));
 
+                            }
+                        });
                         break;
                     case 3:
                         MessageViewHolder messageViewHolder = (MessageViewHolder) holder;

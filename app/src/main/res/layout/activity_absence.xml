@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Message">
+    tools:context=".Absence">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -28,45 +28,31 @@
 
             android:background="@drawable/bg_messaging_behind">
 
+            <RelativeLayout
+                android:id="@+id/rlt_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-
-                <EditText
-                    android:id="@+id/txt_search"
+                <CalendarView
+                    android:id="@+id/filter_calendar"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
 
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="20dp"
-
-                    android:background="@drawable/bg_search"
-                    android:drawableStart="@drawable/icon_search"
-                    android:drawablePadding="10dp"
-                    android:elevation="10dp"
-                    android:hint="Search Student"
-                    android:imeOptions="actionSearch"
-                    android:inputType="textNoSuggestions"
-                    android:maxLines="1"
-                    android:paddingStart="20dp"
-                    android:textSize="12sp" />
+                    android:dateTextAppearance="@style/CalenderViewDateCustomText"
+                    android:theme="@style/CalenderViewCustom"
+                    android:unfocusedMonthDateColor="@color/black"
+                    android:weekDayTextAppearance="@style/CalenderViewWeekCustomText" />
 
 
-
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/rlt_calendar"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="-35dp"
                 android:background="@drawable/bg_messaging">
 
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_students"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:requiresFadingEdge="horizontal|vertical"
-                    android:layout_marginTop="15dp"
-                    android:overScrollMode="never" />
 
             </RelativeLayout>
 

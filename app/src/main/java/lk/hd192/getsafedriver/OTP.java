@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONObject;
 
@@ -36,7 +38,7 @@ public class OTP extends GetSafeDriverBase {
     GetSafeDriverServices getSafeDriverServices;
     TinyDB tinyDB;
     Dialog dialog;
-
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +48,7 @@ public class OTP extends GetSafeDriverBase {
         confirmOTP_2 = findViewById(R.id.otp_two);
         confirmOTP_3 = findViewById(R.id.otp_three);
         confirmOTP_4 = findViewById(R.id.otp_four);
+        mAuth = FirebaseAuth.getInstance();
         getSafeDriverServices = new GetSafeDriverServices();
         tinyDB = new TinyDB(getApplicationContext());
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
@@ -164,7 +167,7 @@ public class OTP extends GetSafeDriverBase {
 
 
 //        showLoading();
-        getSafeDriverServices.networkJsonRequestWithoutHeader(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_OTP), 2, new VolleyJsonCallback() {
+        getSafeDriverServices.networkJsonRequestWithoutHeader(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_VALIDATE_OTP), 2, new VolleyJsonCallback() {
 
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -175,7 +178,8 @@ public class OTP extends GetSafeDriverBase {
                     if (result.getBoolean("otp_token_validity")) {
                         tinyDB.putBoolean("isLogged", true);
                         tinyDB.putString("token", result.getString("access_token"));
-
+                        firebaseLogin();
+                        getDeviceToken();
                         startActivity(new Intent(getApplicationContext(), Home.class));
                         finishAffinity();
 
@@ -192,6 +196,51 @@ public class OTP extends GetSafeDriverBase {
         });
 
 
+    }
+    private void firebaseLogin(){
+
+        mAuth.signInWithEmailAndPassword( tinyDB.getString("email"), tinyDB.getString("phone_no")).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+
+                    Log.e("firebase login","success");
+
+                } else {
+
+                }
+            }
+        });
+
+
+
+
+    }
+    public void getDeviceToken() {
+
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            showToast(dialog, "Please try again", 0);
+
+
+                            return;
+
+
+                        } else {
+
+                            updateUserFcmToken(task.getResult().getToken());
+
+
+                        }
+
+                    }
+                });
+    }
+    private void updateUserFcmToken(String token) {
     }
 
 }

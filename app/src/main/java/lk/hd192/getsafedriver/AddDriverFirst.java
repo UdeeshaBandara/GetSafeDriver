@@ -180,6 +180,8 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
         tempParam.put("type", txtType.getText().toString());
 
 
+
+
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_SAVE), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -189,6 +191,7 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
                     if (result.getBoolean("saved_status")) {
                         tinyDB.putString("phone_no", edit_text_telephone.getText().toString());
                         tinyDB.putString("email", txt_email.getText().toString());
+                        tinyDB.putBoolean("isStaffDriver", txtType.getText().toString().equals("School Transport"));
                         registerFirebaseUser();
                         isValidated = true;
 

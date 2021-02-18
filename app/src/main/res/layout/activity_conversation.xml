@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Conversation">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:background="@color/yellow">
+
+        <TextView
+            android:id="@+id/txt_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/nunito_semibold"
+            android:text="Mr. Ranil Wickaramasinghe"
+            android:textSize="16sp" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/txt_user_name"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_messaging_behind">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+
+                android:layout_marginTop="40dp">
+
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/message_swipe_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:layout_above="@+id/rlt_msg"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_messaging">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_messages"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_above="@+id/chat_message_view"
+                        android:layout_marginTop="15dp"
+                        android:clipToPadding="false"
+                        android:overScrollMode="never"
+                        android:paddingHorizontal="25dp"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="5dp" />
+
+
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlt_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/white">
+
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/custom_edit_text"
+
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="5dp"
+                        android:paddingBottom="5dp"
+                        android:scrollHorizontally="true">
+
+
+                        <EditText
+                            android:id="@+id/txt_msg_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toStartOf="@+id/btn_send"
+                            android:background="@drawable/bg_blank_for_edit"
+                            android:gravity="bottom"
+                            android:inputType="textImeMultiLine|textMultiLine"
+                            android:paddingRight="5dp" />
+
+                        <ImageView
+                            android:id="@+id/btn_send"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/icon_send" />
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/icon_back" />
+
+</RelativeLayout>

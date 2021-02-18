@@ -52,7 +52,7 @@ public class Register extends GetSafeDriverBase {
         driverAnimation = findViewById(R.id.driver_animation);
         doneAnimation = findViewById(R.id.done_animation);
         locationAnimation = findViewById(R.id.location_animation);
-        txtSubHeading = findViewById(R.id.txt_sub_heading);
+
 
         nonSwappableViewPager.setOffscreenPageLimit(1);
         setupViewPager(nonSwappableViewPager);

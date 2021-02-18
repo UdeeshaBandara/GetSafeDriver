@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import lk.hd192.getsafedriver.Home;
 import lk.hd192.getsafedriver.Login;
 import lk.hd192.getsafedriver.R;
 
@@ -29,7 +30,7 @@ class SplashScreen extends GetSafeDriverBase {
         Log.e("islogged",tinyDB.getBoolean("isLogged")+"");
 
 
-        if (tinyDB.getBoolean("isLogged") == true)
+        if (tinyDB.getBoolean("isLogged"))
             validateToken();
 
 
@@ -59,7 +60,7 @@ class SplashScreen extends GetSafeDriverBase {
                     if (result.getBoolean("logged-in-status"))
 
 
-                        startActivity(new Intent(SplashScreen.this, Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
+                        startActivity(new Intent(SplashScreen.this, Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
                     else {
 
                         startActivity(new Intent(SplashScreen.this, Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));

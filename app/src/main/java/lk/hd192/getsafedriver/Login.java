@@ -1,8 +1,6 @@
 package lk.hd192.getsafedriver;
 
 
-
-
 import android.app.Dialog;
 
 import android.content.Intent;
@@ -39,6 +37,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONObject;
+
 import java.util.HashMap;
 
 import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
@@ -47,14 +46,13 @@ import lk.hd192.getsafedriver.Utils.TinyDB;
 import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 
 
-
 public class Login extends GetSafeDriverBase {
 
     EditText one, two, three, four, five, six, seven, eight, nine;
     ImageView img_head;
     Dialog dialog;
     RelativeLayout rlt;
-    private FirebaseAuth mAuth;
+
     TinyDB tinyDB;
 
     GetSafeDriverServices getSafeDriverServices;
@@ -74,7 +72,7 @@ public class Login extends GetSafeDriverBase {
         nine = findViewById(R.id.txt_number_nine);
         img_head = findViewById(R.id.img_head);
         rlt = findViewById(R.id.rlt);
-        mAuth = FirebaseAuth.getInstance();
+
         tinyDB = new TinyDB(getApplicationContext());
         getSafeDriverServices = new GetSafeDriverServices();
         requestFocus();
@@ -97,21 +95,16 @@ public class Login extends GetSafeDriverBase {
                         !TextUtils.isEmpty(eight.getText().toString()) &
                         !TextUtils.isEmpty(nine.getText().toString())) {
 
-                    if (tinyDB.getBoolean("isLogged")){
-                        driverSendOtp();
-                    }
-                    else{
-                        startActivity(new Intent(getApplicationContext(),Register.class));
-                    }
 
-                    getDeviceToken();
-//                    firebaseLogin();
+                    driverSendOtp();
+
 
                 } else {
                     YoYo.with(Techniques.Bounce)
                             .duration(2500)
                             .playOn(findViewById(R.id.lnr_number));
-
+                    startActivity(new Intent(getApplicationContext(),Home.class));
+                    finish();
 //                    captureImageCameraOrGallery();
 
 
@@ -119,62 +112,6 @@ public class Login extends GetSafeDriverBase {
             }
         });
     }
-
-    public void getDeviceToken() {
-
-
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            showToast(dialog, "Please try again", 0);
-
-
-                            return;
-
-
-                        } else {
-
-                            updateUserFcmToken(task.getResult().getToken());
-
-
-                        }
-
-                    }
-                });
-    }
-
-    private void updateUserFcmToken(String token) {
-    }
-    private void firebaseLogin(){
-
-        mAuth.signInWithEmailAndPassword( tinyDB.getString("email"), one.getText().toString() +
-                two.getText().toString() +
-                three.getText().toString() +
-                four.getText().toString() +
-                five.getText().toString() +
-                six.getText().toString() +
-                seven.getText().toString() +
-                eight.getText().toString() +
-                nine.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-
-                    Log.e("firebase login","success");
-
-                } else {
-
-                }
-            }
-        });
-
-
-
-
-    }
-
 
 
     private void requestFocus() {
@@ -394,19 +331,30 @@ public class Login extends GetSafeDriverBase {
                 eight.getText().toString() +
                 nine.getText().toString());
         //    tempParam.put("fcm_token", token);
-        Log.e("inside", "ok");
+
 
         getSafeDriverServices.networkJsonRequestWithoutHeader(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_OTP), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-                    Log.e("success", "ok");
+
                     Log.e("result", result + "");
 
                     if (result.getBoolean("otp_sent_status")) {
 
+                        tinyDB.putString("phone_no", one.getText().toString() +
+                                two.getText().toString() +
+                                three.getText().toString() +
+                                four.getText().toString() +
+                                five.getText().toString() +
+                                six.getText().toString() +
+                                seven.getText().toString() +
+                                eight.getText().toString() +
+                                nine.getText().toString());
 
+                        startActivity(new Intent(getApplicationContext(),OTP.class));
+                        finish();
                     }
 //                        showToast(dialog, "Something went wrong. Please try again", 0);
 

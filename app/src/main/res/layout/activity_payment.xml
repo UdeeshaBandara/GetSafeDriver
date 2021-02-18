@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Message">
+    tools:context=".Payment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -29,44 +29,13 @@
             android:background="@drawable/bg_messaging_behind">
 
 
-
-                <EditText
-                    android:id="@+id/txt_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="20dp"
-
-                    android:background="@drawable/bg_search"
-                    android:drawableStart="@drawable/icon_search"
-                    android:drawablePadding="10dp"
-                    android:elevation="10dp"
-                    android:hint="Search Student"
-                    android:imeOptions="actionSearch"
-                    android:inputType="textNoSuggestions"
-                    android:maxLines="1"
-                    android:paddingStart="20dp"
-                    android:textSize="12sp" />
-
-
-
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/rlt_calendar"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="45dp"
                 android:background="@drawable/bg_messaging">
 
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_students"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:requiresFadingEdge="horizontal|vertical"
-                    android:layout_marginTop="15dp"
-                    android:overScrollMode="never" />
 
             </RelativeLayout>
 
