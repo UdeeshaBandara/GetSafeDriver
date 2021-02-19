@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".Absence">
 
-    <RelativeLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:background="@color/yellow">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/img_head"
 
-        <ImageView
-            android:id="@+id/img_head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/logo" />
+        android:background="@color/yellow"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-
-        <RelativeLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/img_head"
+            android:layout_marginBottom="-45dp"
 
-            android:background="@drawable/bg_messaging_behind">
+            android:background="@color/yellow"
+
+            android:fitsSystemWindows="true"
+            app:expandedTitleMarginEnd="0dp"
+            app:expandedTitleMarginStart="0dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <RelativeLayout
                 android:id="@+id/rlt_calendar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:background="@drawable/bg_messaging">
 
                 <CalendarView
                     android:id="@+id/filter_calendar"
@@ -46,19 +50,128 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginLeft="-17dp"
+                android:layout_marginTop="-5dp"
+                android:background="@drawable/bg_action_bar"
+                android:visibility="visible"
+                app:layout_collapseMode="pin">
+
+                <RelativeLayout
+                    android:id="@+id/status_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/bg_action_bar">
+
+
+                    <ImageView
+                        android:id="@+id/img_head"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/logo" />
+
+
+                </RelativeLayout>
+
+
+            </androidx.appcompat.widget.Toolbar>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <LinearLayout
+            android:id="@+id/lnrTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_tool_bar_expanded"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/nunito_semibold"
+                android:text="Date"
+                android:textColor="@color/black" />
+
+            <LinearLayout
+                android:id="@+id/lnr_marks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginBottom="10dp"
+
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/icon_check" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Present"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="25dp"
+                    android:src="@drawable/icon_false" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Absent"
+                    android:textColor="@color/black" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#EBEBE0"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_absence"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/rlt_calendar"
-                android:layout_marginTop="-35dp"
-                android:background="@drawable/bg_messaging">
+                android:layout_below="@+id/lnr_marks"
+                android:layout_marginTop="15dp"
 
+                android:clipToPadding="false"
+                android:overScrollMode="never" />
+        </LinearLayout>
 
-            </RelativeLayout>
-
-
-        </RelativeLayout>
-    </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
 
 
     <ImageView
@@ -79,4 +192,4 @@
     <!--    </ScrollView>-->
 
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -62,7 +62,7 @@ public class Conversation extends AppCompatActivity {
         setContentView(R.layout.activity_conversation);
 
         tinyDB = new TinyDB(getApplicationContext());
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         tinyDB.putBoolean("isStaffDriver",true);
         mRootRef = FirebaseDatabase.getInstance().getReference();
         if (tinyDB.getBoolean("isStaffDriver"))

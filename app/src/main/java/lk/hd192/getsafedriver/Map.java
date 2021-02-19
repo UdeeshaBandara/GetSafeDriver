@@ -89,7 +89,6 @@ TinyDB tinyDB;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
@@ -588,11 +587,11 @@ TinyDB tinyDB;
     }
 
 
-    public Bitmap bitmapSizeByScale(Bitmap bitmapIn, float scall_zero_to_one_f) {
+    public Bitmap bitmapSizeByScale(Bitmap bitmapIn, float scale_zero_to_one_f) {
 
         Bitmap bitmapOut = Bitmap.createScaledBitmap(bitmapIn,
-                Math.round(bitmapIn.getWidth() * scall_zero_to_one_f),
-                Math.round(bitmapIn.getHeight() * scall_zero_to_one_f), false);
+                Math.round(bitmapIn.getWidth() * scale_zero_to_one_f),
+                Math.round(bitmapIn.getHeight() * scale_zero_to_one_f), false);
 
         return bitmapOut;
     }
