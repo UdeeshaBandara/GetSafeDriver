@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -21,8 +22,10 @@ import lk.hd192.getsafedriver.Utils.AppBarStateChangeListener;
 public class Absence extends AppCompatActivity {
 
     RecyclerView recycler_absence;
+    RelativeLayout status_bar;
     AppBarLayout appBarLayout;
-LinearLayout lnrTop;
+    LinearLayout lnrTop;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +34,7 @@ LinearLayout lnrTop;
         recycler_absence = findViewById(R.id.recycler_absence);
         appBarLayout = findViewById(R.id.appBar);
         lnrTop = findViewById(R.id.lnrTop);
+        status_bar = findViewById(R.id.status_bar);
 
         findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
 
@@ -40,11 +44,15 @@ LinearLayout lnrTop;
         appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
             @Override
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                Log.e("STATE", state.name());
-                if(state.name().equals("COLLAPSED"))
+
+                if (state.name().equals("COLLAPSED")) {
                     lnrTop.setBackground(getDrawable(R.drawable.bg_tool_bar_collapsed));
-                else
+                    status_bar.setBackground(getDrawable(R.drawable.bg_action_bar_collapse));
+                } else {
                     lnrTop.setBackground(getDrawable(R.drawable.bg_tool_bar_expanded));
+                    status_bar.setBackground(getDrawable(R.drawable.bg_action_bar));
+                }
+
 
             }
         });

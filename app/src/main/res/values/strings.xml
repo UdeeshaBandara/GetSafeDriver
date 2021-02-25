@@ -21,4 +21,10 @@
     <string name="DRIVER_NIC_BACK">/newdriver/nicback</string>
     <string name="DRIVER_LICENCE">/newdriver/license</string>
 
+
+    <string name="JOURNEY_LIST_MORNING">/driver/journey/list/morning</string>
+    <string name="JOURNEY_LIST_EVENING">/driver/journey/list/evening</string>
+
+
+
 </resources>

@@ -16,11 +16,13 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
+import lk.hd192.getsafedriver.Utils.TinyDB;
 
 public class Home extends GetSafeDriverBase {
 
     RecyclerView recyclerHome;
     StaggeredGridLayoutManager staggeredGridLayoutManager;
+    TinyDB tinyDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class Home extends GetSafeDriverBase {
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow));
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
+        tinyDB= new TinyDB(getApplicationContext());
 
         recyclerHome = findViewById(R.id.recycler_home);
 
@@ -40,6 +43,8 @@ public class Home extends GetSafeDriverBase {
 //        recyclerHome.setLayoutManager(staggeredGridLayoutManager);
 //        recyclerHome.getAdapter().notifyDataSetChanged();
 
+        tinyDB.putBoolean("isSchoolDriver",true);
+        tinyDB.putString("token","2|J077CxJEhXRM3PzH72ezwVHVGCW6Eg3ki5VG9YrW");
 
     }
 

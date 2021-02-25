@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -43,6 +44,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -57,28 +59,31 @@ import java.util.List;
 import java.util.Locale;
 
 import lk.hd192.getsafedriver.Utils.DirectionJSONParser;
+import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
 import lk.hd192.getsafedriver.Utils.GetSafeDriverServices;
 import lk.hd192.getsafedriver.Utils.LocationUpdates;
 import lk.hd192.getsafedriver.Utils.TinyDB;
+import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 
-public class Map extends AppCompatActivity {
+public class Map extends GetSafeDriverBase {
     MapView mapView;
 
 
     private GoogleMap googleMap;
-
+    ArrayList<LatLng> dropOffLocations = new ArrayList<>();
     LocationManager locationManager;
     GetSafeDriverServices getSafeDriverServices;
     private DatabaseReference mRootRef, locationRef;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
 
-    String pushId = "";
+    String wayPoints ;
 
+    JSONArray passengerList;
     Polyline polyline;
     LocationListener locationListener;
     LocationManager locationManagerSender;
-TinyDB tinyDB;
+    TinyDB tinyDB;
     Bitmap originMarker, finalMarker;
 
     Double dropLat, dropLon, currentLat, currentLon;
@@ -93,8 +98,9 @@ TinyDB tinyDB;
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
         getSafeDriverServices = new GetSafeDriverServices();
-        tinyDB=new TinyDB(getApplicationContext());
+        tinyDB = new TinyDB(getApplicationContext());
         mapView = findViewById(R.id.mapView);
+
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
 //        btnBack = findViewById(R.id.btn_location_back);
@@ -105,7 +111,7 @@ TinyDB tinyDB;
 
         findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
 
-        if (tinyDB.getBoolean("isStaffAccount"))
+        if (!tinyDB.getBoolean("isSchoolDriver"))
             locationRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Location");
         else
             locationRef = mRootRef.child("School_Drivers").child("add_driver_id_here").child("Location");
@@ -141,7 +147,6 @@ TinyDB tinyDB;
                 java.util.Map messageMap = new HashMap();
                 messageMap.put("Latitude", location.getLatitude());
                 messageMap.put("Longitude", location.getLongitude());
-
 
 
                 locationRef.updateChildren(messageMap, new DatabaseReference.CompletionListener() {
@@ -245,6 +250,7 @@ TinyDB tinyDB;
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
     }
+
     public void loadMap() {
 
         mapView.getMapAsync(new OnMapReadyCallback() {
@@ -308,6 +314,7 @@ TinyDB tinyDB;
 
             }
         });
+        getMorningList();
     }
 
 
@@ -366,25 +373,44 @@ TinyDB tinyDB;
 //        LatLng origin = new LatLng(pickUpLat, pickUpLon);
         LatLng origin = new LatLng(6.965495959761049, 79.95475497680536);
 //        LatLng dest = new LatLng(drpickUpLat, pickUpLon);
-        LatLng dest = new LatLng(dropLat, dropLon);
+//        LatLng dest = new LatLng(dropLat, dropLon);
+
+        if (dropOffLocations.size() != 0) {
+//            LatLng origin = new LatLng(Double.parseDouble(driverLatLongs.get(0).getLatitude()), Double.parseDouble(driverLatLongs.get(0).getLongitude()));
+
+            LatLng dest = dropOffLocations.get(0);
+
+            wayPoints = "&waypoints=";
+            for (int l = 0; l < dropOffLocations.size(); l++) {
+                googleMap.addMarker(new MarkerOptions()
+                        .position(dropOffLocations.get(l)).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title(""));
+
+//                if (l == 0 || l == driverLatLongs.size() - 1)
+//                    continue;
+//                else
+                if (l == 1)
+                    wayPoints += "via:" + dropOffLocations.get(l).latitude + "," + dropOffLocations.get(l).longitude + "";
+                else
+                    wayPoints += "|" + dropOffLocations.get(l).latitude + "," + dropOffLocations.get(l).longitude + "";
+            }
 
 
-        googleMap.addMarker(new MarkerOptions()
-                .position(origin).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title("Marker at home"));
+//            googleMap.addMarker(new MarkerOptions()
+//                .position(origin).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title("Marker at home"));
+//
+//        googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).position(dest).title("Live location"));
 
-        googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).position(dest).title("Live location"));
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(origin);
+            builder.include(dest);
 
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(origin);
-        builder.include(dest);
+            LatLngBounds bounds = builder.build();
 
-        LatLngBounds bounds = builder.build();
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 75));
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 75));
-
-        CameraPosition camPos = new CameraPosition.Builder(googleMap.getCameraPosition()).target(bounds.getCenter()).tilt(40).build();
-        googleMap.animateCamera(CameraUpdateFactory
-                .newCameraPosition(camPos));
+            CameraPosition camPos = new CameraPosition.Builder(googleMap.getCameraPosition()).target(bounds.getCenter()).tilt(40).build();
+            googleMap.animateCamera(CameraUpdateFactory
+                    .newCameraPosition(camPos));
 //
 //        int padding = 1;
 //
@@ -394,14 +420,14 @@ TinyDB tinyDB;
 //        googleMap.animateCamera(cu);
 
 
-        String url = getDirectionsUrl(origin, dest);
+            String url = getDirectionsUrl(origin, dest);
 
 
-        DownloadTask downloadTask = new DownloadTask();
+            DownloadTask downloadTask = new DownloadTask();
 
 
-        downloadTask.execute(url);
-
+            downloadTask.execute(url);
+        }
 
     }
 
@@ -417,12 +443,10 @@ TinyDB tinyDB;
         //avoid highways
         String avoidList = "&avoid=highways";
 
-        //drop off locations
-        String wayPoints = "&waypoints=via:7.008079020850186,79.96081405184961";
 
 
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest +wayPoints+avoidList + "&key=" + getString(R.string.API_KEY);
+        String parameters = str_origin + "&" + str_dest + wayPoints + avoidList + "&key=" + getString(R.string.API_KEY);
 
         // Output format
         String output = "json";
@@ -431,7 +455,7 @@ TinyDB tinyDB;
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
-        Log.e("direction url",url);
+        Log.e("direction url", url);
 
         return url;
     }
@@ -594,5 +618,85 @@ TinyDB tinyDB;
                 Math.round(bitmapIn.getHeight() * scale_zero_to_one_f), false);
 
         return bitmapOut;
+    }
+
+    void getLatLong() {
+        try {
+            for (int jk = 0; jk < passengerList.length(); jk++) {
+
+            dropOffLocations.add(jk,new LatLng(passengerList.getJSONObject(jk).getJSONObject("pickup_location").getDouble("pick_up_latitude"),passengerList.getJSONObject(jk).getJSONObject("pickup_location").getDouble("pick_up_longitude")));
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+    }
+
+    private void getMorningList() {
+
+        HashMap<String, String> tempParam = new HashMap<>();
+
+
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.JOURNEY_LIST_MORNING), 1,tinyDB.getString("token"), new VolleyJsonCallback() {
+
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+                    passengerList = new JSONArray();
+                    Log.e("response", result + "");
+
+                    if (result.getBoolean("status")) {
+
+                        passengerList = result.getJSONArray("models");
+                        getLatLong();
+                    } else
+                        showToast(dialog, "Something went wrong. Please try again", 0);
+
+
+                } catch (Exception e) {
+
+                    Log.e("ex", e.getMessage());
+                }
+
+            }
+        });
+
+
+    }
+
+    private void getEveningList() {
+
+        HashMap<String, String> tempParam = new HashMap<>();
+
+
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.JOURNEY_LIST_MORNING), 1, tinyDB.getString("token"),new VolleyJsonCallback() {
+
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+                    passengerList = new JSONArray();
+                    Log.e("response", result + "");
+
+                    if (result.getBoolean("status")) {
+
+                        passengerList = result.getJSONArray("models");
+                        getLatLong();
+                    } else
+                        showToast(dialog, "Something went wrong. Please try again", 0);
+
+
+                } catch (Exception e) {
+
+                    Log.e("ex", e.getMessage());
+                }
+
+            }
+        });
+
+
     }
 }
