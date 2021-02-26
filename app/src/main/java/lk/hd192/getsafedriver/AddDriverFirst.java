@@ -266,6 +266,7 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
                 public void onClick(View v) {
                     txtType.setText("School Transport");
                     typeBottomSheet.dismiss();
+
                 }
             });
             findViewById(R.id.staff_search).setOnClickListener(new View.OnClickListener() {

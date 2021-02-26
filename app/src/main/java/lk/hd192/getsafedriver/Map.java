@@ -24,6 +24,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -85,7 +86,7 @@ public class Map extends GetSafeDriverBase {
     LocationManager locationManagerSender;
     TinyDB tinyDB;
     Bitmap originMarker, finalMarker;
-
+Button btn_start_trip;
     Double dropLat, dropLon, currentLat, currentLon;
     Dialog dialog;
 
@@ -100,6 +101,7 @@ public class Map extends GetSafeDriverBase {
         getSafeDriverServices = new GetSafeDriverServices();
         tinyDB = new TinyDB(getApplicationContext());
         mapView = findViewById(R.id.mapView);
+        btn_start_trip = findViewById(R.id.btn_start_trip);
 
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -137,6 +139,24 @@ public class Map extends GetSafeDriverBase {
 //            }
 //        });
 
+        btn_start_trip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(btn_start_trip.getText().toString().equals("End Trip0")){
+                    locationRef.child("Status").setValue("end");
+                    btn_start_trip.setText("Start Trip");
+                    btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_stop));
+
+                }else{
+
+                    locationRef.child("Status").setValue("started");
+                    btn_start_trip.setText("End Trip");
+                    btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_next_forward));
+                }
+
+
+            }
+        });
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -587,8 +607,8 @@ public class Map extends GetSafeDriverBase {
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(8);
-                lineOptions.color(getResources().getColor(R.color.sec_color));
+                lineOptions.width(14);
+                lineOptions.color(getResources().getColor(R.color.button_blue));
             }
 
             // Drawing polyline in the Google Map for the i-th route

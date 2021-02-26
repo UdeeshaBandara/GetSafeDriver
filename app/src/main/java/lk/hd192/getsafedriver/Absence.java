@@ -3,6 +3,7 @@ package lk.hd192.getsafedriver;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,6 +27,8 @@ public class Absence extends AppCompatActivity {
     RelativeLayout status_bar;
     AppBarLayout appBarLayout;
     LinearLayout lnrTop;
+    TextView txt_current_date;
+    CalendarView filter_calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +39,13 @@ public class Absence extends AppCompatActivity {
         appBarLayout = findViewById(R.id.appBar);
         lnrTop = findViewById(R.id.lnrTop);
         status_bar = findViewById(R.id.status_bar);
+        txt_current_date = findViewById(R.id.txt_current_date);
+        filter_calendar = findViewById(R.id.filter_calendar);
 
         findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
 
         recycler_absence.setAdapter(new AbsenceUserAdapter());
-        recycler_absence.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
+        recycler_absence.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
         recycler_absence.setNestedScrollingEnabled(false);
         appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
             @Override
@@ -54,6 +60,12 @@ public class Absence extends AppCompatActivity {
                 }
 
 
+            }
+        });
+        filter_calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                txt_current_date.setText("Selected Date"+dayOfMonth+"-"+month+"-"+year);
             }
         });
     }

@@ -60,13 +60,14 @@
                 android:id="@+id/btn_start_trip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start Trip"
-                android:fontFamily="@font/nunito_semibold"
-                android:textSize="16sp"
-                android:layout_marginTop="5dp"
                 android:layout_centerHorizontal="true"
+                android:fontFamily="@font/nunito_semibold"
+                android:text="Start Trip"
                 android:textAllCaps="false"
-                android:textColor="@color/black"/>
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_btn_next_forward"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
