@@ -65,7 +65,7 @@ public class Absence extends AppCompatActivity {
         filter_calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                txt_current_date.setText("Selected Date"+dayOfMonth+"-"+month+"-"+year);
+                txt_current_date.setText("Selected Date : "+dayOfMonth+"-"+month+"-"+year);
             }
         });
     }

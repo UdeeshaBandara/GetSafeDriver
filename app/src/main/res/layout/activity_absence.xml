@@ -72,8 +72,8 @@
                         android:id="@+id/img_head"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/logo" />
 
@@ -101,16 +101,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:textSize="18sp"
                 android:fontFamily="@font/nunito_semibold"
-              
-                android:textColor="@color/black" />
+                android:text="Select a date"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:id="@+id/lnr_marks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-android:layout_marginTop="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
 
                 android:gravity="center_horizontal"
@@ -171,9 +171,9 @@ android:layout_marginTop="10dp"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/lnr_marks"
                 android:layout_marginTop="15dp"
-
                 android:clipToPadding="false"
-                android:overScrollMode="never" />
+                android:overScrollMode="never"
+                android:paddingBottom="80dp" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

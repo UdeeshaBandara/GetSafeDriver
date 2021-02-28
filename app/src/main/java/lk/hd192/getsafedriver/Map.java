@@ -67,6 +67,7 @@ import lk.hd192.getsafedriver.Utils.TinyDB;
 import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 
 public class Map extends GetSafeDriverBase {
+
     MapView mapView;
 
 
@@ -78,7 +79,7 @@ public class Map extends GetSafeDriverBase {
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
 
-    String wayPoints ;
+    String wayPoints;
 
     JSONArray passengerList;
     Polyline polyline;
@@ -86,7 +87,7 @@ public class Map extends GetSafeDriverBase {
     LocationManager locationManagerSender;
     TinyDB tinyDB;
     Bitmap originMarker, finalMarker;
-Button btn_start_trip;
+    Button btn_start_trip;
     Double dropLat, dropLon, currentLat, currentLon;
     Dialog dialog;
 
@@ -105,6 +106,7 @@ Button btn_start_trip;
 
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
+
 //        btnBack = findViewById(R.id.btn_location_back);
 
 //        database = FirebaseDatabase.getInstance();
@@ -132,6 +134,7 @@ Button btn_start_trip;
 
         dropLat = 6.965495959761049;
         dropLon = 79.95475497680536;
+
 //        btnBack.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -142,12 +145,12 @@ Button btn_start_trip;
         btn_start_trip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(btn_start_trip.getText().toString().equals("End Trip0")){
+                if (btn_start_trip.getText().toString().equals("End Trip0")) {
                     locationRef.child("Status").setValue("end");
                     btn_start_trip.setText("Start Trip");
                     btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_stop));
 
-                }else{
+                } else {
 
                     locationRef.child("Status").setValue("started");
                     btn_start_trip.setText("End Trip");
@@ -464,7 +467,6 @@ Button btn_start_trip;
         String avoidList = "&avoid=highways";
 
 
-
         // Building the parameters to the web service
         String parameters = str_origin + "&" + str_dest + wayPoints + avoidList + "&key=" + getString(R.string.API_KEY);
 
@@ -644,11 +646,11 @@ Button btn_start_trip;
         try {
             for (int jk = 0; jk < passengerList.length(); jk++) {
 
-            dropOffLocations.add(jk,new LatLng(passengerList.getJSONObject(jk).getJSONObject("pickup_location").getDouble("pick_up_latitude"),passengerList.getJSONObject(jk).getJSONObject("pickup_location").getDouble("pick_up_longitude")));
+                dropOffLocations.add(jk, new LatLng(passengerList.getJSONObject(jk).getJSONObject("pickup_location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("pickup_location").getDouble("pick_up_longitude")));
             }
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -659,7 +661,7 @@ Button btn_start_trip;
         HashMap<String, String> tempParam = new HashMap<>();
 
 
-        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.JOURNEY_LIST_MORNING), 1,tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.JOURNEY_LIST_MORNING), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
 
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -692,7 +694,7 @@ Button btn_start_trip;
         HashMap<String, String> tempParam = new HashMap<>();
 
 
-        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.JOURNEY_LIST_MORNING), 1, tinyDB.getString("token"),new VolleyJsonCallback() {
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.JOURNEY_LIST_MORNING), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
 
             @Override
             public void onSuccessResponse(JSONObject result) {
