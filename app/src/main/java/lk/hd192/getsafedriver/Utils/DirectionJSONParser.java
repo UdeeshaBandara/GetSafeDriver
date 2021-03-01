@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import lk.hd192.getsafedriver.Map;
+
 public class DirectionJSONParser {
 
     public List<List<HashMap<String,String>>> parse(JSONObject jObject){
@@ -28,10 +30,12 @@ public class DirectionJSONParser {
                 jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray("legs");
                 List path = new ArrayList<HashMap<String, String>>();
 
+
                 /** Traversing all legs */
                 for(int j=0;j<jLegs.length();j++){
                     jSteps = ( (JSONObject)jLegs.get(j)).getJSONArray("steps");
-
+                    Map.duration.add(j,( (JSONObject)jLegs.get(j)).getJSONObject("duration").getString("text"));
+                    Map.distance.add(j,( (JSONObject)jLegs.get(j)).getJSONObject("distance").getString("text"));
                     /** Traversing all steps */
                     for(int k=0;k<jSteps.length();k++){
                         String polyline = "";

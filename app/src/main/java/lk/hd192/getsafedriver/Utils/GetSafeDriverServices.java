@@ -355,7 +355,7 @@ public class GetSafeDriverServices extends GetSafeDriverBase {
 
             requestMethod = Request.Method.POST;
 
-        } else {
+        } else  if (method == 3) {
 
             requestMethod = Request.Method.PUT;
 

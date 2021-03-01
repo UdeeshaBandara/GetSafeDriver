@@ -106,7 +106,7 @@ public class Login extends GetSafeDriverBase {
                     startActivity(new Intent(getApplicationContext(),Home.class));
                     finish();
 //                    captureImageCameraOrGallery();
-
+                    getDeviceToken();
 
                 }
             }
@@ -366,6 +366,31 @@ public class Login extends GetSafeDriverBase {
             }
         });
 
+    }
+    public void getDeviceToken() {
+
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            showToast(dialog, "Please try again", 0);
+
+
+                            return;
+
+
+                        } else {
+                            Log.e("htok",task.getResult().getToken());
+
+//                            updateUserFcmToken();
+
+
+                        }
+
+                    }
+                });
     }
 
 }

@@ -50,7 +50,7 @@ public class Home extends GetSafeDriverBase {
 //        recyclerHome.getAdapter().notifyDataSetChanged();
 
         tinyDB.putBoolean("isSchoolDriver",true);
-        tinyDB.putString("token","2|J077CxJEhXRM3PzH72ezwVHVGCW6Eg3ki5VG9YrW");
+        tinyDB.putString("token","2|49nA3gevYJ11pMEr3HFfaAjb4LTxIChbMPPrloVr");
         try {
             Encrypt encrypt = new Encrypt(1024);
 

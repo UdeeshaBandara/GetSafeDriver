@@ -68,7 +68,7 @@ public class GetSafeDriverBase extends AppCompatActivity {
             window.setGravity(Gravity.BOTTOM);
 
 
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, 550);
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
             dialog.setTitle(null);
             dialog.setContentView(R.layout.toast_layout_location);
 
@@ -108,7 +108,7 @@ public class GetSafeDriverBase extends AppCompatActivity {
         window.setGravity(Gravity.BOTTOM);
 
 
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, 550);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         dialog.setTitle(null);
         switch (type) {
             case 0:

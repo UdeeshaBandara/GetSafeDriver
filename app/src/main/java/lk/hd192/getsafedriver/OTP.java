@@ -178,7 +178,7 @@ public class OTP extends GetSafeDriverBase {
                     if (result.getBoolean("otp_token_validity")) {
                         tinyDB.putBoolean("isLogged", true);
                         tinyDB.putString("token", result.getString("access_token"));
-                        firebaseLogin();
+//                        firebaseLogin();
                         getDeviceToken();
                         startActivity(new Intent(getApplicationContext(), Home.class));
                         finishAffinity();

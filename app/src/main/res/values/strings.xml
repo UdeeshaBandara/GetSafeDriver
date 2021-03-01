@@ -26,5 +26,19 @@
     <string name="JOURNEY_LIST_EVENING">/driver/journey/list/evening</string>
 
 
+    <string name="JOURNEY_START">/driver/journey/start</string>
+    <string name="JOURNEY_END">/driver/journey/end</string>
+
+
+    <string name="PASSENGER_PICKUP">/driver/journey/picked</string>
+    <string name="PASSENGER_DROP">/driver/journey/dropped</string>
+
+
+    <string name="INFORM_DRIVER_ARRIVAL">/driver/journey/arrived</string>
+    <string name="MARK_PASSENGER_ABSENT">/driver/journey/markabsent</string>
+
+
+
+
 
 </resources>

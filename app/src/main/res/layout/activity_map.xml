@@ -25,14 +25,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/img_head"
-
+            android:layout_marginTop="-20dp"
             android:background="@drawable/bg_messaging_behind">
 
+
+            <Button
+                android:id="@+id/btn_start_trip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_btn_stop"
+                android:fontFamily="@font/nunito_semibold"
+                android:text="Start Trip"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="60dp"
                 android:layout_marginBottom="-40dp"
                 android:elevation="10dp"
                 app:cardCornerRadius="70dp">
@@ -47,38 +60,153 @@
             </androidx.cardview.widget.CardView>
 
 
-
-
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="160dp"
             android:layout_alignParentBottom="true"
+
             android:background="@drawable/bg_messaging">
 
-            <Button
-                android:id="@+id/btn_start_trip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:fontFamily="@font/nunito_semibold"
-                android:text="Start Trip"
-                android:textAllCaps="false"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bg_btn_next_forward"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/btn_start_trip"
-                android:orientation="horizontal">
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="5"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/nunito_regular"
+                        android:maxLines="1"
+                        android:text="Next Passenger Name "
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="5"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/nunito_regular"
+                        android:maxLines="1"
+                        android:text=": "
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="5"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/nunito_regular"
+                        android:maxLines="1"
+                        android:text="Distance "
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_distance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="5"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/nunito_regular"
+                        android:maxLines="1"
+                        android:text=": "
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="5"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/nunito_regular"
+                        android:maxLines="1"
+                        android:text="Estimated Time "
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="5"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/nunito_regular"
+                        android:maxLines="1"
+                        android:text=": "
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
 
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
 
+                    <Button
+                        android:id="@+id/btn_absent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:background="@drawable/bg_btn_stop"
+                        android:fontFamily="@font/nunito_regular"
+                        android:text="Absent"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black" />
 
-
+                    <Button
+                        android:id="@+id/btn_picked"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="5"
+                        android:background="@drawable/bg_absence"
+                        android:fontFamily="@font/nunito_regular"
+                        android:text="Picked"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -94,34 +222,4 @@
         android:src="@drawable/icon_back" />
 </RelativeLayout>
 
-    <!--    <ImageView-->
-    <!--        android:id="@+id/btn_back"-->
-    <!--        android:layout_width="25dp"-->
-    <!--        android:layout_height="25dp"-->
-    <!--        android:layout_marginLeft="20dp"-->
-    <!--        android:layout_marginTop="20dp"-->
-    <!--        android:src="@drawable/icon_back" />-->
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/img_head"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:scaleType="centerCrop"-->
-    <!--        android:src="@drawable/logo_home" />-->
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/btn_back"-->
-    <!--        android:layout_width="25dp"-->
-    <!--        android:layout_height="25dp"-->
-    <!--        android:src="@drawable/icon_back"-->
-    <!--        android:layout_marginTop="35dp"-->
-    <!--        android:layout_marginLeft="35dp"/>-->
-    <!--    <RelativeLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:layout_below="@id/img_head"-->
-    <!--        android:layout_marginTop="10dp">-->
-
-
-    <!--    </RelativeLayout>-->
 
