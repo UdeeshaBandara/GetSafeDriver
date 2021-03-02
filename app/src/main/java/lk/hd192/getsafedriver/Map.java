@@ -136,7 +136,7 @@ public class Map extends GetSafeDriverBase {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         originMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.icon_send), 1);
-        finalMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.icon_send), 1);
+        finalMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.icon_forward), 1);
 
         dropLat = 6.965495959761049;
         dropLon = 79.95475497680536;
@@ -433,31 +433,47 @@ public class Map extends GetSafeDriverBase {
 
         if (dropOffLocations.size() != 0) {
 
-            LatLng dest = new LatLng(dropOffLocations.get(dropOffLocations.size() - 1).getLatitude(),dropOffLocations.get(dropOffLocations.size() - 1).getLongitude());
+            LatLng dest = new LatLng(dropOffLocations.get(dropOffLocations.size() - 1).getLatitude(), dropOffLocations.get(dropOffLocations.size() - 1).getLongitude());
 
             wayPoints = "&waypoints=";
             for (int l = 0; l < dropOffLocations.size(); l++) {
+                if (l == 0) {
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(dropOffLocations.get(l).getLatitude(), dropOffLocations.get(l).getLongitude())).icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).title("Your location"));
 
+                    continue;
+                }
+                if (l == dropOffLocations.size() - 1) {
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(dropOffLocations.get(l).getLatitude(), dropOffLocations.get(l).getLongitude())).icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).title("Destination"));
 
+                    continue;
+                } else if (l == 1)
+                    wayPoints += "via:" + dropOffLocations.get(l).getLatitude() + "," + dropOffLocations.get(l).getLongitude() + "";
+
+                else
+                    wayPoints += "|" + dropOffLocations.get(l).getLatitude() + "," + dropOffLocations.get(l).getLongitude() + "";
                 googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(dropOffLocations.get(l).getLatitude(),dropOffLocations.get(l).getLongitude())).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title(""));
+                        .position(new LatLng(dropOffLocations.get(l).getLatitude(), dropOffLocations.get(l).getLongitude())).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title(dropOffLocations.get(l).getPassengerName()));
+
 
                 googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         Log.e("selected latlong", marker.getPosition() + "");
+                        for (int v = 0; v < dropOffLocations.size(); v++) {
+                            if (dropOffLocations.get(v).getPassengerName().equals(marker.getTitle()))
+                                if (distance.size() != 0 & duration.size() != 0) {
+                                    txt_name.setText(": " + dropOffLocations.get(v).getPassengerName());
+                                    txt_distance.setText(": " + distance.get(v));
+                                    txt_time.setText(": " + duration.get(v));
+                                }
+
+                        }
 
                         return false;
                     }
                 });
-                if (l == 0)
-                    continue;
-                if (l == dropOffLocations.size() - 1)
-                    continue;
-                else if (l == 1)
-                    wayPoints += "via:" + dropOffLocations.get(l).getLatitude() + "," + dropOffLocations.get(l).getLongitude() + "";
-                else
-                    wayPoints += "|via:" + dropOffLocations.get(l).getLatitude() + "," + dropOffLocations.get(l).getLongitude() + "";
             }
 
 
@@ -623,10 +639,7 @@ public class Map extends GetSafeDriverBase {
             ArrayList<LatLng> points = null;
             PolylineOptions lineOptions = null;
             MarkerOptions markerOptions = new MarkerOptions();
-            if (distance.size() != 0 & duration.size() != 0) {
-                txt_distance.setText(": " + distance.get(0));
-                txt_time.setText(": " + duration.get(0));
-            }
+
 
 //            Log.e("POLY - results ", result + "");
 
@@ -683,7 +696,8 @@ public class Map extends GetSafeDriverBase {
 
         return bitmapOut;
     }
-    public Double calculateDistance(Double latOne, Double lonOne, Double latTwo, Double lonTwo){
+
+    public Double calculateDistance(Double latOne, Double lonOne, Double latTwo, Double lonTwo) {
 
         // The math module contains a function
         // named toRadians which converts from
@@ -698,7 +712,7 @@ public class Map extends GetSafeDriverBase {
         double dlat = latTwo - latOne;
         double a = Math.pow(Math.sin(dlat / 2), 2)
                 + Math.cos(latOne) * Math.cos(latTwo)
-                * Math.pow(Math.sin(dlon / 2),2);
+                * Math.pow(Math.sin(dlon / 2), 2);
 
         double c = 2 * Math.asin(Math.sqrt(a));
 
@@ -707,23 +721,23 @@ public class Map extends GetSafeDriverBase {
         double r = 6371;
 
         // calculate the result
-        return (c * r)*1000;
+        return (c * r) * 1000;
     }
 
     void getPickupLatLong() {
         try {
             for (int jk = 0; jk < passengerList.length(); jk++) {
 
-                dropOffLocations.add(jk, new UserLocation(passengerList.getJSONObject(jk).getString("name"),passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude"),calculateDistance(dropLat,dropLon,passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"),passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude"))));
+                dropOffLocations.add(jk, new UserLocation(passengerList.getJSONObject(jk).getString("name"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude"), calculateDistance(dropLat, dropLon, passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude"))));
 
             }
             Collections.sort(dropOffLocations);
-            for(int h=0;h<dropOffLocations.size();h++){
+            for (int h = 0; h < dropOffLocations.size(); h++) {
 
-                Log.e("distance  ",dropOffLocations.get(h).getDistance()+"");
+                Log.e("distance  ", dropOffLocations.get(h).getDistance() + "");
 
             }
-            drawMapPolyline(new LatLng(dropOffLocations.get(0).getLatitude(),dropOffLocations.get(0).getLongitude()));
+            drawMapPolyline(new LatLng(dropOffLocations.get(0).getLatitude(), dropOffLocations.get(0).getLongitude()));
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -733,14 +747,14 @@ public class Map extends GetSafeDriverBase {
 
     void getDropLatLong() {
         try {
-            Log.e("eve","list");
+            Log.e("eve", "list");
             for (int jk = 0; jk < passengerList.length(); jk++) {
 
-                dropOffLocations.add(jk, new UserLocation(passengerList.getJSONObject(jk).getString("name"),passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_longitude"),calculateDistance(dropLat,dropLon,passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_latitude"),passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_longitude"))));
+                dropOffLocations.add(jk, new UserLocation(passengerList.getJSONObject(jk).getString("name"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_longitude"), calculateDistance(dropLat, dropLon, passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_longitude"))));
 
             }
             Collections.sort(dropOffLocations);
-            drawMapPolyline(new LatLng(dropOffLocations.get(0).getLatitude(),dropOffLocations.get(0).getLongitude()));
+            drawMapPolyline(new LatLng(dropOffLocations.get(0).getLatitude(), dropOffLocations.get(0).getLongitude()));
         } catch (Exception e) {
 
         }
