@@ -51,14 +51,7 @@ public class Home extends GetSafeDriverBase {
 
         tinyDB.putBoolean("isSchoolDriver",true);
         tinyDB.putString("token","2|49nA3gevYJ11pMEr3HFfaAjb4LTxIChbMPPrloVr");
-        try {
-            Encrypt encrypt = new Encrypt(1024);
 
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        }
 
         homeRoutes();
 

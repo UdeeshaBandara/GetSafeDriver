@@ -135,8 +135,8 @@ public class Map extends GetSafeDriverBase {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        originMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.icon_send), 1);
-        finalMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.icon_forward), 1);
+        originMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.marker_passenger), 1);
+        finalMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.marker_end ), 1);
 
         dropLat = 6.965495959761049;
         dropLon = 79.95475497680536;
