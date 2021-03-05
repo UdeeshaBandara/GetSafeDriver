@@ -156,10 +156,11 @@ public class AddDriverThird extends Fragment {
             return false;
         } else {
 
-            registerVehicle();
+            return true;
+//            return registerVehicle();
 
         }
-        return false;
+
     }
 
     private boolean registerVehicle() {

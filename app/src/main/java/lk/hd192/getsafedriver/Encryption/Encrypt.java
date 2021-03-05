@@ -7,6 +7,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Base64;
 
 import javax.crypto.Cipher;
 
@@ -16,13 +17,13 @@ public class Encrypt {
     private PrivateKey privateKey;
     private PublicKey publicKey;
     private Cipher cipher;
-    String encryptedMsg,decryptedMsg;
+    String encryptedMsg, decryptedMsg;
 
 
     //default  generate public and private keys
     public void generateRSAKey() throws NoSuchAlgorithmException {
         this.keyGen = KeyPairGenerator.getInstance("RSA");
-        this.keyGen.initialize(2048);
+        this.keyGen.initialize(1024);
         this.pair = this.keyGen.generateKeyPair();
         this.privateKey = pair.getPrivate();
         this.publicKey = pair.getPublic();
@@ -37,21 +38,19 @@ public class Encrypt {
         return this.publicKey;
     }
 
-    public String encryptData(PublicKey key, String message) throws  GeneralSecurityException {
+    public String encryptData(PublicKey key, String message) throws GeneralSecurityException {
         this.cipher = Cipher.getInstance("RSA");
 
         this.cipher.init(Cipher.ENCRYPT_MODE, key);
-        encryptedMsg=  this.cipher.doFinal(message.getBytes()).toString();
+        encryptedMsg = Base64.getEncoder().encodeToString(this.cipher.doFinal(Base64.getDecoder().decode(message)));
         return encryptedMsg;
     }
 
     public byte[] decryptData(PrivateKey privateKey, String message) throws GeneralSecurityException {
         this.cipher = Cipher.getInstance("RSA");
         this.cipher.init(Cipher.DECRYPT_MODE, privateKey);
-        return this.cipher.doFinal(message.getBytes());
+        return this.cipher.doFinal(Base64.getDecoder().decode(message));
     }
-
-
 
 
 }

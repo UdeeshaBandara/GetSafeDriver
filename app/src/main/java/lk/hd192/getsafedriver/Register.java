@@ -18,6 +18,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.vlk.multimager.utils.Constants;
 import com.vlk.multimager.utils.Image;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class Register extends GetSafeDriverBase {
     Intent intent;
 
     ArrayList<Image> imagesList;
-    LottieAnimationView driverAnimation, locationAnimation, doneAnimation, btnNext;
+    LottieAnimationView driverAnimation, locationAnimation, doneAnimation,vanAnimation,images, btnNext,btn_done;
     AddDriverFirst addDriverFirst;
     AddDriverSecond addDriverSecond;
     AddDriverThird addDriverThird;
@@ -51,7 +52,10 @@ public class Register extends GetSafeDriverBase {
         btnNext = findViewById(R.id.btn_next);
         driverAnimation = findViewById(R.id.driver_animation);
         doneAnimation = findViewById(R.id.done_animation);
+        vanAnimation = findViewById(R.id.van_animation);
         locationAnimation = findViewById(R.id.location_animation);
+        images = findViewById(R.id.images_animation);
+        btn_done = findViewById(R.id.btn_done);
 
 
         nonSwappableViewPager.setOffscreenPageLimit(1);
@@ -61,9 +65,10 @@ public class Register extends GetSafeDriverBase {
             public void onClick(View v) {
 
                 if (currentPage == 1) {
+                    Log.e("1st","exe");
                     if(addDriverFirst.validateFields()){
                         nonSwappableViewPager.setCurrentItem(1);
-                        txtSubHeading.setText("Location Details");
+//                        txtSubHeading.setText("Location Details");
                         driverAnimation.setVisibility(View.GONE);
                         doneAnimation.setVisibility(View.GONE);
                         locationAnimation.setVisibility(View.VISIBLE);
@@ -74,8 +79,8 @@ public class Register extends GetSafeDriverBase {
 
                     if(addDriverSecond.validateFields()){
                         nonSwappableViewPager.setCurrentItem(2);
-                        txtSubHeading.setText("Vehicle Details");
-                        doneAnimation.setVisibility(View.VISIBLE);
+//                        txtSubHeading.setText("Vehicle Details");
+                        vanAnimation.setVisibility(View.VISIBLE);
                         locationAnimation.setVisibility(View.GONE);
                         driverAnimation.setVisibility(View.GONE);
                         currentPage = 3;
@@ -86,14 +91,32 @@ public class Register extends GetSafeDriverBase {
 
                     if(addDriverThird.validateFields()){
                         nonSwappableViewPager.setCurrentItem(3);
-                        txtSubHeading.setText("Vehicle Details");
-                        doneAnimation.setVisibility(View.VISIBLE);
+//                        txtSubHeading.setText("Vehicle Details");
+                        images.setVisibility(View.VISIBLE);
                         locationAnimation.setVisibility(View.GONE);
-                        driverAnimation.setVisibility(View.GONE);
+                        vanAnimation.setVisibility(View.GONE);
+                        btnNext.setVisibility(View.GONE);
                         currentPage = 4;
 
-                        btnNext.setVisibility(View.GONE);
+                        btn_done.setVisibility(View.VISIBLE);
                     }
+
+
+                }   else if (currentPage == 4) {
+
+                    try {
+                        addDriverFourth.convertToBase64AndUpload();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+//                        txtSubHeading.setText("Vehicle Details");
+//                        vanAnimation.setVisibility(View.VISIBLE);
+//                        locationAnimation.setVisibility(View.GONE);
+//                        driverAnimation.setVisibility(View.GONE);
+//                        currentPage = 4;
+
+//                    }
 
 
                 }

@@ -14,12 +14,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,14 +28,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,10 +48,10 @@ import lk.hd192.getsafedriver.Utils.TinyDB;
 
 public class Conversation extends AppCompatActivity {
 
-
+    byte[] keyBytes;
     SwipeRefreshLayout mRefreshLayout;
     EditText txtMsgContent;
-
+    String encryptedMsg = "";
 
     private ImageView btnSend;
 
@@ -57,7 +60,7 @@ public class Conversation extends AppCompatActivity {
     private MessageAdapter mAdapter;
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private int mCurrentPage = 1;
-    private DatabaseReference mRootRef, messageRef,keyRef;
+    private DatabaseReference mRootRef, messageRef, keyRef;
     private RecyclerView mMessageList, chatMessageView;
     TinyDB tinyDB;
     private final List<MsgPoJo> messagesList = new ArrayList<>();
@@ -71,8 +74,9 @@ public class Conversation extends AppCompatActivity {
         tinyDB = new TinyDB(getApplicationContext());
         try {
             encrypt.generateRSAKey();
-            tinyDB.putString("private_key",encrypt.getPrivateKey().toString());
-            tinyDB.putString("public_key",encrypt.getPublicKey().toString());
+
+            tinyDB.putString("public_key", Base64.getEncoder().encodeToString(encrypt.getPublicKey().getEncoded()));
+            tinyDB.putString("private_key", Base64.getEncoder().encodeToString(encrypt.getPrivateKey().getEncoded()));
 
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -83,12 +87,11 @@ public class Conversation extends AppCompatActivity {
         if (tinyDB.getBoolean("isStaffDriver")) {
             messageRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("messages");
             keyRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("key");
-            keyRef.setValue(  tinyDB.getString("public_key"));
-        }
-        else {
+            keyRef.setValue(tinyDB.getString("public_key"));
+        } else {
             messageRef = mRootRef.child("School_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child(tinyDB.getString("selectedChildId")).child("messages");
             keyRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("key");
-            keyRef.setValue(  tinyDB.getString("public_key"));
+            keyRef.setValue(tinyDB.getString("public_key"));
         }
 
         findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
@@ -134,54 +137,63 @@ public class Conversation extends AppCompatActivity {
     private void sendMessage() {
         String message = txtMsgContent.getText().toString();
         if (!TextUtils.isEmpty(message)) {
-            String encryptedMsg="";
-            final byte[][] keyBytes = new byte[1][1];
 
-            keyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+//            keyBytes= keyRef.get().getResult().getValue().toString().getBytes();
+
+            keyRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Log.e("firebase", "Error getting data", task.getException());
+                    } else {
+                        try {
+                            keyBytes = Base64.getDecoder().decode(task.getResult().getValue().toString());
+                            X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+                            KeyFactory kf = KeyFactory.getInstance("RSA");
+                            encryptedMsg = encrypt.encryptData(kf.generatePublic(spec), message);
+                            Log.e("j", task.getResult().getValue() + "");
 
 
-                     keyBytes[0] = dataSnapshot.getValue().toString().getBytes();
+                            DatabaseReference user_message_push = messageRef.push();
+                            String push_id = user_message_push.getKey();
 
+                            java.util.Map messageMap = new HashMap();
+                            messageMap.put("message", encryptedMsg);
+                            messageMap.put("seen", false);
+                            messageMap.put("from", "driver");
+                            messageMap.put("time", ServerValue.TIMESTAMP);
 
-                    // ...
-                }
+                            txtMsgContent.setText("");
+                            messageRef.child(push_id).updateChildren(messageMap, new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                    if (databaseError != null) {
+                                        Log.e("Error", databaseError.getMessage());
+                                    }
+                                }
+                            });
+                        } catch (Exception e) {
+                            Log.e("jsds", e.getMessage());
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // ...
-                }
-            });
-            try {
-                X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes[0]);
-                KeyFactory kf = KeyFactory.getInstance("RSA");
-                encryptedMsg = encrypt.encryptData(kf.generatePublic(spec), message);
-            }
-            catch (Exception e){
-Log.e("ex",e.getMessage());
-            }
-            DatabaseReference user_message_push = messageRef.push();
-            String push_id = user_message_push.getKey();
+                        }
 
-            java.util.Map messageMap = new HashMap();
-            messageMap.put("message", encryptedMsg);
-            messageMap.put("seen", false);
-            messageMap.put("from", "driver");
-            messageMap.put("time", ServerValue.TIMESTAMP);
-
-            txtMsgContent.setText("");
-            messageRef.child(push_id).updateChildren(messageMap, new DatabaseReference.CompletionListener() {
-                @Override
-                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                    if (databaseError != null) {
-                        Log.e("Error", databaseError.getMessage());
                     }
                 }
             });
 
 
         }
+    }
+
+    PrivateKey generatePrivateKey() throws InvalidKeySpecException, NoSuchAlgorithmException {
+
+
+        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(tinyDB.getString("private_key")));
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+        return kf.generatePrivate(spec);
+
+
     }
 
     private void loadMessages() {
@@ -274,13 +286,24 @@ Log.e("ex",e.getMessage());
             if (from_user.equals("user")) {
                 holder.lnrFrom.setVisibility(View.GONE);
                 holder.lnrTo.setVisibility(View.VISIBLE);
-                holder.txtMsgTo.setText(c.getMessage());
+//                holder.txtMsgTo.setText(c.getMessage());
+
+                try {
+                    holder.txtMsgTo.setText(Base64.getEncoder().encodeToString(encrypt.decryptData(generatePrivateKey(), c.getMessage())));
+                } catch (GeneralSecurityException e) {
+                    e.printStackTrace();
+                }
+
                 holder.txtMsgToTime.setText(timeAgo);
 
             } else {
                 holder.lnrFrom.setVisibility(View.VISIBLE);
                 holder.lnrTo.setVisibility(View.GONE);
-                holder.txtMsgFrom.setText(c.getMessage());
+                try {
+                    holder.txtMsgFrom.setText(Base64.getEncoder().encodeToString(encrypt.decryptData(generatePrivateKey(), c.getMessage())));
+                } catch (GeneralSecurityException e) {
+                    e.printStackTrace();
+                }
                 holder.txtMsgFromTime.setText(timeAgo);
             }
 

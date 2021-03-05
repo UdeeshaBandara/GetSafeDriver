@@ -51,6 +51,14 @@ public class AddDriverSecond extends Fragment {
         edit_txt_district = view.findViewById(R.id.edit_txt_district);
         getSafeDriverServices = new GetSafeDriverServices();
 
+        editTextPick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
     }
 
     public boolean validateFields() {
@@ -71,7 +79,7 @@ public class AddDriverSecond extends Fragment {
                     .duration(1000)
                     .playOn(editTextPick);
             editTextPick.setError("Please select location");
-            return false;
+            return true;
         }  else if (TextUtils.isEmpty(edit_txt_district.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
@@ -79,9 +87,10 @@ public class AddDriverSecond extends Fragment {
             edit_txt_district.setError("Please select drop-off district");
             return false;
         } else {
-            driverLocationDetails();
+            return true;
+//          return  driverLocationDetails();
         }
-        return false;
+
     }
 
     private boolean driverLocationDetails() {

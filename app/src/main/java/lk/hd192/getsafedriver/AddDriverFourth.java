@@ -287,7 +287,7 @@ public class AddDriverFourth extends Fragment {
 
     }
 
-    private void convertToBase64AndUpload() throws IOException {
+    public void convertToBase64AndUpload() throws IOException {
 
         for (int g = 0; g < imagesToUpload.size(); g++) {
             imagesBase64.add(g, encodeImage(imagesToUpload.get(g).imagePath));

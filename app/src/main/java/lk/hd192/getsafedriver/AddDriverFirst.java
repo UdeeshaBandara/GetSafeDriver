@@ -143,6 +143,12 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
                     .playOn(edit_text_telephone);
             edit_text_telephone.setError("Please enter contact number");
             return false;
+        }   else if (edit_text_telephone.getText().toString().length()!=9) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_text_telephone);
+            edit_text_telephone.setError("Please enter correct number");
+            return false;
         } else if (TextUtils.isEmpty(txtDriverBirthday.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
@@ -162,13 +168,15 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
             txtType.setError("Please select transport type");
             return false;
         } else {
-            return registerDriverBasic();
+            return true;
+//            return registerDriverBasic();
         }
 
     }
 
     private boolean registerDriverBasic() {
 
+        Log.e("register","methd");
 
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("name", edit_txt_name.getText().toString());
@@ -187,19 +195,20 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
             public void onSuccessResponse(JSONObject result) {
 
                 try {
+                    Log.e("res",result+"");
 
                     if (result.getBoolean("saved_status")) {
                         tinyDB.putString("phone_no", edit_text_telephone.getText().toString());
                         tinyDB.putString("email", txt_email.getText().toString());
                         tinyDB.putBoolean("isStaffDriver", txtType.getText().toString().equals("School Transport"));
-                        registerFirebaseUser();
+//                        registerFirebaseUser();
                         isValidated = true;
 
                     }
 
 
-                } catch (JSONException ex) {
-                    ex.printStackTrace();
+                } catch (Exception ex) {
+                   Log.e("ex",ex.getMessage());
                     isValidated = false;
                 }
 
@@ -288,7 +297,7 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         Calendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
-        txtDriverBirthday.setHint(simpleDateFormat.format(calendar.getTime()));
+        txtDriverBirthday.setText(simpleDateFormat.format(calendar.getTime()));
     }
 
     @VisibleForTesting

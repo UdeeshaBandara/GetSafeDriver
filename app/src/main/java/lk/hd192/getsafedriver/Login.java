@@ -111,6 +111,14 @@ public class Login extends GetSafeDriverBase {
                 }
             }
         });
+
+
+        findViewById(R.id.btn_register).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Register.class));
+            }
+        });
     }
 
 
