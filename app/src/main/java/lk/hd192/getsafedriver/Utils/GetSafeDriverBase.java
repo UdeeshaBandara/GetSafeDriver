@@ -22,8 +22,6 @@ import lk.hd192.getsafedriver.R;
 public class GetSafeDriverBase extends AppCompatActivity {
 
 
-
-
     public static int device_width, device_height;
     public TinyDB tinyDB;
     public static String PICKUP_LAT, PICKUP_LOG, DROP_LAT, DROP_LOG, PICKUP_LOCATION, DROP_LOCATION, LOC_ADDRESS;
@@ -97,9 +95,6 @@ public class GetSafeDriverBase extends AppCompatActivity {
     }
 
 
-
-
-
     public void showToast(final Dialog dialog, String msg, int type) {
 
 
@@ -116,6 +111,9 @@ public class GetSafeDriverBase extends AppCompatActivity {
                 break;
             case 1:
                 dialog.setContentView(R.layout.toast_layout_location);
+                break;
+            case 2:
+                dialog.setContentView(R.layout.toast_layout_success);
                 break;
 
 

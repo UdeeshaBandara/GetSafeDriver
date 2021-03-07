@@ -126,7 +126,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/card_attendance"
+                        android:id="@+id/card_request"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:layout_marginStart="15dp"
@@ -161,7 +161,7 @@
                                 android:layout_marginBottom="5dp"
                                 android:fontFamily="@font/nunito_regular"
                                 android:gravity="center"
-                                android:text="Attendance"
+                                android:text="Pending Request"
                                 android:textColor="@color/black"
                                 android:textSize="18sp" />
                         </RelativeLayout>

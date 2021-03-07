@@ -7,7 +7,7 @@
     <string name="REVERSE_GEO">https://maps.googleapis.com/maps/api/geocode/json</string>
 
 
-    <string name="BASE_URL">http://192.168.1.4:8000/v1/getsafe/api</string>
+    <string name="BASE_URL">http://192.168.1.3:8000/v1/getsafe/api</string>
     <string name="SAVE_DRIVER">/newdriver/save</string>
     <string name="DRIVER_OTP">/driverlogin/sendotp</string>
     <string name="DRIVER_VALIDATE_OTP">/driverlogin/validateotp</string>
@@ -26,6 +26,7 @@
     <string name="JOURNEY_LIST_EVENING">/driver/journey/list/evening</string>
 
 
+
     <string name="JOURNEY_START">/driver/journey/start</string>
     <string name="JOURNEY_END">/driver/journey/end</string>
 
@@ -37,8 +38,10 @@
     <string name="INFORM_DRIVER_ARRIVAL">/driver/journey/arrived</string>
     <string name="MARK_PASSENGER_ABSENT">/driver/journey/markabsent</string>
 
-
-
+    <string name="ACCEPT_REQUEST">/driver/requests/accept</string>
+    <string name="DECLINE_REQUEST">/driver/requests/decline</string>
+    <string name="VIEW_ONE_REQUEST">/driver/requests/viewone</string>
+    <string name="VIEW_ALL_REQUEST">/driver/requests/viewall</string>
 
 
 </resources>

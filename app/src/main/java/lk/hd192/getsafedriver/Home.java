@@ -50,7 +50,7 @@ public class Home extends GetSafeDriverBase {
 //        recyclerHome.getAdapter().notifyDataSetChanged();
 
         tinyDB.putBoolean("isSchoolDriver",true);
-        tinyDB.putString("token","2|49nA3gevYJ11pMEr3HFfaAjb4LTxIChbMPPrloVr");
+        tinyDB.putString("token","2|vmt25I0AbcK18twgYHU98jIXzMMpU2dc77u1Fmde");
 
 
         homeRoutes();
@@ -65,10 +65,10 @@ public class Home extends GetSafeDriverBase {
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Absence.class));
             }
-        });  findViewById(R.id.card_attendance).setOnClickListener(new View.OnClickListener() {
+        });  findViewById(R.id.card_request).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Absence.class));
+                startActivity(new Intent(getApplicationContext(), NewRequest.class));
             }
         });  findViewById(R.id.card_map).setOnClickListener(new View.OnClickListener() {
             @Override

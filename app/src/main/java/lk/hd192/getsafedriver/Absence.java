@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ public class Absence extends AppCompatActivity {
     LinearLayout lnrTop;
     TextView txt_current_date;
     CalendarView filter_calendar;
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,7 @@ public class Absence extends AppCompatActivity {
         status_bar = findViewById(R.id.status_bar);
         txt_current_date = findViewById(R.id.txt_current_date);
         filter_calendar = findViewById(R.id.filter_calendar);
-
+        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
 
         recycler_absence.setAdapter(new AbsenceUserAdapter());
