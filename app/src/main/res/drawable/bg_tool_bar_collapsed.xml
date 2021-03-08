@@ -14,7 +14,7 @@
     <item
         android:right="100dp">
         <shape>
-            <solid android:color="@color/yellow" />
+            <solid android:color="@color/yellow_te" />
         </shape>
     </item>
     <item>

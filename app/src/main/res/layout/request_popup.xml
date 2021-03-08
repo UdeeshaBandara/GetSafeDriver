@@ -25,142 +25,222 @@
             android:id="@+id/close"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/icon_false"
-            android:layout_gravity="right"/>
+            android:layout_gravity="right"
+            android:layout_marginEnd="-5dp"
+            android:padding="10dp"
+            android:src="@drawable/icon_false" />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/main_save_animation"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            android:visibility="gone"
-            app:lottie_rawRes="@raw/waiting" />
 
         <LinearLayout
+            android:id="@+id/lnr_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="-15dp"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/nunito_regular"
                 android:text="Name"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:layout_marginStart="2dp"
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/txt_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="left"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/request_view"
+                android:ellipsize="end"
                 android:fontFamily="@font/nunito_regular"
-                android:text=": "
-                android:textColor="@color/black"
-                android:textSize="14sp" />
 
-        </LinearLayout>
+                android:inputType="textPostalAddress"
+                android:maxLines="1"
+                android:paddingHorizontal="10dp"
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/nunito_regular"
-                android:text="Pick Up"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:text="Pick-up Location"
+                android:layout_marginStart="2dp"
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/txt_pickup"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="left"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/request_view"
+                android:ellipsize="end"
                 android:fontFamily="@font/nunito_regular"
-                android:text=": "
-                android:textColor="@color/black"
-                android:textSize="14sp" />
 
-        </LinearLayout>
+                android:inputType="textPostalAddress"
+                android:maxLines="1"
+                android:paddingHorizontal="10dp"
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/nunito_regular"
-                android:text="Drop-off"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:text="Drop-off Location"
+                android:layout_marginStart="2dp"
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/txt_drop"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="left"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/request_view"
+                android:ellipsize="end"
                 android:fontFamily="@font/nunito_regular"
-                android:text=": "
-                android:textColor="@color/black"
-                android:textSize="14sp" />
 
-        </LinearLayout>
+                android:inputType="textPostalAddress"
+                android:maxLines="1"
+                android:paddingHorizontal="10dp"
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/nunito_regular"
-                android:text="Number"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:text="Telephone Number"
+                android:layout_marginStart="2dp"
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/txt_number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="left"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/request_view"
+                android:ellipsize="end"
                 android:fontFamily="@font/nunito_regular"
-                android:text=": "
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+
+                android:inputType="textPostalAddress"
+                android:maxLines="1"
+                android:paddingHorizontal="10dp"
+
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
+
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            android:orientation="horizontal">-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="4"-->
+        <!--                android:fontFamily="@font/nunito_regular"-->
+        <!--                android:text="Pick Up"-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:textSize="14sp" />-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/txt_pickup"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="6"-->
+        <!--                android:fontFamily="@font/nunito_regular"-->
+        <!--                android:text=": "-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:textSize="14sp" />-->
+
+        <!--        </LinearLayout>-->
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            android:orientation="horizontal">-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="4"-->
+        <!--                android:fontFamily="@font/nunito_regular"-->
+        <!--                android:text="Drop-off"-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:textSize="14sp" />-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/txt_drop"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="6"-->
+        <!--                android:fontFamily="@font/nunito_regular"-->
+        <!--                android:text=": "-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:textSize="14sp" />-->
+
+        <!--        </LinearLayout>-->
+
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            android:orientation="horizontal">-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="4"-->
+        <!--                android:fontFamily="@font/nunito_regular"-->
+        <!--                android:text="Number"-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:textSize="14sp" />-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/txt_number"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="6"-->
+        <!--                android:fontFamily="@font/nunito_regular"-->
+        <!--                android:text=": "-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:textSize="14sp" />-->
+
+        <!--        </LinearLayout>-->
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btn_cancel"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_weight="5"
-
+                android:background="@drawable/bg_btn_stop"
                 android:fontFamily="@font/nunito_regular"
                 android:text="Cancel Request"
                 android:textAllCaps="false"
@@ -170,9 +250,10 @@
             <Button
                 android:id="@+id/btn_accept"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginStart="10dp"
                 android:layout_weight="5"
+                android:background="@drawable/bg_btn_ok"
                 android:fontFamily="@font/nunito_regular"
                 android:text="Confirm Request"
                 android:textAllCaps="false"

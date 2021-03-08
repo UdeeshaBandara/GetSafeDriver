@@ -1,26 +1,12 @@
 package lk.hd192.getsafedriver;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
-
-import lk.hd192.getsafedriver.Encryption.Encrypt;
 import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
 import lk.hd192.getsafedriver.Utils.TinyDB;
 
@@ -34,7 +20,7 @@ public class Home extends GetSafeDriverBase {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow));
+        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_te));
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
         tinyDB= new TinyDB(getApplicationContext());

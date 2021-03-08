@@ -5,9 +5,9 @@
 
             <stroke
                 android:width="0.5dp"
-                android:color="@color/yellow"></stroke>
+                android:color="@color/yellow_te"></stroke>
             <corners android:bottomRightRadius="20dp" android:topRightRadius="20dp" />
-            <solid android:color="@color/yellow"></solid>
+            <solid android:color="@color/yellow_te"></solid>
         </shape>
     </item>
 </selector>

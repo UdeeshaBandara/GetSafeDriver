@@ -168,7 +168,7 @@ public class Map extends GetSafeDriverBase {
                         if (user.getPicked()) {
                             dropOffPassenger(user.getId());
                             user.setDropped(true);
-                        }else{
+                        } else {
                             pickUpPassenger(user.getId());
                             user.setPicked(true);
                         }
@@ -185,8 +185,12 @@ public class Map extends GetSafeDriverBase {
 
 
                 if (btn_start_trip.getText().toString().equals("Start Trip")) {
-                    Log.e("trip", "start");
+                    tinyDB.putBoolean("isTripStart", true);
+
+                    ArrayList<String> strList = (ArrayList<String>) (ArrayList<?>) (dropOffLocations);
+                    tinyDB.putListString("tripRoute", strList);
                     btn_start_trip.setText("End Trip");
+                    Log.e("drop offs", tinyDB.getListString("tripRoute") + "");
                     btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_stop));
                     if (timeOfDay >= 0 && timeOfDay < 12) {
 
@@ -195,16 +199,17 @@ public class Map extends GetSafeDriverBase {
                         getEveningList();
                     }
 
-//                    notifyTripStart();
+                    notifyTripStart();
                     locationRef.child("Status").setValue("end");
-                    Log.e("trip", "start 2");
+
                 } else {
-                    Log.e("trip", "end");
-//                    notifyTripEnd();
+
+                    notifyTripEnd();
+                    tinyDB.putBoolean("isTripStart", false);
                     btn_start_trip.setText("Start Trip");
-                    btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_next_forward));
+                    btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_ok));
                     locationRef.child("Status").setValue("started");
-                    Log.e("trip", "end 2");
+
                 }
 
 

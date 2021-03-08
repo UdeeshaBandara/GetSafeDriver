@@ -14,12 +14,12 @@
     <item
         android:right="100dp">
         <shape>
-            <solid android:color="@color/yellow" />
+            <solid android:color="@color/yellow_te" />
         </shape>
     </item>
     <item>
         <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-            <solid android:color="@color/yellow" />
+            <solid android:color="@color/yellow_te" />
             <corners android:bottomLeftRadius="50dp" android:bottomRightRadius="50dp"/>
         </shape>
     </item>

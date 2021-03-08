@@ -10,7 +10,7 @@ android {
     
     defaultConfig {
         applicationId "lk.hd192.getsafedriver"
-        minSdkVersion 28
+        minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -85,6 +85,8 @@ dependencies {
     //dialog
     implementation 'com.shreyaspatil:MaterialDialog:2.1'
 
+    //floating edit text
+    implementation 'com.github.thomhurst:ExpandableHintText:1.0.7'
     
 
 

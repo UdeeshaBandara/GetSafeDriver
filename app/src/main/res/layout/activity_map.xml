@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:background="@color/yellow">
+        android:background="@color/yellow_te">
 
         <ImageView
             android:id="@+id/img_head"
@@ -32,13 +32,15 @@
             <Button
                 android:id="@+id/btn_start_trip"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/bg_btn_stop"
-                android:fontFamily="@font/nunito_semibold"
+                android:layout_marginTop="15dp"
+
+                android:background="@drawable/bg_btn_ok"
+                android:fontFamily="@font/nunito_regular"
                 android:text="Start Trip"
                 android:textAllCaps="false"
+
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -80,6 +82,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -87,13 +90,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_weight="5"
+                        android:layout_weight="4"
                         android:ellipsize="end"
                         android:fontFamily="@font/nunito_regular"
                         android:maxLines="1"
-                        android:text="Next Passenger Name "
+                        android:text="Passenger Name "
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/txt_name"
@@ -101,18 +104,19 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_weight="5"
+                        android:layout_weight="6"
                         android:ellipsize="end"
                         android:fontFamily="@font/nunito_regular"
                         android:maxLines="1"
                         android:text=": "
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -120,13 +124,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_weight="5"
+                        android:layout_weight="4"
                         android:ellipsize="end"
                         android:fontFamily="@font/nunito_regular"
                         android:maxLines="1"
                         android:text="Distance "
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/txt_distance"
@@ -134,18 +138,19 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_weight="5"
+                        android:layout_weight="6"
                         android:ellipsize="end"
                         android:fontFamily="@font/nunito_regular"
                         android:maxLines="1"
                         android:text=": "
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -153,13 +158,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_weight="5"
+                        android:layout_weight="4"
                         android:ellipsize="end"
                         android:fontFamily="@font/nunito_regular"
                         android:maxLines="1"
                         android:text="Estimated Time "
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/txt_time"
@@ -167,13 +172,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_weight="5"
+                        android:layout_weight="6"
                         android:ellipsize="end"
                         android:fontFamily="@font/nunito_regular"
                         android:maxLines="1"
                         android:text=": "
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="15sp" />
                 </LinearLayout>
 
 
@@ -187,7 +192,7 @@
                     <Button
                         android:id="@+id/btn_absent"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_weight="5"
                         android:background="@drawable/bg_btn_stop"
                         android:fontFamily="@font/nunito_regular"
@@ -198,7 +203,7 @@
                     <Button
                         android:id="@+id/btn_dropNPick"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_marginLeft="10dp"
                         android:layout_weight="5"
                         android:background="@drawable/bg_absence"

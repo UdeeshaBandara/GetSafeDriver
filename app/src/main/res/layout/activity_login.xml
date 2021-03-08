@@ -193,7 +193,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="15dp"
         android:layout_marginBottom="15dp"
-        android:background="@color/white"
+        android:background="@drawable/bg_btn_ok"
         android:fontFamily="@font/nunito_regular"
         android:text="Register"
         android:textColor="@color/black"

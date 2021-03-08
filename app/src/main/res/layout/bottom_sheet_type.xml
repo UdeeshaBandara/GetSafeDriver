@@ -29,7 +29,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:background="@color/yellow" />
+                android:background="@color/yellow_te" />
 
             <TextView
                 android:id="@+id/school_search"

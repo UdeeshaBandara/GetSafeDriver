@@ -22,6 +22,9 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.tomlonghurst.expandablehinttext.ExpandableEditText;
+import com.tomlonghurst.expandablehinttext.ExpandableHintText;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -56,7 +59,12 @@ public class NewRequest extends GetSafeDriverBase {
         recycler_students = findViewById(R.id.recycler_students);
         recycler_students.setAdapter(new StudentAdapter());
         recycler_students.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
-//
+            findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
+                }
+            });
         getAllRequestForDriver();
     }
 
