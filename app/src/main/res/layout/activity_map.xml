@@ -196,7 +196,7 @@
                         android:textColor="@color/black" />
 
                     <Button
-                        android:id="@+id/btn_picked"
+                        android:id="@+id/btn_dropNPick"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"

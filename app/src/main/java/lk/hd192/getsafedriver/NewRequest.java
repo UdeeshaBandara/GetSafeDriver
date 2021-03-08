@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class NewRequest extends GetSafeDriverBase {
     RecyclerView recycler_students;
     Button mConfirm, cancel;
     TextView txt_name, txt_pickup, txt_drop, txt_number;
+    ImageView close;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +127,7 @@ public class NewRequest extends GetSafeDriverBase {
         txt_drop = popupView.findViewById(R.id.txt_drop);
         txt_pickup = popupView.findViewById(R.id.txt_pickup);
         txt_name = popupView.findViewById(R.id.txt_name);
+        close = popupView.findViewById(R.id.close);
 
 
         popupView.setOnTouchListener(new View.OnTouchListener() {
@@ -148,6 +151,14 @@ public class NewRequest extends GetSafeDriverBase {
             @Override
             public void onClick(View v) {
                 acceptRequest();
+
+                popupWindow.dismiss();
+            }
+        });
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
 
                 popupWindow.dismiss();
             }

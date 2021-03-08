@@ -2,50 +2,85 @@ package lk.hd192.getsafedriver.Utils;
 
 public class UserLocation implements Comparable{
 
-    String passengerName;
-    Double Latitude,Longitude,Distance;
+    String passengerName,id;
+    Double pickUpLatitude,pickUpLongitude,dropLatitude,dropLongitude,distance;
+    Boolean isPicked,isAbsent,isDropped;
 
     public UserLocation() {
 
-    }
-
-    public UserLocation(String passengerName, Double latitude, Double longitude, Double distance) {
-        this.passengerName = passengerName;
-        Latitude = latitude;
-        Longitude = longitude;
-        Distance = distance;
     }
 
     public String getPassengerName() {
         return passengerName;
     }
 
-    public void setPassengerName(String passengerName) {
+    public Double getPickUpLatitude() {
+        return pickUpLatitude;
+    }
+
+    public UserLocation(String id,String passengerName, Double pickUpLatitude, Double pickUpLongitude, Double dropLatitude, Double dropLongitude, Double distance, Boolean isPicked, Boolean isAbsent, Boolean isDropped) {
+        this.id = id;
         this.passengerName = passengerName;
+        this.pickUpLatitude = pickUpLatitude;
+        this.pickUpLongitude = pickUpLongitude;
+        this.dropLatitude = dropLatitude;
+        this.dropLongitude = dropLongitude;
+        this.distance = distance;
+        this.isPicked = isPicked;
+        this.isAbsent = isAbsent;
+        this.isDropped = isDropped;
     }
 
-    public Double getLatitude() {
-        return Latitude;
+    public Double getPickUpLongitude() {
+        return pickUpLongitude;
     }
 
-    public void setLatitude(Double latitude) {
-        Latitude = latitude;
+    public String getId() {
+        return id;
     }
 
-    public Double getLongitude() {
-        return Longitude;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setLongitude(Double longitude) {
-        Longitude = longitude;
+    public Double getDropLatitude() {
+        return dropLatitude;
+    }
+
+    public Double getDropLongitude() {
+        return dropLongitude;
     }
 
     public Double getDistance() {
-        return Distance;
+        return distance;
+    }
+
+    public Boolean getPicked() {
+        return isPicked;
     }
 
     public void setDistance(Double distance) {
-        Distance = distance;
+        this.distance = distance;
+    }
+
+    public void setPicked(Boolean picked) {
+        isPicked = picked;
+    }
+
+    public Boolean getAbsent() {
+        return isAbsent;
+    }
+
+    public void setAbsent(Boolean absent) {
+        isAbsent = absent;
+    }
+
+    public Boolean getDropped() {
+        return isDropped;
+    }
+
+    public void setDropped(Boolean dropped) {
+        isDropped = dropped;
     }
 
     @Override
@@ -53,7 +88,7 @@ public class UserLocation implements Comparable{
 
         Double compare=((UserLocation)o).getDistance();
         /* For Ascending order*/
-        return (int) (this.Distance-compare);
+        return (int) (this.distance-compare);
 
     }
 }

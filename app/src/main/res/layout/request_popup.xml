@@ -21,6 +21,13 @@
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp">
 
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_false"
+            android:layout_gravity="right"/>
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/main_save_animation"
             android:layout_width="match_parent"
@@ -29,6 +36,7 @@
             android:layout_gravity="center"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
+            android:visibility="gone"
             app:lottie_rawRes="@raw/waiting" />
 
         <LinearLayout
@@ -152,8 +160,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
+
                 android:fontFamily="@font/nunito_regular"
-                android:text="Cancel"
+                android:text="Cancel Request"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
@@ -165,7 +174,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_weight="5"
                 android:fontFamily="@font/nunito_regular"
-                android:text="Confirm"
+                android:text="Confirm Request"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
