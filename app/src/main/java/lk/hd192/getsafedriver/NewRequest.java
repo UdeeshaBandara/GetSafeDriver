@@ -1,7 +1,6 @@
 package lk.hd192.getsafedriver;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,9 +21,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
-import com.tomlonghurst.expandablehinttext.ExpandableEditText;
-import com.tomlonghurst.expandablehinttext.ExpandableHintText;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,8 +41,11 @@ public class NewRequest extends GetSafeDriverBase {
     JSONArray requestList;
     RecyclerView recycler_students;
     Button mConfirm, cancel;
-    TextView txt_name, txt_pickup, txt_drop, txt_number;
+    TextView txt_name, txt_pickup, txt_drop, txt_number, msg;
     ImageView close;
+    String number = "",selectedRequestId="";
+    int selectedIndex=-1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,25 +55,29 @@ public class NewRequest extends GetSafeDriverBase {
         getSafeDriverServices = new GetSafeDriverServices();
         tinyDB = new TinyDB(getApplicationContext());
         requestList = new JSONArray();
-
+        msg = findViewById(R.id.msg);
         recycler_students = findViewById(R.id.recycler_students);
         recycler_students.setAdapter(new StudentAdapter());
         recycler_students.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
-            findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onBackPressed();
-                }
-            });
+        findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         getAllRequestForDriver();
     }
 
     class StudentItemHolder extends RecyclerView.ViewHolder {
         CardView rlt_transport_services;
+        TextView student_school, parent_name, passenger_name;
 
         public StudentItemHolder(@NonNull View itemView) {
             super(itemView);
             rlt_transport_services = itemView.findViewById(R.id.rlt_transport_services);
+            student_school = itemView.findViewById(R.id.student_school);
+            passenger_name = itemView.findViewById(R.id.passenger_name);
+            parent_name = itemView.findViewById(R.id.parent_name);
         }
     }
 
@@ -91,19 +95,38 @@ public class NewRequest extends GetSafeDriverBase {
         @Override
         public void onBindViewHolder(@NonNull StudentItemHolder holder, int position) {
 
-            holder.rlt_transport_services.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    startActivity(new Intent(getApplicationContext(), Conversation.class));
-                    onCreateMapPopup(v);
+            try {
+
+
+
+                if (tinyDB.getBoolean("isStaffDriver")) {
+
+
+                    holder.student_school.setText(requestList.getJSONObject(position).getJSONObject("user").getString("email"));
+                    holder.passenger_name.setText(requestList.getJSONObject(position).getJSONObject("user").getString("name"));
+                }else{
+                    holder.parent_name.setText("Parent : "+requestList.getJSONObject(position).getJSONObject("user").getString("name"));
+                    holder.student_school.setText(requestList.getJSONObject(position).getJSONObject("child").getString("school_name"));
+                    holder.passenger_name.setText(requestList.getJSONObject(position).getJSONObject("child").getString("name"));
+
                 }
-            });
+                holder.rlt_transport_services.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                    startActivity(new Intent(getApplicationContext(), Conversation.class));
+                        selectedIndex=position;
+                        onCreateRequestPopup(v);
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
 
         @Override
         public int getItemCount() {
-            return 10;
+            return requestList.length();
         }
     }
 
@@ -118,7 +141,7 @@ public class NewRequest extends GetSafeDriverBase {
         wm.updateViewLayout(container, p);
     }
 
-    public void onCreateMapPopup(View view) {
+    public void onCreateRequestPopup(View view) {
 
 
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -138,11 +161,31 @@ public class NewRequest extends GetSafeDriverBase {
         close = popupView.findViewById(R.id.close);
 
 
+        try {
+            number=requestList.getJSONObject(selectedIndex).getJSONObject("user").getString("phone_no");
+            selectedRequestId=requestList.getJSONObject(selectedIndex).getString("id");
+            txt_number.setText(number);
+
+            txt_name.setText(requestList.getJSONObject(selectedIndex).getJSONObject("user").getString("name"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         popupView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 //  popupWindow.dismiss();
                 return true;
+            }
+        });
+        txt_number.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + number));
+                startActivity(intent);
             }
         });
 
@@ -196,12 +239,17 @@ public class NewRequest extends GetSafeDriverBase {
 
                 try {
                     requestList = new JSONArray();
-                    Log.e("response", result + "");
+
 
                     if (result.getBoolean("status")) {
 
                         requestList = result.getJSONArray("requests");
-                        recycler_students.getAdapter().notifyDataSetChanged();
+                        if (requestList.length() != 0)
+                            recycler_students.getAdapter().notifyDataSetChanged();
+                        else {
+                            recycler_students.setVisibility(View.GONE);
+                            msg.setVisibility(View.VISIBLE);
+                        }
 
                     } else
                         showToast(dialog, "Something went wrong. Please try again", 0);
@@ -248,22 +296,25 @@ public class NewRequest extends GetSafeDriverBase {
 
     }
 
+
     private void acceptRequest() {
 
         HashMap<String, String> tempParam = new HashMap<>();
 
 
-        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.ACCEPT_REQUEST), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.ACCEPT_REQUEST)+"?id="+selectedRequestId, 3, tinyDB.getString("token"), new VolleyJsonCallback() {
 
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
                     requestList = new JSONArray();
-                    Log.e("response", result + "");
+
 
                     if (result.getBoolean("status")) {
                         showToast(dialog, "Request Confirmed", 2);
+                        requestList.remove(selectedIndex);
+                        recycler_students.getAdapter().notifyDataSetChanged();
 
                     } else
                         showToast(dialog, "Something went wrong. Please try again", 0);
@@ -284,17 +335,19 @@ public class NewRequest extends GetSafeDriverBase {
         HashMap<String, String> tempParam = new HashMap<>();
 
 
-        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.DECLINE_REQUEST), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.DECLINE_REQUEST)+"?id="+selectedRequestId, 4, tinyDB.getString("token"), new VolleyJsonCallback() {
 
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
                     requestList = new JSONArray();
-                    Log.e("response", result + "");
+
 
                     if (result.getBoolean("status")) {
                         showToast(dialog, "Request Canceled", 2);
+                        requestList.remove(selectedIndex);
+                        recycler_students.getAdapter().notifyDataSetChanged();
 
 
                     } else

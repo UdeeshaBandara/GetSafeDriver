@@ -20,6 +20,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -52,6 +53,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
@@ -80,7 +82,8 @@ public class Map extends GetSafeDriverBase {
     TextView txt_name, txt_distance, txt_time;
 
     String wayPoints;
-
+    LinearLayout lnr_trip_details;
+TextView txt_error;
     JSONArray passengerList;
     Polyline polyline;
     LocationListener locationListener;
@@ -90,6 +93,7 @@ public class Map extends GetSafeDriverBase {
     Button btn_start_trip, btn_absent, btn_dropNPick;
     Double currentLat, currentLon;
     Dialog dialog;
+    Boolean isPickingCompleted = false;
 
     public static ArrayList<String> duration = new ArrayList<>();
     public static ArrayList<String> distance = new ArrayList<>();
@@ -111,6 +115,8 @@ public class Map extends GetSafeDriverBase {
         txt_name = findViewById(R.id.txt_name);
         btn_absent = findViewById(R.id.btn_absent);
         btn_dropNPick = findViewById(R.id.btn_dropNPick);
+        lnr_trip_details = findViewById(R.id.lnr_trip_details);
+        txt_error = findViewById(R.id.txt_error);
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
 
@@ -121,6 +127,7 @@ public class Map extends GetSafeDriverBase {
 //        Query lastQuery = myRef.orderByKey().limitToLast(1);
 
         findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
+
 
         if (!tinyDB.getBoolean("isSchoolDriver"))
             locationRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Location");
@@ -155,14 +162,27 @@ public class Map extends GetSafeDriverBase {
                     if (user.getPassengerName().equals(txt_name.getText().toString())) {
                         user.setAbsent(true);
                         markAbsent(user.getId());
+                        ArrayList<String> strList = (ArrayList<String>) (ArrayList<?>) (dropOffLocations);
+                        tinyDB.putListString("tripRoute", strList);
                     }
+                    if (!user.getPicked())
+                        if (user.getAbsent())
+
+                            isPickingCompleted = true;
+                        else
+                            isPickingCompleted = false;
+                    else
+                        isPickingCompleted = true;
                 }
+
+                Log.e("trip status absent",isPickingCompleted+"");
 
             }
         });
         btn_dropNPick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                isPickingCompleted = true;
                 for (UserLocation user : dropOffLocations) {
                     if (user.getPassengerName().equals(txt_name.getText().toString())) {
                         if (user.getPicked()) {
@@ -172,8 +192,24 @@ public class Map extends GetSafeDriverBase {
                             pickUpPassenger(user.getId());
                             user.setPicked(true);
                         }
+                        ArrayList<String> strList = (ArrayList<String>) (ArrayList<?>) (dropOffLocations);
+                        tinyDB.putListString("tripRoute", strList);
                     }
+                    if (!user.getPicked())
+                        if (user.getAbsent())
+
+                            isPickingCompleted = true;
+                        else
+                            isPickingCompleted = false;
+                    else
+                        isPickingCompleted = true;
                 }
+
+                if (isPickingCompleted)
+                    drawMapPolyline(new LatLng(currentLat, currentLon));
+
+
+                Log.e("trip status pick",isPickingCompleted+"");
             }
         });
         btn_start_trip.setOnClickListener(new View.OnClickListener() {
@@ -185,10 +221,11 @@ public class Map extends GetSafeDriverBase {
 
 
                 if (btn_start_trip.getText().toString().equals("Start Trip")) {
+                    txt_error.setVisibility(View.GONE);
+                    lnr_trip_details.setVisibility(View.VISIBLE);
                     tinyDB.putBoolean("isTripStart", true);
 
-                    ArrayList<String> strList = (ArrayList<String>) (ArrayList<?>) (dropOffLocations);
-                    tinyDB.putListString("tripRoute", strList);
+
                     btn_start_trip.setText("End Trip");
                     Log.e("drop offs", tinyDB.getListString("tripRoute") + "");
                     btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_stop));
@@ -205,7 +242,14 @@ public class Map extends GetSafeDriverBase {
                 } else {
 
                     notifyTripEnd();
+                    dropOffLocations.clear();
+                    txt_error.setVisibility(View.VISIBLE);
+                    lnr_trip_details.setVisibility(View.GONE);
+                    distance.clear();
+                    googleMap.clear();
+                    duration.clear();
                     tinyDB.putBoolean("isTripStart", false);
+                    tinyDB.remove("tripRoute");
                     btn_start_trip.setText("Start Trip");
                     btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_ok));
                     locationRef.child("Status").setValue("started");
@@ -215,20 +259,15 @@ public class Map extends GetSafeDriverBase {
 
             }
         });
+
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                Log.e("onLocationChanged", "exe");
 
-                locationRef.child("Latitude").setValue(location.getLatitude());
-                locationRef.child("Longitude").setValue(location.getLongitude());
-                // pushId++;
                 java.util.Map messageMap = new HashMap();
                 messageMap.put("Latitude", location.getLatitude());
                 messageMap.put("Longitude", location.getLongitude());
-
-//                Log.e("lat",location.getLatitude()+"");
-//                Log.e("lon",location.getLongitude()+"");
-
 
                 locationRef.updateChildren(messageMap, new DatabaseReference.CompletionListener() {
                     @Override
@@ -274,7 +313,7 @@ public class Map extends GetSafeDriverBase {
         locationManagerSender.requestLocationUpdates(LocationManager.GPS_PROVIDER, 12000, 0, locationListener);
 
 
-        locationRef.addChildEventListener(new ChildEventListener() {
+        locationRef.child("Latitude").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
@@ -284,10 +323,12 @@ public class Map extends GetSafeDriverBase {
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 try {
+                    Log.e("onChildChanged", "exe");
                     LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
                     currentLat = locationUpdates.getLatitude();
                     currentLon = locationUpdates.getLongitude();
                     googleMap.clear();
+
                     drawMapPolyline(new LatLng(currentLat, currentLon));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -331,6 +372,60 @@ public class Map extends GetSafeDriverBase {
 
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (tinyDB.getBoolean("isTripStart")) {
+
+            btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_stop));
+            btn_start_trip.setText("End Trip");
+            txt_error.setVisibility(View.GONE);
+            lnr_trip_details.setVisibility(View.VISIBLE);
+            dropOffLocations = new ArrayList<>();
+//            for (String s :  tinyDB.getListString("tripRoute")) {
+////                Object o=s;
+////                userLocation.fo
+//
+//            }
+            dropOffLocations.add(new UserLocation(tinyDB.getListString("tripRoute").get(0)));
+
+            Log.e("FROM string",  tinyDB.getListString("tripRoute").get(0)+"");
+            Log.e("formt iny",  dropOffLocations.get(0).getDropLatitude()+"");
+            drawMapPolyline(new LatLng(currentLat, currentLon));
+
+
+        }
+        else{
+
+            txt_error.setVisibility(View.VISIBLE);
+            lnr_trip_details.setVisibility(View.GONE);
+        }
+    }
+
+
+    @Override
+    protected void onStop() {
+
+        if (!dropOffLocations.isEmpty()) {
+
+            ArrayList<String> strings = new ArrayList<>();
+            for (Object object : dropOffLocations) {
+                strings.add(object != null ? object.toString() : null);
+            }
+            tinyDB.putListString("tripRoute", strings);
+            Log.e("tiny", tinyDB.getListString("tripRoute") + "");
+            distance.clear();
+            googleMap.clear();
+            duration.clear();
+
+            Log.e("new array", dropOffLocations.get(0) + "");
+
+        }
+
+        super.onStop();
 
     }
 
@@ -463,39 +558,80 @@ public class Map extends GetSafeDriverBase {
 //    }
 
     public void drawMapPolyline(LatLng origin) {
+        Log.e("draw polyline","exe");
+        try {
 
+            for (int f = 0; f < distance.size(); f++) {
+                if (Double.parseDouble(distance.get(f)) < 500)
+                    informDriverArrival(dropOffLocations.get(f).getId());
 
-        if (dropOffLocations.size() != 0) {
+            }
+            LatLng dest;
 
-            LatLng dest = new LatLng(dropOffLocations.get(dropOffLocations.size() - 1).getPickUpLatitude(), dropOffLocations.get(dropOffLocations.size() - 1).getPickUpLongitude());
-            googleMap.addMarker(new MarkerOptions()
-                    .position(origin).icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).title("Your location"));
+            if (dropOffLocations.size() != 0) {
 
+                if (isPickingCompleted) {
+                    dest = new LatLng(dropOffLocations.get(dropOffLocations.size() - 1).getDropLatitude(), dropOffLocations.get(dropOffLocations.size() - 1).getDropLongitude());
 
-            wayPoints = "&waypoints=";
-            for (int l = 0; l < dropOffLocations.size(); l++) {
-
-                if (dropOffLocations.size() - 1 == l) {
                     googleMap.addMarker(new MarkerOptions()
-                            .position(dest).icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).title(dropOffLocations.get(l).getPassengerName()));
-                    continue;
+                            .position(origin).icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).title("Your location"));
+
+
+                    wayPoints = "&waypoints=";
+                    for (int l = 0; l < dropOffLocations.size(); l++) {
+
+                        if (dropOffLocations.size() - 1 == l) {
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(dest).icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).title(dropOffLocations.get(l).getPassengerName()));
+                            continue;
+                        }
+                        if (l == 0)
+
+                            wayPoints += dropOffLocations.get(l).getDropLatitude() + "," + dropOffLocations.get(l).getDropLongitude();
+
+                        else
+                            wayPoints += "|" + dropOffLocations.get(l).getDropLatitude() + "," + dropOffLocations.get(l).getDropLongitude();
+
+
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(dropOffLocations.get(l).getDropLatitude(), dropOffLocations.get(l).getDropLongitude())).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title(dropOffLocations.get(l).getPassengerName()));
+
+
+                    }
+                } else {
+
+                    dest = new LatLng(dropOffLocations.get(dropOffLocations.size() - 1).getPickUpLatitude(), dropOffLocations.get(dropOffLocations.size() - 1).getPickUpLongitude());
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(origin).icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).title("Your location"));
+
+
+                    wayPoints = "&waypoints=";
+                    for (int l = 0; l < dropOffLocations.size(); l++) {
+
+                        if (dropOffLocations.size() - 1 == l) {
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(dest).icon(BitmapDescriptorFactory.fromBitmap(finalMarker)).title(dropOffLocations.get(l).getPassengerName()));
+                            continue;
+                        }
+                        if (l == 0)
+
+                            wayPoints += dropOffLocations.get(l).getPickUpLatitude() + "," + dropOffLocations.get(l).getPickUpLongitude();
+
+                        else
+                            wayPoints += "|" + dropOffLocations.get(l).getPickUpLatitude() + "," + dropOffLocations.get(l).getPickUpLongitude();
+
+
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(dropOffLocations.get(l).getPickUpLatitude(), dropOffLocations.get(l).getPickUpLongitude())).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title(dropOffLocations.get(l).getPassengerName()));
+
+
+                    }
                 }
-                if (l == 0)
-
-                    wayPoints += dropOffLocations.get(l).getPickUpLatitude() + "," + dropOffLocations.get(l).getPickUpLongitude();
-
-                else
-                    wayPoints += "|" + dropOffLocations.get(l).getPickUpLatitude() + "," + dropOffLocations.get(l).getPickUpLongitude();
-
-
-                googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(dropOffLocations.get(l).getPickUpLatitude(), dropOffLocations.get(l).getPickUpLongitude())).icon(BitmapDescriptorFactory.fromBitmap(originMarker)).title(dropOffLocations.get(l).getPassengerName()));
-
 
                 googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
-                        Log.e("selected latlong", marker.getPosition() + "");
+//                            Log.e("selected latlong", marker.getPosition() + "");
                         for (int v = 0; v < dropOffLocations.size(); v++) {
                             if (dropOffLocations.get(v).getPassengerName().equals(marker.getTitle()))
                                 if (distance.size() != 0 & duration.size() != 0) {
@@ -514,20 +650,17 @@ public class Map extends GetSafeDriverBase {
                         return false;
                     }
                 });
-            }
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                builder.include(origin);
+                builder.include(dest);
 
+                LatLngBounds bounds = builder.build();
 
-            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            builder.include(origin);
-            builder.include(dest);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 75));
 
-            LatLngBounds bounds = builder.build();
-
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 75));
-
-            CameraPosition camPos = new CameraPosition.Builder(googleMap.getCameraPosition()).target(bounds.getCenter()).tilt(35).build();
-            googleMap.animateCamera(CameraUpdateFactory
-                    .newCameraPosition(camPos));
+                CameraPosition camPos = new CameraPosition.Builder(googleMap.getCameraPosition()).target(bounds.getCenter()).tilt(35).build();
+                googleMap.animateCamera(CameraUpdateFactory
+                        .newCameraPosition(camPos));
 //
 //        int padding = 1;
 //
@@ -537,13 +670,18 @@ public class Map extends GetSafeDriverBase {
 //        googleMap.animateCamera(cu);
 
 
-            String url = getDirectionsUrl(origin, dest);
+                String url = getDirectionsUrl(origin, dest);
 
 
-            DownloadTask downloadTask = new DownloadTask();
+                DownloadTask downloadTask = new DownloadTask();
 
 
-            downloadTask.execute(url);
+                downloadTask.execute(url);
+            }
+        }
+        catch (Exception e){
+            Log.e("ez",e.getMessage());
+         e.printStackTrace();
         }
 
     }
@@ -766,6 +904,7 @@ public class Map extends GetSafeDriverBase {
 
     void getPickupLatLong() {
         try {
+            Log.e("getPickupLatLong","exe");
             for (int jk = 0; jk < passengerList.length(); jk++) {
 
                 dropOffLocations.add(jk, new UserLocation(passengerList.getJSONObject(jk).getString("id"), passengerList.getJSONObject(jk).getString("name"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_longitude"), calculateDistance(currentLat, currentLon, passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude")), false, false, false));
@@ -778,6 +917,8 @@ public class Map extends GetSafeDriverBase {
 
             }
             drawMapPolyline(new LatLng(currentLat, currentLon));
+            ArrayList<String> strList = (ArrayList<String>) (ArrayList<?>) (dropOffLocations);
+            tinyDB.putListString("tripRoute", strList);
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -820,7 +961,7 @@ public class Map extends GetSafeDriverBase {
                         passengerList = result.getJSONArray("models");
                         getPickupLatLong();
                     } else
-                        showToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, result.getString("validation_errors"), 0);
 
 
                 } catch (Exception e) {
@@ -853,7 +994,7 @@ public class Map extends GetSafeDriverBase {
                         passengerList = result.getJSONArray("models");
                         getPickupLatLong();
                     } else
-                        showToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, result.getString("validation_errors"), 0);
 
 
                 } catch (Exception e) {
@@ -871,7 +1012,8 @@ public class Map extends GetSafeDriverBase {
 
         HashMap<String, String> tempParam = new HashMap<>();
 
-
+        tempParam.put("latitude", currentLat.toString());
+        tempParam.put("longitude", currentLon.toString());
         getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.JOURNEY_START), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
 
             @Override
@@ -883,7 +1025,7 @@ public class Map extends GetSafeDriverBase {
 
 
                     } else
-                        showToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, result.getString("validation_errors"), 0);
 
 
                 } catch (Exception e) {
@@ -914,7 +1056,7 @@ public class Map extends GetSafeDriverBase {
 
 
                     } else
-                        showToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, result.getString("validation_errors"), 0);
 
 
                 } catch (Exception e) {
@@ -945,7 +1087,7 @@ public class Map extends GetSafeDriverBase {
 
 
                     } else
-                        showToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, result.getString("validation_errors"), 0);
 
 
                 } catch (Exception e) {
@@ -976,7 +1118,7 @@ public class Map extends GetSafeDriverBase {
 
 
                     } else
-                        showToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, result.getString("validation_errors"), 0);
 
 
                 } catch (Exception e) {
@@ -993,7 +1135,8 @@ public class Map extends GetSafeDriverBase {
     private void notifyTripEnd() {
 
         HashMap<String, String> tempParam = new HashMap<>();
-
+        tempParam.put("latitude", currentLat.toString());
+        tempParam.put("longitude", currentLon.toString());
 
         getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.JOURNEY_END), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
 
@@ -1006,7 +1149,38 @@ public class Map extends GetSafeDriverBase {
 
 
                     } else
-                        showToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, result.getString("validation_errors"), 0);
+
+
+                } catch (Exception e) {
+
+                    Log.e("ex", e.getMessage());
+                }
+
+            }
+        });
+
+
+    }
+
+    private void informDriverArrival(String id) {
+
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("id", id);
+
+
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.INFORM_DRIVER_ARRIVAL), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    if (result.getBoolean("status")) {
+
+
+                    } else
+                        showToast(dialog, result.getString("validation_errors"), 0);
 
 
                 } catch (Exception e) {

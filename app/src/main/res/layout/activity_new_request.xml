@@ -12,13 +12,17 @@
         android:layout_alignParentTop="true"
         android:background="@color/yellow_te">
 
-        <ImageView
+        <TextView
             android:id="@+id/img_head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:fontFamily="@font/nunito_bold"
             android:scaleType="centerCrop"
-            android:src="@drawable/logo" />
+            android:text="New trip requests"
+            android:textColor="@color/black"
+            android:layout_marginVertical="38dp"
+            android:textSize="20sp" />
 
 
         <RelativeLayout
@@ -29,11 +33,6 @@
             android:background="@drawable/bg_messaging_behind">
 
 
-
-
-
-
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -41,14 +40,24 @@
                 android:layout_marginTop="40dp"
                 android:background="@drawable/bg_messaging">
 
+                <TextView
+                    android:id="@+id/msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/nunito_regular"
+                    android:text="No new request(s) !"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_students"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:requiresFadingEdge="horizontal|vertical"
                     android:layout_marginTop="15dp"
-                    android:overScrollMode="never" />
+                    android:overScrollMode="never"
+                    android:requiresFadingEdge="horizontal|vertical" />
 
             </RelativeLayout>
 

@@ -12,7 +12,7 @@ import lk.hd192.getsafedriver.Utils.TinyDB;
 
 public class Home extends GetSafeDriverBase {
 
-//    RecyclerView recyclerHome;
+    //    RecyclerView recyclerHome;
     StaggeredGridLayoutManager staggeredGridLayoutManager;
     TinyDB tinyDB;
 
@@ -23,7 +23,7 @@ public class Home extends GetSafeDriverBase {
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_te));
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
-        tinyDB= new TinyDB(getApplicationContext());
+        tinyDB = new TinyDB(getApplicationContext());
 
 //        recyclerHome = findViewById(R.id.recycler_home);
 
@@ -35,15 +35,16 @@ public class Home extends GetSafeDriverBase {
 //        recyclerHome.setLayoutManager(staggeredGridLayoutManager);
 //        recyclerHome.getAdapter().notifyDataSetChanged();
 
-        tinyDB.putBoolean("isSchoolDriver",true);
-        tinyDB.putString("token"," 1|J9TF6nFVQQYZ2vyCppHNu5l7pfTSaewwSm0qmFAd");
+        tinyDB.putBoolean("isStaffDriver", false);
+        tinyDB.putString("token", "2|qHUTtilTReJeEIU0N0ZzDksZhaRwXfzAuCHy2u0R");
 
 
         homeRoutes();
 
 
     }
-    private void homeRoutes(){
+
+    private void homeRoutes() {
 
 
         findViewById(R.id.card_absence).setOnClickListener(new View.OnClickListener() {
@@ -51,22 +52,26 @@ public class Home extends GetSafeDriverBase {
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Absence.class));
             }
-        });  findViewById(R.id.card_request).setOnClickListener(new View.OnClickListener() {
+        });
+        findViewById(R.id.card_request).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), NewRequest.class));
             }
-        });  findViewById(R.id.card_map).setOnClickListener(new View.OnClickListener() {
+        });
+        findViewById(R.id.card_map).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Map.class));
             }
-        });  findViewById(R.id.card_message).setOnClickListener(new View.OnClickListener() {
+        });
+        findViewById(R.id.card_message).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Message.class));
             }
-        });  findViewById(R.id.card_payment).setOnClickListener(new View.OnClickListener() {
+        });
+        findViewById(R.id.card_payment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Payment.class));

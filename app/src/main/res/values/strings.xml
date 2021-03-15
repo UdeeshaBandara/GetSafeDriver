@@ -31,6 +31,7 @@
     <string name="JOURNEY_END">/driver/journey/end</string>
 
 
+    <string name="GET_ALL_PASSENGERS">/driver/journey/list/all</string>
     <string name="PASSENGER_PICKUP">/driver/journey/picked</string>
     <string name="PASSENGER_DROP">/driver/journey/dropped</string>
 
@@ -42,6 +43,7 @@
     <string name="DECLINE_REQUEST">/driver/requests/decline</string>
     <string name="VIEW_ONE_REQUEST">/driver/requests/viewone</string>
     <string name="VIEW_ALL_REQUEST">/driver/requests/viewall</string>
+
 
 
 

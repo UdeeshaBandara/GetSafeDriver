@@ -5,11 +5,16 @@ public class UserLocation implements Comparable{
     String passengerName,id;
     Double pickUpLatitude,pickUpLongitude,dropLatitude,dropLongitude,distance;
     Boolean isPicked,isAbsent,isDropped;
+    String tempString;
+
+    UserLocation userLocation;
 
     public UserLocation() {
 
     }
-
+    public UserLocation (String userLocTemp) {
+//        userLocation = (UserLocation) userLocTemp;
+    }
     public String getPassengerName() {
         return passengerName;
     }

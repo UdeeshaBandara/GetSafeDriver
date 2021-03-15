@@ -359,7 +359,8 @@ public class GetSafeDriverServices extends GetSafeDriverBase {
 
             requestMethod = Request.Method.PUT;
 
-        }
+        }else if(method==4)
+            requestMethod = Request.Method.DELETE;
 
         JsonObjectRequest req = new JsonObjectRequest(requestMethod, url, new JSONObject(parameters), new Response.Listener<JSONObject>() { //Json request
             @Override
