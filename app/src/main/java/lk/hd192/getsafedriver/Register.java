@@ -25,12 +25,12 @@ import java.util.List;
 import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
 import lk.hd192.getsafedriver.Utils.NonSwappableViewPager;
 
-public class Register extends GetSafeDriverBase {
+public class Register extends GetSafeDriverBase implements AddDriverFirst.RegisterCallBack, AddDriverSecond.RegisterCallBack, AddDriverThird.RegisterCallBack {
     private NonSwappableViewPager nonSwappableViewPager;
     Intent intent;
 
     ArrayList<Image> imagesList;
-    LottieAnimationView driverAnimation, locationAnimation, doneAnimation,vanAnimation,images, btnNext,btn_done;
+    LottieAnimationView driverAnimation, locationAnimation, doneAnimation, vanAnimation, images, btnNext, btn_done;
     AddDriverFirst addDriverFirst;
     AddDriverSecond addDriverSecond;
     AddDriverThird addDriverThird;
@@ -64,45 +64,23 @@ public class Register extends GetSafeDriverBase {
             @Override
             public void onClick(View v) {
 
-                if (currentPage == 1) {
-                    Log.e("1st","exe");
-                    if(addDriverFirst.validateFields()){
-                        nonSwappableViewPager.setCurrentItem(1);
-//                        txtSubHeading.setText("Location Details");
-                        driverAnimation.setVisibility(View.GONE);
-                        doneAnimation.setVisibility(View.GONE);
-                        locationAnimation.setVisibility(View.VISIBLE);
-                        currentPage = 2;
-                    }
-
-                } else if (currentPage == 2) {
-
-                    if(addDriverSecond.validateFields()){
-                        nonSwappableViewPager.setCurrentItem(2);
-//                        txtSubHeading.setText("Vehicle Details");
-                        vanAnimation.setVisibility(View.VISIBLE);
-                        locationAnimation.setVisibility(View.GONE);
-                        driverAnimation.setVisibility(View.GONE);
-                        currentPage = 3;
-                    }
-
-                } else if (currentPage == 3) {
+                if (currentPage == 1)
 
 
-                    if(addDriverThird.validateFields()){
-                        nonSwappableViewPager.setCurrentItem(3);
-//                        txtSubHeading.setText("Vehicle Details");
-                        images.setVisibility(View.VISIBLE);
-                        locationAnimation.setVisibility(View.GONE);
-                        vanAnimation.setVisibility(View.GONE);
-                        btnNext.setVisibility(View.GONE);
-                        currentPage = 4;
-
-                        btn_done.setVisibility(View.VISIBLE);
-                    }
+                    addDriverFirst.validateFields();
 
 
-                }   else if (currentPage == 4) {
+                else if (currentPage == 2)
+
+                    addDriverSecond.validateFields();
+
+
+                else if (currentPage == 3) {
+
+                    addDriverThird.validateFields();
+
+
+                } else if (currentPage == 4) {
 
                     try {
                         addDriverFourth.convertToBase64AndUpload();
@@ -125,6 +103,45 @@ public class Register extends GetSafeDriverBase {
         });
 
     }
+
+    @Override
+    public void showPageTwo() {
+
+        nonSwappableViewPager.setCurrentItem(1);
+//                        txtSubHeading.setText("Location Details");
+        driverAnimation.setVisibility(View.GONE);
+        doneAnimation.setVisibility(View.GONE);
+        locationAnimation.setVisibility(View.VISIBLE);
+        currentPage = 2;
+
+
+    }
+
+    @Override
+    public void showPageThree() {
+        nonSwappableViewPager.setCurrentItem(2);
+//                        txtSubHeading.setText("Vehicle Details");
+        vanAnimation.setVisibility(View.VISIBLE);
+        locationAnimation.setVisibility(View.GONE);
+        driverAnimation.setVisibility(View.GONE);
+        currentPage = 3;
+
+    }
+
+    @Override
+    public void showPageFour() {
+        nonSwappableViewPager.setCurrentItem(3);
+//                        txtSubHeading.setText("Vehicle Details");
+        images.setVisibility(View.VISIBLE);
+        locationAnimation.setVisibility(View.GONE);
+        vanAnimation.setVisibility(View.GONE);
+        btnNext.setVisibility(View.GONE);
+        currentPage = 4;
+
+        btn_done.setVisibility(View.VISIBLE);
+
+    }
+
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -168,9 +185,9 @@ public class Register extends GetSafeDriverBase {
         super.onActivityResult(requestCode, resultCode, data);
 
         for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-            if(fragment==addDriverFourth)
+            if (fragment == addDriverFourth)
 
-            fragment.onActivityResult(requestCode, resultCode, data);
+                fragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 

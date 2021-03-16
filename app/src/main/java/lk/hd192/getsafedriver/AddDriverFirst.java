@@ -1,8 +1,7 @@
 package lk.hd192.getsafedriver;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,11 +11,10 @@ import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -33,13 +31,13 @@ import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import lk.hd192.getsafedriver.Utils.GetSafeDriverServices;
 import lk.hd192.getsafedriver.Utils.TinyDB;
@@ -48,13 +46,14 @@ import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateSetListener {
 
     int year;
+    Register register;
     int month;
     int day;
     TypeBottomSheet typeBottomSheet;
     GetSafeDriverServices getSafeDriverServices;
     SimpleDateFormat simpleDateFormat;
-    public boolean isValidated = false;
-    public static String driverId;
+    public static boolean isValidated = false;
+
     TinyDB tinyDB;
     private DatabaseReference firebaseDatabase;
     private FirebaseAuth mAuth;
@@ -82,6 +81,8 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
         super.onViewCreated(view, savedInstanceState);
 
         final Calendar c = Calendar.getInstance();
+        register=new Register();
+
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
@@ -117,66 +118,87 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
 
     }
 
-    public boolean validateFields() {
+    public void validateFields() {
 
         if (TextUtils.isEmpty(edit_txt_name.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_txt_name);
             edit_txt_name.setError("Please enter name");
-            return false;
+           
         } else if (TextUtils.isEmpty(edit_txt_nic.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_txt_nic);
             edit_txt_nic.setError("Please enter NIC number");
-            return false;
+           
+        } else if (!Pattern.matches("^([0-9]{9}[x|X|v|V]|[0-9]{12})$", edit_txt_nic.getText())) {
+
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_txt_nic);
+            edit_txt_nic.setError("Please enter valid NIC number");
+           
+        } else if (!Pattern.matches("^((B){1}[0-9]{7})$", edit_text_license_no_main.getText())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_text_license_no_main);
+            edit_text_license_no_main.setError("Please enter valid License number");
+           
         } else if (TextUtils.isEmpty(edit_text_license_no_main.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_text_license_no_main);
             edit_text_license_no_main.setError("Please enter License number");
-            return false;
+           
         } else if (TextUtils.isEmpty(edit_text_telephone.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_text_telephone);
             edit_text_telephone.setError("Please enter contact number");
-            return false;
-        }   else if (edit_text_telephone.getText().toString().length()!=9) {
+           
+        } else if (edit_text_telephone.getText().toString().length() != 9) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_text_telephone);
             edit_text_telephone.setError("Please enter correct number");
-            return false;
+           
         } else if (TextUtils.isEmpty(txtDriverBirthday.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(txtDriverBirthday);
             txtDriverBirthday.setError("Please select birthday");
-            return false;
+           
         } else if (TextUtils.isEmpty(txt_email.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_txt_name);
             txt_email.setError("Please enter email");
-            return false;
+           
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(txt_email.getText()).matches()) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_txt_name);
+            txt_email.setError("Please enter correct email");
+           
         } else if (TextUtils.isEmpty(txtType.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(txtType);
             txtType.setError("Please select transport type");
-            return false;
+           
         } else {
-            return true;
-//            return registerDriverBasic();
+
+            registerDriverBasic();
+
         }
 
     }
 
-    private boolean registerDriverBasic() {
 
-        Log.e("register","methd");
+    private void registerDriverBasic() {
+
+        Log.e("register", "methd");
 
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("name", edit_txt_name.getText().toString());
@@ -185,9 +207,7 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
         tempParam.put("phone", edit_text_telephone.getText().toString());
         tempParam.put("birthday", txtDriverBirthday.getText().toString());
         tempParam.put("email", txt_email.getText().toString());
-        tempParam.put("type", txtType.getText().toString());
-
-
+        tempParam.put("type", (txtType.getText().toString().split("\\s+")[0]).toLowerCase());
 
 
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_SAVE), 2, new VolleyJsonCallback() {
@@ -195,31 +215,42 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-                    Log.e("res",result+"");
+                    Log.e("res", result + "");
 
                     if (result.getBoolean("saved_status")) {
+                        tinyDB.putString("driver_id", result.getJSONObject("driver").getString("id"));
                         tinyDB.putString("phone_no", edit_text_telephone.getText().toString());
                         tinyDB.putString("email", txt_email.getText().toString());
                         tinyDB.putBoolean("isStaffDriver", txtType.getText().toString().equals("School Transport"));
 //                        registerFirebaseUser();
                         isValidated = true;
+                        ((RegisterCallBack) getActivity()).showPageTwo();
 
                     }
 
 
+
                 } catch (Exception ex) {
-                   Log.e("ex",ex.getMessage());
+                    Log.e("ex", ex.getMessage());
                     isValidated = false;
                 }
 
 
             }
+
         });
-        return isValidated;
+        Log.e("return", isValidated + "");
+
 
     }
+    public interface RegisterCallBack {
+
+        void showPageTwo();
+    }
+
+
     private void registerFirebaseUser() {
-        mAuth.createUserWithEmailAndPassword( tinyDB.getString("email"),tinyDB.getString("phone_no"))
+        mAuth.createUserWithEmailAndPassword(tinyDB.getString("email"), tinyDB.getString("phone_no"))
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -281,7 +312,7 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
             findViewById(R.id.staff_search).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    txtType.setText("Staff Transport");
+                    txtType.setText("Office Transport");
                     typeBottomSheet.dismiss();
                 }
             });

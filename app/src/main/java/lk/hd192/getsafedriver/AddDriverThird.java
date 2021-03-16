@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import lk.hd192.getsafedriver.Utils.GetSafeDriverServices;
+import lk.hd192.getsafedriver.Utils.TinyDB;
 import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 
 
@@ -36,6 +37,7 @@ public class AddDriverThird extends Fragment {
     GetSafeDriverServices getSafeDriverServices;
     String isAc = "", isCam = "";
     public boolean isThirdValidated = false;
+    TinyDB tinyDB;
 
     public AddDriverThird() {
         // Required empty public constructor
@@ -58,7 +60,7 @@ public class AddDriverThird extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        tinyDB = new TinyDB(getActivity());
         txtAc = view.findViewById(R.id.txt_ac);
         txtNonAc = view.findViewById(R.id.txt_non_ac);
         txtCam = view.findViewById(R.id.txt_cam);
@@ -119,55 +121,60 @@ public class AddDriverThird extends Fragment {
         });
     }
 
-    public boolean validateFields() {
+    public void validateFields() {
         if (TextUtils.isEmpty(edit_txt_vehicle_type.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_txt_vehicle_type);
-            edit_txt_vehicle_type.setError("Please enter address two");
-            return false;
+            edit_txt_vehicle_type.setError("Please enter vehicle type");
+            
         } else if (TextUtils.isEmpty(edit_txt_vehicle_make.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_txt_vehicle_make);
-            edit_txt_vehicle_make.setError("Please enter address two");
-            return false;
+            edit_txt_vehicle_make.setError("Please enter vehicle make");
+            
         } else if (TextUtils.isEmpty(edit_txt_vehicle_model.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_txt_vehicle_model);
-            edit_txt_vehicle_model.setError("Please enter address two");
-            return false;
+            edit_txt_vehicle_model.setError("Please enter vehicle model");
+            
         } else if (TextUtils.isEmpty(edit_txt_registration_no.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_txt_registration_no);
-            edit_txt_registration_no.setError("Please enter address two");
-            return false;
+            edit_txt_registration_no.setError("Please enter vehicle registration number");
+            
         } else if (TextUtils.isEmpty(edit_txt_seating.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_txt_seating);
-            edit_txt_seating.setError("Please enter address two");
-            return false;
+            edit_txt_seating.setError("Please enter seating capacity");
+            
         } else if (isAc.equals("")) {
-            return false;
+            
         } else if (isCam.equals("")) {
-            return false;
+            
         } else {
 
-            return true;
-//            return registerVehicle();
+//            return true;
+             registerVehicle();
 
         }
 
+    }
+
+    public interface RegisterCallBack {
+
+        void showPageFour();
     }
 
     private boolean registerVehicle() {
 
 
         HashMap<String, String> tempParam = new HashMap<>();
-        tempParam.put("id", AddDriverFirst.driverId);
+        tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("type", edit_txt_vehicle_type.getText().toString());
         tempParam.put("make", edit_txt_vehicle_make.getText().toString());
         tempParam.put("model", edit_txt_vehicle_model.getText().toString());
@@ -185,6 +192,7 @@ public class AddDriverThird extends Fragment {
 
                     if (result.getBoolean("saved_status")) {
                         isThirdValidated = true;
+                        ((RegisterCallBack) getActivity()).showPageFour();
                     }
 
 

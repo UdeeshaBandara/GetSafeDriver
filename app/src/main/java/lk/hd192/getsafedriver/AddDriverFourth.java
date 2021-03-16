@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import lk.hd192.getsafedriver.Utils.GetSafeDriverServices;
+import lk.hd192.getsafedriver.Utils.TinyDB;
 import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -56,6 +57,8 @@ public class AddDriverFourth extends Fragment {
     public ImageView imageDriver, imgLicOne, imgLicTwo, imgIdOne, imgIdTwo;
     ArrayList<Image> imagesList, imagesToUpload;
     ArrayList<String> imagesBase64;
+    TinyDB tinyDB;
+
     GetSafeDriverServices getSafeDriverServices;
     Boolean fromIdOne = false, fromIdTwo = false, fromLicOne = false, fromLicTwo = false, fromDriverPic = false;
 
@@ -80,7 +83,7 @@ public class AddDriverFourth extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        tinyDB = new TinyDB(getActivity());
         getSafeDriverServices = new GetSafeDriverServices();
         imageDriver = view.findViewById(R.id.image_driver);
         imgLicTwo = view.findViewById(R.id.img_lic_two);
@@ -303,7 +306,7 @@ public class AddDriverFourth extends Fragment {
 
 
         HashMap<String, String> tempParam = new HashMap<>();
-        tempParam.put("id", AddDriverFirst.driverId);
+        tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(0));
 
 
@@ -332,7 +335,7 @@ public class AddDriverFourth extends Fragment {
 
 
         HashMap<String, String> tempParam = new HashMap<>();
-        tempParam.put("id", AddDriverFirst.driverId);
+        tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(1));
 
 
@@ -361,7 +364,7 @@ public class AddDriverFourth extends Fragment {
 
 
         HashMap<String, String> tempParam = new HashMap<>();
-        tempParam.put("id", AddDriverFirst.driverId);
+        tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(2));
 
 
@@ -390,7 +393,7 @@ public class AddDriverFourth extends Fragment {
 
 
         HashMap<String, String> tempParam = new HashMap<>();
-        tempParam.put("id", AddDriverFirst.driverId);
+        tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(3));
 
 

@@ -43,7 +43,7 @@
                 android:fontFamily="@font/nunito_regular"
                 android:gravity="center"
                 android:paddingHorizontal="20dp"
-                android:text="School Transport"
+                android:text="Colombo"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -59,7 +59,7 @@
                 android:fontFamily="@font/nunito_regular"
                 android:gravity="center"
                 android:paddingHorizontal="20dp"
-                android:text="Office Transport"
+                android:text="Gampaha"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
