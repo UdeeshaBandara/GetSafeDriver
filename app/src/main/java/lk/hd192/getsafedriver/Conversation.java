@@ -85,14 +85,12 @@ public class Conversation extends AppCompatActivity {
         tinyDB.putBoolean("isStaffDriver", true);
         mRootRef = FirebaseDatabase.getInstance().getReference();
         if (tinyDB.getBoolean("isStaffDriver")) {
-            messageRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("messages");
-            keyRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("key");
-            keyRef.setValue(tinyDB.getString("public_key"));
+            messageRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("driver_id")).child("Passengers").child("Add_user_id_here").child("messages");
         } else {
-            messageRef = mRootRef.child("School_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child(tinyDB.getString("selectedChildId")).child("messages");
-            keyRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("key");
-            keyRef.setValue(tinyDB.getString("public_key"));
+            messageRef = mRootRef.child("School_Drivers").child(tinyDB.getString("driver_id")).child("Passengers").child("Add_user_id_here").child(tinyDB.getString("selectedChildId")).child("messages");
         }
+        keyRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("key");
+        keyRef.setValue(tinyDB.getString("public_key"));
 
         findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
 //        mChatUser = "a0tW1ZdZySMuDb28Za0RyoSDrlz1";

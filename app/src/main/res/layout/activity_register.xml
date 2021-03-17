@@ -116,7 +116,7 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="center"
 
-android:visibility="gone"
+        android:visibility="gone"
 
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
@@ -141,6 +141,6 @@ android:visibility="gone"
         android:visibility="gone"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/loading" />
+        app:lottie_rawRes="@raw/loading_hud" />
 
 </RelativeLayout>

@@ -25,7 +25,7 @@ import java.util.List;
 import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
 import lk.hd192.getsafedriver.Utils.NonSwappableViewPager;
 
-public class Register extends GetSafeDriverBase implements AddDriverFirst.RegisterCallBack, AddDriverSecond.RegisterCallBack, AddDriverThird.RegisterCallBack {
+public class Register extends GetSafeDriverBase implements AddDriverFirst.RegisterCallBack, AddDriverSecond.RegisterCallSecond, AddDriverThird.RegisterCallBack,AddDriverFourth.LoadingCall {
     private NonSwappableViewPager nonSwappableViewPager;
     Intent intent;
 
@@ -38,6 +38,9 @@ public class Register extends GetSafeDriverBase implements AddDriverFirst.Regist
     TextView txtSubHeading;
     public static boolean firstCompleted = false, secondCompleted = false;
     int currentPage = 1;
+    View view;
+    LottieAnimationView loading;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +60,23 @@ public class Register extends GetSafeDriverBase implements AddDriverFirst.Regist
         images = findViewById(R.id.images_animation);
         btn_done = findViewById(R.id.btn_done);
 
+        loading = findViewById(R.id.loading);
+        view = findViewById(R.id.disable_layout);
 
         nonSwappableViewPager.setOffscreenPageLimit(1);
         setupViewPager(nonSwappableViewPager);
+        btn_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentPage == 4) {
+
+                    try {
+                        addDriverFourth.convertToBase64AndUpload();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }}
+            }
+        });
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,8 +84,8 @@ public class Register extends GetSafeDriverBase implements AddDriverFirst.Regist
                 if (currentPage == 1)
 
 
-                    addDriverFirst.validateFields();
-
+//                    addDriverFirst.validateFields();
+                    showPageFour();
 
                 else if (currentPage == 2)
 
@@ -80,13 +97,7 @@ public class Register extends GetSafeDriverBase implements AddDriverFirst.Regist
                     addDriverThird.validateFields();
 
 
-                } else if (currentPage == 4) {
 
-                    try {
-                        addDriverFourth.convertToBase64AndUpload();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
 
 //                        txtSubHeading.setText("Vehicle Details");
 //                        vanAnimation.setVisibility(View.VISIBLE);
@@ -117,16 +128,6 @@ public class Register extends GetSafeDriverBase implements AddDriverFirst.Regist
 
     }
 
-    @Override
-    public void showPageThree() {
-        nonSwappableViewPager.setCurrentItem(2);
-//                        txtSubHeading.setText("Vehicle Details");
-        vanAnimation.setVisibility(View.VISIBLE);
-        locationAnimation.setVisibility(View.GONE);
-        driverAnimation.setVisibility(View.GONE);
-        currentPage = 3;
-
-    }
 
     @Override
     public void showPageFour() {
@@ -140,6 +141,32 @@ public class Register extends GetSafeDriverBase implements AddDriverFirst.Regist
 
         btn_done.setVisibility(View.VISIBLE);
 
+    }
+
+    @Override
+    public void showPageThree() {
+        Log.e("page three", "exe");
+        nonSwappableViewPager.setCurrentItem(2);
+//                        txtSubHeading.setText("Vehicle Details");
+        vanAnimation.setVisibility(View.VISIBLE);
+        locationAnimation.setVisibility(View.GONE);
+        driverAnimation.setVisibility(View.GONE);
+        currentPage = 3;
+
+    }
+
+    @Override
+    public void showLoadingImage() {
+        view.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
+        loading.playAnimation();
+
+    }
+
+    @Override
+    public void hideLoadingImage() {
+        loading.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
     }
 
 
@@ -190,6 +217,5 @@ public class Register extends GetSafeDriverBase implements AddDriverFirst.Regist
                 fragment.onActivityResult(requestCode, resultCode, data);
         }
     }
-
 
 }

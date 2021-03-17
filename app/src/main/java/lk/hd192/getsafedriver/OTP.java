@@ -180,8 +180,7 @@ public class OTP extends GetSafeDriverBase {
                         tinyDB.putString("token", result.getString("access_token"));
 //                        firebaseLogin();
                         getDeviceToken();
-                        startActivity(new Intent(getApplicationContext(), Home.class));
-                        finishAffinity();
+
 
                     } else
                         showToast(dialog, "Something went wrong. Please try again", 0);
@@ -240,7 +239,36 @@ public class OTP extends GetSafeDriverBase {
                     }
                 });
     }
-    private void updateUserFcmToken(String token) {
+    private void updateUserFcmToken(String fcmToken) {
+        HashMap<String, String> tempParam = new HashMap<>();
+
+        tempParam.put("fcm_token", fcmToken);
+
+
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.UPDATE_FCM), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    if (result.getBoolean("saved_status")) {
+
+                        tinyDB.putString("fcmToken", fcmToken);
+                        startActivity(new Intent(getApplicationContext(), Home.class));
+                        finishAffinity();
+
+                    } else
+                        showToast(dialog, result.getString("validation_errors"), 0);
+
+
+                } catch (Exception e) {
+
+
+                }
+
+            }
+        });
+
     }
 
 }

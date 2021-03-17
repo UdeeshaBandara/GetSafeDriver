@@ -129,7 +129,7 @@ public class AddDriverSecond extends Fragment {
 
     }
 
-    public interface RegisterCallBack {
+    public interface RegisterCallSecond {
 
         void showPageThree();
     }
@@ -314,9 +314,9 @@ public class AddDriverSecond extends Fragment {
                 try {
                     Log.e("res",result+"");
 
-                    if (result.getBoolean("saved_status")) {
+                    if (result.getBoolean("status")) {
 
-                        ((RegisterCallBack) getActivity()).showPageThree();
+                        ((RegisterCallSecond) getActivity()).showPageThree();
                     }
 
 

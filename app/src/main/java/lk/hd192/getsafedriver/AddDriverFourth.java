@@ -1,5 +1,6 @@
 package lk.hd192.getsafedriver;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -44,6 +45,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import lk.hd192.getsafedriver.Utils.GetSafeDriverBaseFragment;
 import lk.hd192.getsafedriver.Utils.GetSafeDriverServices;
 import lk.hd192.getsafedriver.Utils.TinyDB;
 import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
@@ -52,15 +54,16 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_OK;
 
-public class AddDriverFourth extends Fragment {
+public class AddDriverFourth extends GetSafeDriverBaseFragment {
 
-    public ImageView imageDriver, imgLicOne, imgLicTwo, imgIdOne, imgIdTwo;
+    public ImageView imageDriver, imgLicOne, imgLicTwo, imgIdOne, imgIdTwo, img_vehicle_one, img_vehicle_three, img_vehicle_four, img_vehicle_two;
     ArrayList<Image> imagesList, imagesToUpload;
     ArrayList<String> imagesBase64;
     TinyDB tinyDB;
+    Dialog dialog;
 
     GetSafeDriverServices getSafeDriverServices;
-    Boolean fromIdOne = false, fromIdTwo = false, fromLicOne = false, fromLicTwo = false, fromDriverPic = false;
+    Boolean fromIdOne = false, fromIdTwo = false, fromLicOne = false, fromLicTwo = false, fromDriverPic = false, fromVehicleOne = false, fromVehicleTwo = false, fromVehicleThree = false, fromVehicleOneFour = false;
 
     public AddDriverFourth() {
         // Required empty public constructor
@@ -90,43 +93,89 @@ public class AddDriverFourth extends Fragment {
         imgLicOne = view.findViewById(R.id.img_lic_one);
         imgIdOne = view.findViewById(R.id.img_id_one);
         imgIdTwo = view.findViewById(R.id.img_id_two);
+        img_vehicle_three = view.findViewById(R.id.img_vehicle_three);
+        img_vehicle_one = view.findViewById(R.id.img_vehicle_one);
+        img_vehicle_two = view.findViewById(R.id.img_vehicle_two);
+        img_vehicle_four = view.findViewById(R.id.img_vehicle_four);
+        imagesToUpload = new ArrayList<>(9);
+        imagesList = new ArrayList<>();
+        imagesBase64 = new ArrayList<>();
 
+        dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
         imageDriver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGallery(1);
                 fromDriverPic = true;
+                openGallery(1);
+
             }
         });
 
         imgLicTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGallery(2);
                 fromLicTwo = true;
+                openGallery(2);
+
             }
         });
         imgIdTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGallery(2);
                 fromIdTwo = true;
+                openGallery(2);
+
             }
         });
         imgLicOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGallery(2);
                 fromLicOne = true;
+                openGallery(2);
+
 
             }
         });
         imgIdOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGallery(2);
                 fromIdOne = true;
+                openGallery(2);
+
+            }
+        });
+        img_vehicle_four.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fromVehicleOne = true;
+                openGallery(4);
+
+            }
+        });
+        img_vehicle_three.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fromVehicleOne = true;
+                openGallery(4);
+
+            }
+        });
+        img_vehicle_two.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fromVehicleOne = true;
+                openGallery(4);
+
+            }
+        });
+        img_vehicle_one.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fromVehicleOne = true;
+                openGallery(4);
+
+
             }
         });
     }
@@ -185,7 +234,7 @@ public class AddDriverFourth extends Fragment {
             imagesList = data.getParcelableArrayListExtra(Constants.KEY_BUNDLE_LIST);
             if (fromDriverPic) {
                 imageDriver.setImageURI(imagesList.get(0).uri);
-                encodeImage(imagesList.get(0).imagePath);
+//                encodeImage(imagesList.get(0).imagePath);
                 fromDriverPic = false;
                 if (imagesToUpload.size() > 0) {
                     imagesToUpload.remove(0);
@@ -254,17 +303,46 @@ public class AddDriverFourth extends Fragment {
 
                 }
 
+                imagesList.clear();
+            } else {
+
+                if (fromVehicleOne) {
+
+                    if (imagesList.size() == 4) {
+                        img_vehicle_one.setImageURI(imagesList.get(0).uri);
+                        img_vehicle_three.setImageURI(imagesList.get(2).uri);
+                        img_vehicle_two.setImageURI(imagesList.get(1).uri);
+                        img_vehicle_four.setImageURI(imagesList.get(3).uri);
+
+                        imagesToUpload.add(6, imagesList.get(1));
+                        imagesToUpload.add(5, imagesList.get(0));
+                        imagesToUpload.add(7, imagesList.get(2));
+                        imagesToUpload.add(8, imagesList.get(3));
+                        fromVehicleOne = false;
+                        imagesList.clear();
+                    } else
+                        showToast(dialog, "Select at least 4 photos", 0);
+
+
+                }
 
             }
-            imagesList.clear();
 
-        } catch (Exception e) {
+
+        } catch (
+                Exception e) {
+            e.printStackTrace();
 
         }
 
 
-        Log.e("img", imagesList + "");
+    }
 
+    public interface LoadingCall {
+
+        void showLoadingImage();
+
+        void hideLoadingImage();
 
     }
 
@@ -284,31 +362,36 @@ public class AddDriverFourth extends Fragment {
         byte[] b = baos.toByteArray();
         String encImage = Base64.encodeToString(b, Base64.DEFAULT);
 
+
 //        outputStreamWriter.close();
         //Base64.de
-        return encImage;
+        return "data:image/jpeg;base64," + encImage;
 
     }
 
     public void convertToBase64AndUpload() throws IOException {
 
-        for (int g = 0; g < imagesToUpload.size(); g++) {
-            imagesBase64.add(g, encodeImage(imagesToUpload.get(g).imagePath));
-        }
-        addDriverImage();
-        addDriverIdFront();
-        addDriverIdBack();
-        addDriverLicence();
+        if (imagesToUpload.size() == 9) {
+            for (int g = 0; g < imagesToUpload.size(); g++) {
+                imagesBase64.add(g, encodeImage(imagesToUpload.get(g).imagePath));
+            }
+            addDriverImage();
+            addDriverIdFront();
+            addDriverIdBack();
+            addDriverLicence();
+            addVehicleImages();
+        } else
+            showToast(dialog, "Please add all photos", 0);
 
     }
 
     private void addDriverImage() {
-
+        Log.e("addDriverImage", "exe");
 
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(0));
-
+        ((LoadingCall) getActivity()).showLoadingImage();
 
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_IMAGE), 2, new VolleyJsonCallback() {
             @Override
@@ -324,7 +407,7 @@ public class AddDriverFourth extends Fragment {
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }
-
+                ((LoadingCall) getActivity()).hideLoadingImage();
 
             }
         });
@@ -333,17 +416,18 @@ public class AddDriverFourth extends Fragment {
 
     private void addDriverIdFront() {
 
-
+        Log.e("addDriverIdFront", "exe");
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(1));
 
-
+        ((LoadingCall) getActivity()).showLoadingImage();
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_IMAGE), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
+                    Log.e("res addDriverIdFront", result + "");
 
                     if (result.getBoolean("saved_status")) {
 
@@ -353,7 +437,7 @@ public class AddDriverFourth extends Fragment {
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }
-
+                ((LoadingCall) getActivity()).hideLoadingImage();
 
             }
         });
@@ -362,18 +446,18 @@ public class AddDriverFourth extends Fragment {
 
     private void addDriverIdBack() {
 
-
+        Log.e("addDriverIdBack", "exe");
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(2));
 
-
+        ((LoadingCall) getActivity()).showLoadingImage();
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_NIC_BACK), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-
+                    Log.e("res addDriverIdBack", result + "");
                     if (result.getBoolean("saved_status")) {
 
                     }
@@ -383,7 +467,7 @@ public class AddDriverFourth extends Fragment {
                     ex.printStackTrace();
                 }
 
-
+                ((LoadingCall) getActivity()).hideLoadingImage();
             }
         });
 
@@ -391,18 +475,19 @@ public class AddDriverFourth extends Fragment {
 
     private void addDriverLicence() {
 
+        Log.e("addDriverLicence", "exe");
 
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(3));
 
-
+        ((LoadingCall) getActivity()).showLoadingImage();
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_LICENCE), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-
+                    Log.e("res addDriverLicence", result + "");
                     if (result.getBoolean("saved_status")) {
 
                     }
@@ -412,7 +497,40 @@ public class AddDriverFourth extends Fragment {
                     ex.printStackTrace();
                 }
 
+                ((LoadingCall) getActivity()).hideLoadingImage();
+            }
+        });
 
+    }
+
+    private void addVehicleImages() {
+
+        Log.e("addDriverLicence", "exe");
+
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("id", tinyDB.getString("driver_id"));
+        tempParam.put("image1", imagesBase64.get(5));
+        tempParam.put("image2", imagesBase64.get(6));
+        tempParam.put("image3", imagesBase64.get(7));
+        tempParam.put("image4", imagesBase64.get(8));
+
+        ((LoadingCall) getActivity()).showLoadingImage();
+        getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_VEHICLE_IMAGES), 2, new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+                    Log.e("res addDriverLicence", result + "");
+                    if (result.getBoolean("saved_status")) {
+
+                    }
+
+
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
+
+                ((LoadingCall) getActivity()).hideLoadingImage();
             }
         });
 

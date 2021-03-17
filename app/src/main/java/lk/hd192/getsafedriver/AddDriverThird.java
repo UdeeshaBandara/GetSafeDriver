@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,7 +89,7 @@ public class AddDriverThird extends Fragment {
             public void onClick(View v) {
                 txtAc.setBackgroundResource(R.drawable.bg_btn_left_radio_select);
                 txtNonAc.setBackgroundResource(R.drawable.bg_btn_right_radio_deselect);
-                isAc = "true";
+                isAc = "1";
 
             }
         });
@@ -97,7 +98,7 @@ public class AddDriverThird extends Fragment {
             public void onClick(View v) {
                 txtNonAc.setBackgroundResource(R.drawable.bg_btn_right_radio_select);
                 txtAc.setBackgroundResource(R.drawable.bg_btn_left_radio_deselect);
-                isAc = "false";
+                isAc = "0";
 
             }
         });
@@ -106,7 +107,7 @@ public class AddDriverThird extends Fragment {
             public void onClick(View v) {
                 txtCam.setBackgroundResource(R.drawable.bg_btn_left_radio_select);
                 txtNonCam.setBackgroundResource(R.drawable.bg_btn_right_radio_deselect);
-                isCam = "true";
+                isCam = "1";
 
             }
         });
@@ -115,7 +116,7 @@ public class AddDriverThird extends Fragment {
             public void onClick(View v) {
                 txtNonCam.setBackgroundResource(R.drawable.bg_btn_right_radio_select);
                 txtCam.setBackgroundResource(R.drawable.bg_btn_left_radio_deselect);
-                isCam = "false";
+                isCam = "0";
 
             }
         });
@@ -175,7 +176,7 @@ public class AddDriverThird extends Fragment {
 
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("id", tinyDB.getString("driver_id"));
-        tempParam.put("type", edit_txt_vehicle_type.getText().toString());
+        tempParam.put("type", edit_txt_vehicle_type.getText().toString().toLowerCase());
         tempParam.put("make", edit_txt_vehicle_make.getText().toString());
         tempParam.put("model", edit_txt_vehicle_model.getText().toString());
         tempParam.put("registration_no", edit_txt_registration_no.getText().toString());
@@ -189,7 +190,7 @@ public class AddDriverThird extends Fragment {
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-
+                    Log.e("res",result+"");
                     if (result.getBoolean("saved_status")) {
                         isThirdValidated = true;
                         ((RegisterCallBack) getActivity()).showPageFour();
