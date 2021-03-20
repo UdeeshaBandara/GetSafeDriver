@@ -107,5 +107,13 @@ public class Absence extends AppCompatActivity {
             return 32;
         }
     }
+    private void getAbsentList(){
+
+
+
+    }
+    private void getAllList(){
+
+    }
 
 }

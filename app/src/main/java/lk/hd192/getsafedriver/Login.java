@@ -76,7 +76,7 @@ public class    Login extends GetSafeDriverBase {
         tinyDB = new TinyDB(getApplicationContext());
         getSafeDriverServices = new GetSafeDriverServices();
         requestFocus();
-
+        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 //        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
         findViewById(R.id.btn_login_next).setOnClickListener(new View.OnClickListener() {

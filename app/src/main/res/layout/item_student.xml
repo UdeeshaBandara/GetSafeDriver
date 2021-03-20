@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
 
                     android:fontFamily="@font/nunito_semibold"
-                    android:text="Vimukthi Kumaranatunga"
+
                     android:textColor="@color/dark_blue"
                     android:textSize="12sp" />
 
@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:fontFamily="@font/nunito_semibold"
-                    android:text="St. Benedict's College"
+
                     android:textColor="@color/dark_blue"
                     android:textSize="12sp" />
 
@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:fontFamily="@font/nunito_semibold"
-                    android:text="Parent : Chandrika Kumarathunga"
+
                     android:textColor="@color/dark_blue"
                     android:textSize="12sp" />
             </LinearLayout>

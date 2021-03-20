@@ -2,12 +2,14 @@ package lk.hd192.getsafedriver;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -37,7 +39,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
-import java.util.Base64;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,6 +56,7 @@ public class Conversation extends AppCompatActivity {
     String encryptedMsg = "";
 
     private ImageView btnSend;
+    TextView txt_user_name;
 
 
     private LinearLayoutManager mLinearLayout;
@@ -65,6 +68,8 @@ public class Conversation extends AppCompatActivity {
     TinyDB tinyDB;
     private final List<MsgPoJo> messagesList = new ArrayList<>();
     Encrypt encrypt;
+    String childId, id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,22 +77,33 @@ public class Conversation extends AppCompatActivity {
         setContentView(R.layout.activity_conversation);
         encrypt = new Encrypt();
         tinyDB = new TinyDB(getApplicationContext());
-        try {
-            encrypt.generateRSAKey();
+        txt_user_name = findViewById(R.id.txt_user_name);
+//        try {
+//
+//            encrypt.generateRSAKey();
+//
+//            tinyDB.putString("public_key", Base64.getEncoder().encodeToString(encrypt.getPublicKey().getEncoded()));
+//            tinyDB.putString("private_key", Base64.getEncoder().encodeToString(encrypt.getPrivateKey().getEncoded()));
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
-            tinyDB.putString("public_key", Base64.getEncoder().encodeToString(encrypt.getPublicKey().getEncoded()));
-            tinyDB.putString("private_key", Base64.getEncoder().encodeToString(encrypt.getPrivateKey().getEncoded()));
 
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        tinyDB.putBoolean("isStaffDriver", true);
         mRootRef = FirebaseDatabase.getInstance().getReference();
-        if (tinyDB.getBoolean("isStaffDriver")) {
-            messageRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("driver_id")).child("Passengers").child("Add_user_id_here").child("messages");
-        } else {
-            messageRef = mRootRef.child("School_Drivers").child(tinyDB.getString("driver_id")).child("Passengers").child("Add_user_id_here").child(tinyDB.getString("selectedChildId")).child("messages");
+        try {
+
+            if (tinyDB.getBoolean("isStaffDriver")) {
+
+                txt_user_name.setText(getIntent().getStringExtra("name"));
+                messageRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("driver_id")).child("Passengers").child(getIntent().getStringExtra("id")).child("messages");
+            } else {
+
+                txt_user_name.setText(getIntent().getStringExtra("name") + "'s Parent");
+                messageRef = mRootRef.child("School_Drivers").child(tinyDB.getString("driver_id")).child("Passengers").child(getIntent().getStringExtra("id")).child(getIntent().getStringExtra("child_id")).child("messages");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         keyRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("key");
         keyRef.setValue(tinyDB.getString("public_key"));
@@ -140,16 +156,17 @@ public class Conversation extends AppCompatActivity {
 //            keyBytes= keyRef.get().getResult().getValue().toString().getBytes();
 
             keyRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                     if (!task.isSuccessful()) {
                         Log.e("firebase", "Error getting data", task.getException());
                     } else {
                         try {
-                            keyBytes = Base64.getDecoder().decode(task.getResult().getValue().toString());
-                            X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
-                            KeyFactory kf = KeyFactory.getInstance("RSA");
-                            encryptedMsg = encrypt.encryptData(kf.generatePublic(spec), message);
+//                            keyBytes = Base64.getDecoder().decode(task.getResult().getValue().toString());
+//                            X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+//                            KeyFactory kf = KeyFactory.getInstance("RSA");
+//                            encryptedMsg = encrypt.encryptData(kf.generatePublic(spec), message);
                             Log.e("j", task.getResult().getValue() + "");
 
 
@@ -157,7 +174,7 @@ public class Conversation extends AppCompatActivity {
                             String push_id = user_message_push.getKey();
 
                             java.util.Map messageMap = new HashMap();
-                            messageMap.put("message", encryptedMsg);
+                            messageMap.put("message",message);
                             messageMap.put("seen", false);
                             messageMap.put("from", "driver");
                             messageMap.put("time", ServerValue.TIMESTAMP);
@@ -184,15 +201,16 @@ public class Conversation extends AppCompatActivity {
         }
     }
 
-    PrivateKey generatePrivateKey() throws InvalidKeySpecException, NoSuchAlgorithmException {
-
-
-        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(tinyDB.getString("private_key")));
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-        return kf.generatePrivate(spec);
-
-
-    }
+//
+//    PrivateKey generatePrivateKey() throws InvalidKeySpecException, NoSuchAlgorithmException {
+//
+//
+//        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(tinyDB.getString("private_key")));
+//        KeyFactory kf = KeyFactory.getInstance("RSA");
+//        return kf.generatePrivate(spec);
+//
+//
+//    }
 
     private void loadMessages() {
 
@@ -270,6 +288,7 @@ public class Conversation extends AppCompatActivity {
 
         }
 
+
         @Override
         public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
 
@@ -281,27 +300,29 @@ public class Conversation extends AppCompatActivity {
             String timeAgo = GetTimeAgo.getTimeAgo(c.getTime(), mContext);
 
 
-            if (from_user.equals("user")) {
+            if (from_user.equals("driver")) {
                 holder.lnrFrom.setVisibility(View.GONE);
                 holder.lnrTo.setVisibility(View.VISIBLE);
 //                holder.txtMsgTo.setText(c.getMessage());
 
-                try {
-                    holder.txtMsgTo.setText(Base64.getEncoder().encodeToString(encrypt.decryptData(generatePrivateKey(), c.getMessage())));
-                } catch (GeneralSecurityException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    holder.txtMsgTo.setText(Base64.getEncoder().encodeToString(encrypt.decryptData(generatePrivateKey(), c.getMessage())));
+                holder.txtMsgTo.setText(c.getMessage());
+//                } catch (GeneralSecurityException e) {
+//                    e.printStackTrace();
+//                }
 
                 holder.txtMsgToTime.setText(timeAgo);
 
             } else {
                 holder.lnrFrom.setVisibility(View.VISIBLE);
                 holder.lnrTo.setVisibility(View.GONE);
-                try {
-                    holder.txtMsgFrom.setText(Base64.getEncoder().encodeToString(encrypt.decryptData(generatePrivateKey(), c.getMessage())));
-                } catch (GeneralSecurityException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    holder.txtMsgFrom.setText(Base64.getEncoder().encodeToString(encrypt.decryptData(generatePrivateKey(), c.getMessage())));
+//                } catch (GeneralSecurityException e) {
+//                    e.printStackTrace();
+//                }
+                holder.txtMsgFrom.setText(c.getMessage());
                 holder.txtMsgFromTime.setText(timeAgo);
             }
 

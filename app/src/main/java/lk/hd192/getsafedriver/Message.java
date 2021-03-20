@@ -10,10 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -30,7 +34,8 @@ public class Message extends GetSafeDriverBase {
     RecyclerView recyclerStudents;
     GetSafeDriverServices getSafeDriverServices;
     Dialog dialog;
-    JSONArray passengerList;
+    TextView txt_search;
+    JSONArray passengerList, originalPassengerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +44,40 @@ public class Message extends GetSafeDriverBase {
         getSafeDriverServices = new GetSafeDriverServices();
 
         recyclerStudents = findViewById(R.id.recycler_students);
+        txt_search = findViewById(R.id.txt_search);
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         passengerList = new JSONArray();
+        originalPassengerList = new JSONArray();
         recyclerStudents.setAdapter(new StudentAdapter());
         recyclerStudents.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
 //
+
+        txt_search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (txt_search.getText().toString().equals("")) {
+                    passengerList = originalPassengerList;
+                    recyclerStudents.getAdapter().notifyDataSetChanged();
+                } else {
+
+                    StudentAdapter homeAdapter = new StudentAdapter();
+                    homeAdapter.getFilter().filter(s);
+                }
+
+            }
+        });
+
 
         findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
         getAllPassengersToMessage();
@@ -62,7 +96,7 @@ public class Message extends GetSafeDriverBase {
         }
     }
 
-    class StudentAdapter extends RecyclerView.Adapter<StudentItemHolder> {
+    class StudentAdapter extends RecyclerView.Adapter<StudentItemHolder> implements Filterable {
 
         @NonNull
         @Override
@@ -77,21 +111,37 @@ public class Message extends GetSafeDriverBase {
         public void onBindViewHolder(@NonNull StudentItemHolder holder, int position) {
 
             try {
-//                if (tinyDB.getBoolean("isStaffDriver")) {
-//
-//
-//                    holder.student_school.setText(passengerList.getJSONObject(position).getJSONObject("user").getString("email"));
-//                    holder.passenger_name.setText(passengerList.getJSONObject(position).getJSONObject("user").getString("name"));
-//                } else {
-//                    holder.parent_name.setText("Parent : " + passengerList.getJSONObject(position).getJSONObject("user").getString("name"));
-//                    holder.student_school.setText(passengerList.getJSONObject(position).getJSONObject("child").getString("school_name"));
-//                    holder.passenger_name.setText(passengerList.getJSONObject(position).getJSONObject("child").getString("name"));
-//
-//                }
+                if (tinyDB.getBoolean("isStaffDriver")) {
+
+                    holder.student_school.setText(passengerList.getJSONObject(position).getString("email"));
+                } else {
+                    String parent = passengerList.getJSONObject(position).getJSONObject("user").getString("name");
+                    holder.parent_name.setText("Parent : " + parent);
+
+                    holder.student_school.setText(passengerList.getJSONObject(position).getString("school_name"));
+
+                }
+                holder.passenger_name.setText(passengerList.getJSONObject(position).getString("name"));
                 holder.rlt_transport_services.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(getApplicationContext(), Conversation.class));
+                        try {
+                            Intent intent = new Intent(getApplicationContext(), Conversation.class);
+                            intent.putExtra("name", passengerList.getJSONObject(position).getString("name"));
+                            if (tinyDB.getBoolean("isStaffDriver")) {
+                                intent.putExtra("id", passengerList.getJSONObject(position).getString("id"));
+
+
+                            } else {
+                                intent.putExtra("id", passengerList.getJSONObject(position).getJSONObject("user").getString("id"));
+                                intent.putExtra("child_id", passengerList.getJSONObject(position).getString("id"));
+                            }
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
                     }
                 });
             } catch (Exception e) {
@@ -102,8 +152,49 @@ public class Message extends GetSafeDriverBase {
 
         @Override
         public int getItemCount() {
-            return passengerList.length();
+            if (passengerList != null)
+                return passengerList.length();
+            else
+                return 0;
+
         }
+
+        @Override
+        public Filter getFilter() {
+
+            return filter;
+        }
+
+        Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                passengerList = new JSONArray();
+                int put = 0;
+
+                try {
+                    for (int i = 0; i < originalPassengerList.length(); i++) {
+                        if (originalPassengerList.getJSONObject(i).getString("name").toLowerCase().contains(constraint.toString().toLowerCase()) ||
+                                originalPassengerList.getJSONObject(i).getJSONObject("user").getString("name").toLowerCase().contains(constraint.toString().toLowerCase())) {
+
+                            passengerList.put(put++, originalPassengerList.getJSONObject(i));
+                        }
+
+                    }
+
+                } catch (Exception e) {
+
+                }
+
+
+                return null;
+
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                recyclerStudents.getAdapter().notifyDataSetChanged();
+            }
+        };
     }
 
     private void getAllPassengersToMessage() {
@@ -118,13 +209,16 @@ public class Message extends GetSafeDriverBase {
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-
+                    Log.e("passenger", result + "");
                     if (result.getBoolean("status")) {
                         passengerList = result.getJSONArray("model");
+                        originalPassengerList = result.getJSONArray("model");
                         recyclerStudents.getAdapter().notifyDataSetChanged();
 
-                    } else
-                        showToast(dialog, result.getString("validation_errors"), 0);
+                    } else {
+                        originalPassengerList = null;
+                        passengerList = null;
+                    }
 
 
                 } catch (Exception e) {
