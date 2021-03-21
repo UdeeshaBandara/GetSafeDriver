@@ -57,8 +57,9 @@ import static android.app.Activity.RESULT_OK;
 public class AddDriverFourth extends GetSafeDriverBaseFragment {
 
     public ImageView imageDriver, imgLicOne, imgLicTwo, imgIdOne, imgIdTwo, img_vehicle_one, img_vehicle_three, img_vehicle_four, img_vehicle_two;
-    ArrayList<Image> imagesList, imagesToUpload;
+    List<Image> imagesList;
     ArrayList<String> imagesBase64;
+    Image[] imagesToUpload = new Image[9];
     TinyDB tinyDB;
     Dialog dialog;
 
@@ -97,7 +98,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
         img_vehicle_one = view.findViewById(R.id.img_vehicle_one);
         img_vehicle_two = view.findViewById(R.id.img_vehicle_two);
         img_vehicle_four = view.findViewById(R.id.img_vehicle_four);
-        imagesToUpload = new ArrayList<>(9);
+
         imagesList = new ArrayList<>();
         imagesBase64 = new ArrayList<>();
 
@@ -236,10 +237,9 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
                 imageDriver.setImageURI(imagesList.get(0).uri);
 //                encodeImage(imagesList.get(0).imagePath);
                 fromDriverPic = false;
-                if (imagesToUpload.size() > 0) {
-                    imagesToUpload.remove(0);
-                }
-                imagesToUpload.add(0, imagesList.get(0));
+
+                imagesToUpload[0] = imagesList.get(0);
+                Log.e("1 imagesToUpload", imagesToUpload.length + "");
                 imagesList.clear();
 
 
@@ -250,26 +250,21 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
                     if (fromIdTwo) fromIdTwo = false;
                     else if (fromIdOne) fromIdOne = false;
 
-                    if (imagesToUpload.size() > 1)
-                        imagesToUpload.remove(1);
-                    if (imagesToUpload.size() > 2)
-                        imagesToUpload.remove(2);
-                    imagesToUpload.add(1, imagesList.get(0));
-                    imagesToUpload.add(2, imagesList.get(1));
+                    imagesToUpload[1] = imagesList.get(0);
+                    imagesToUpload[2] = imagesList.get(1);
+
                 } else if (fromIdOne) {
                     imgIdOne.setImageURI(imagesList.get(0).uri);
-                    if (imagesToUpload.size() > 1)
-                        imagesToUpload.remove(1);
-                    imagesToUpload.add(1, imagesList.get(0));
+
+                    imagesToUpload[1] = imagesList.get(0);
 
                     fromIdOne = false;
                 } else if (fromIdTwo) {
 
                     imgIdTwo.setImageURI(imagesList.get(0).uri);
                     fromIdTwo = false;
-                    if (imagesToUpload.size() > 2)
-                        imagesToUpload.remove(2);
-                    imagesToUpload.add(2, imagesList.get(0));
+                    imagesToUpload[2] = imagesList.get(0);
+
                 }
 
 //                    imgIdOne.setImageURI(imagesList.get(0).uri);
@@ -282,49 +277,43 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
                     imgLicTwo.setImageURI(imagesList.get(1).uri);
                     if (fromLicOne) fromLicOne = false;
                     else if (fromLicTwo) fromLicTwo = false;
-                    if (imagesToUpload.size() > 3)
-                        imagesToUpload.remove(3);
-                    if (imagesToUpload.size() > 4)
-                        imagesToUpload.remove(4);
-                    imagesToUpload.add(3, imagesList.get(0));
-                    imagesToUpload.add(4, imagesList.get(1));
+
+
+                    imagesToUpload[3] = imagesList.get(0);
+                    imagesToUpload[4] = imagesList.get(1);
                 } else if (fromLicOne) {
                     imgLicOne.setImageURI(imagesList.get(0).uri);
                     fromLicOne = false;
-                    if (imagesToUpload.size() > 3)
-                        imagesToUpload.remove(3);
-                    imagesToUpload.add(3, imagesList.get(0));
+
+                    imagesToUpload[3] = imagesList.get(0);
                 } else if (fromLicTwo) {
                     imgLicTwo.setImageURI(imagesList.get(0).uri);
                     fromLicTwo = false;
-                    if (imagesToUpload.size() > 4)
-                        imagesToUpload.remove(4);
-                    imagesToUpload.add(4, imagesList.get(0));
+
+                    imagesToUpload[4] = imagesList.get(0);
 
                 }
 
                 imagesList.clear();
-            } else {
-
-                if (fromVehicleOne) {
-
-                    if (imagesList.size() == 4) {
-                        img_vehicle_one.setImageURI(imagesList.get(0).uri);
-                        img_vehicle_three.setImageURI(imagesList.get(2).uri);
-                        img_vehicle_two.setImageURI(imagesList.get(1).uri);
-                        img_vehicle_four.setImageURI(imagesList.get(3).uri);
-
-                        imagesToUpload.add(6, imagesList.get(1));
-                        imagesToUpload.add(5, imagesList.get(0));
-                        imagesToUpload.add(7, imagesList.get(2));
-                        imagesToUpload.add(8, imagesList.get(3));
-                        fromVehicleOne = false;
-                        imagesList.clear();
-                    } else
-                        showToast(dialog, "Select at least 4 photos", 0);
+            } else if (fromVehicleOne) {
 
 
-                }
+                if (imagesList.size() == 4) {
+
+                    img_vehicle_one.setImageURI(imagesList.get(0).uri);
+                    img_vehicle_three.setImageURI(imagesList.get(2).uri);
+                    img_vehicle_two.setImageURI(imagesList.get(1).uri);
+                    img_vehicle_four.setImageURI(imagesList.get(3).uri);
+
+                    imagesToUpload[5] = imagesList.get(0);
+                    imagesToUpload[6] = imagesList.get(1);
+                    imagesToUpload[7] = imagesList.get(2);
+                    imagesToUpload[8] = imagesList.get(3);
+                    fromVehicleOne = false;
+                    imagesList.clear();
+                } else
+                    showToast(dialog, "Select at least 4 photos", 0);
+
 
             }
 
@@ -370,18 +359,34 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
     }
 
     public void convertToBase64AndUpload() throws IOException {
+        boolean validated = true;
+        ((LoadingCall) getActivity()).showLoadingImage();
+//
+        for (Image image : imagesToUpload) {
+            if (image == null) {
+                ((LoadingCall) getActivity()).hideLoadingImage();
+                showToast(dialog, "Please add all photos", 0);
+                validated = false;
+                break;
+            } else {
 
-        if (imagesToUpload.size() == 9) {
-            for (int g = 0; g < imagesToUpload.size(); g++) {
-                imagesBase64.add(g, encodeImage(imagesToUpload.get(g).imagePath));
+
+            }
+        }
+        if (validated) {
+            Log.e("validated ", "ok");
+            for (int g = 0; g < imagesToUpload.length; g++) {
+
+                imagesBase64.add(g, encodeImage(imagesToUpload[g].imagePath));
             }
             addDriverImage();
             addDriverIdFront();
             addDriverIdBack();
             addDriverLicence();
             addVehicleImages();
-        } else
-            showToast(dialog, "Please add all photos", 0);
+//            ((LoadingCall) getActivity()).hideLoadingImage();
+        }
+
 
     }
 
@@ -391,7 +396,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(0));
-        ((LoadingCall) getActivity()).showLoadingImage();
+
 
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_IMAGE), 2, new VolleyJsonCallback() {
             @Override
@@ -401,13 +406,12 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
 
                     if (result.getBoolean("saved_status")) {
 
-                    }
-
+                    } else ((LoadingCall) getActivity()).hideLoadingImage();
 
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }
-                ((LoadingCall) getActivity()).hideLoadingImage();
+
 
             }
         });
@@ -421,7 +425,6 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
         tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(1));
 
-        ((LoadingCall) getActivity()).showLoadingImage();
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_IMAGE), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -431,13 +434,13 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
 
                     if (result.getBoolean("saved_status")) {
 
-                    }
+                    } else ((LoadingCall) getActivity()).hideLoadingImage();
 
 
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }
-                ((LoadingCall) getActivity()).hideLoadingImage();
+
 
             }
         });
@@ -460,14 +463,13 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
                     Log.e("res addDriverIdBack", result + "");
                     if (result.getBoolean("saved_status")) {
 
-                    }
-
+                    } else ((LoadingCall) getActivity()).hideLoadingImage();
 
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }
 
-                ((LoadingCall) getActivity()).hideLoadingImage();
+
             }
         });
 
@@ -481,7 +483,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
         tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(3));
 
-        ((LoadingCall) getActivity()).showLoadingImage();
+
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_LICENCE), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -490,14 +492,14 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
                     Log.e("res addDriverLicence", result + "");
                     if (result.getBoolean("saved_status")) {
 
-                    }
+                    } else ((LoadingCall) getActivity()).hideLoadingImage();
 
 
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }
 
-                ((LoadingCall) getActivity()).hideLoadingImage();
+
             }
         });
 
@@ -513,8 +515,9 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
         tempParam.put("image2", imagesBase64.get(6));
         tempParam.put("image3", imagesBase64.get(7));
         tempParam.put("image4", imagesBase64.get(8));
+        tempParam.put("image5", imagesBase64.get(8));
 
-        ((LoadingCall) getActivity()).showLoadingImage();
+
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_VEHICLE_IMAGES), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -522,18 +525,22 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
                 try {
                     Log.e("res addDriverLicence", result + "");
                     if (result.getBoolean("saved_status")) {
+                        ((LoadingCall) getActivity()).hideLoadingImage();
+                        showToast(dialog, "Registration Completed. Please login", 2);
+                        startActivity(new Intent(getActivity(), Login.class));
+                        getActivity().finishAffinity();
 
-                    }
+                    } else ((LoadingCall) getActivity()).hideLoadingImage();
 
 
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }
 
-                ((LoadingCall) getActivity()).hideLoadingImage();
+
             }
         });
-
+        ((LoadingCall) getActivity()).hideLoadingImage();
     }
 
 

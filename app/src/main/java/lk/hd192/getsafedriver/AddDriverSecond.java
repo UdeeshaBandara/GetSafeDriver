@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -25,7 +27,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -37,12 +41,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.libizo.CustomEditText;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -58,17 +65,22 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 public class AddDriverSecond extends Fragment {
     CustomEditText editTextAddOne, editTextAddTwo, editTextPick, edit_txt_district;
     GetSafeDriverServices getSafeDriverServices;
-    public boolean isSecondValidated = false;
+
     TinyDB tinyDB;
     View popupView;
     LatLng pinnedLocation;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
     MapView mPickupLocation;
+    DistrictBottomSheet districtBottomSheet;
+    RecyclerView recyclerDistrict;
     Double latitude, longitude;
     GoogleMap googleMap;
+
     Button mConfirm;
     LocationManager locationManager;
+    ArrayList districts;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,16 +98,52 @@ public class AddDriverSecond extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         tinyDB = new TinyDB(getActivity());
+        districts = new ArrayList<>();
+        districts.add("Colombo");
+        districts.add("Gampaha");
+        districts.add("Kalutara");
+        districts.add("Kurunegala");
+        districts.add("Puttalam");
+        districts.add("Ratnapura");
+        districts.add("Kegalle");
+        districts.add("Nuwara Eliya");
+        districts.add("Kandy");
+        districts.add("Matale");
+        districts.add("Polonnaruwa");
+        districts.add("Anuradhapura");
+        districts.add("Vavuniya");
+        districts.add("Mullaitivu");
+        districts.add("Mannar");
+        districts.add("Kilinochchi");
+        districts.add("Jaffna");
+        districts.add("Hambantota");
+        districts.add("Matara");
+        districts.add("Galle");
+        districts.add("Badulla");
+        districts.add("Monaragala");
+        districts.add("Ampara");
+        districts.add("Batticaloa");
+        districts.add("Trincomalee");
         editTextAddOne = view.findViewById(R.id.edit_txt_add_one);
         editTextAddTwo = view.findViewById(R.id.edit_txt_add_two);
         editTextPick = view.findViewById(R.id.edit_txt_pick);
+
         edit_txt_district = view.findViewById(R.id.edit_txt_district);
         getSafeDriverServices = new GetSafeDriverServices();
 
         editTextPick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCreateMapPopup(v,savedInstanceState);
+                onCreateMapPopup(v, savedInstanceState);
+
+            }
+        });
+        edit_txt_district.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                districtBottomSheet = new DistrictBottomSheet(getActivity());
+                districtBottomSheet.setContentView(R.layout.bottom_sheet_district);
+                districtBottomSheet.show();
 
             }
         });
@@ -153,7 +201,7 @@ public class AddDriverSecond extends Fragment {
 
         final PopupWindow popupWindow = new PopupWindow(popupView, GetSafeDriverBase.device_width - 150, GetSafeDriverBase.device_height - 250, true);
 
-        popupWindow.showAtLocation(view, Gravity    .CENTER, 0, 0);
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
         dimBehind(popupWindow);
 
         mConfirm = popupView.findViewById(R.id.btn_confirmMapLocation);
@@ -296,7 +344,7 @@ public class AddDriverSecond extends Fragment {
         }
     }
 
-    private boolean driverLocationDetails() {
+    private void driverLocationDetails() {
 
 
         HashMap<String, String> tempParam = new HashMap<>();
@@ -312,7 +360,42 @@ public class AddDriverSecond extends Fragment {
             public void onSuccessResponse(JSONObject result) {
 
                 try {
-                    Log.e("res",result+"");
+                    Log.e("res", result + "");
+
+                    if (result.getBoolean("status")) {
+
+                        driverDistrict();
+                    }
+
+
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+
+                }
+
+
+            }
+        });
+
+    }
+
+    private void driverDistrict() {
+
+
+        HashMap<String, String> tempParam = new HashMap<>();
+        tempParam.put("id", tinyDB.getString("driver_id"));
+        tempParam.put("latitude", latitude.toString());
+        tempParam.put("longitude", longitude.toString());
+        tempParam.put("add1", edit_txt_district.getText().toString());
+        tempParam.put("add2", edit_txt_district.getText().toString());
+
+
+        getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.ADD_DRIVER_DISTRICT), 2, new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+                    Log.e("res", result + "");
 
                     if (result.getBoolean("status")) {
 
@@ -322,13 +405,87 @@ public class AddDriverSecond extends Fragment {
 
                 } catch (JSONException ex) {
                     ex.printStackTrace();
-                    isSecondValidated = false;
+
                 }
 
 
             }
         });
-        return isSecondValidated;
+
+    }
+
+    public class DistrictBottomSheet extends BottomSheetDialog {
+        public DistrictBottomSheet(@NonNull Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onStart() {
+            super.onStart();
+
+//            getBehavior().setDraggable(false);
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+
+            recyclerDistrict = findViewById(R.id.districts);
+
+
+            recyclerDistrict.setAdapter(new DistrictAdapter());
+
+            recyclerDistrict.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+
+
+        }
+        //            txtSchool=v.findViewById(R.id.school_search);
+//            txtStaff=v.findViewById(R.id.staff_search);
+//
+//            txtSchool.setOnClickListener(new View.OnClickListener());
+
+    }
+
+    class DistrictViewHolder extends RecyclerView.ViewHolder {
+        TextView txt_district;
+
+        public DistrictViewHolder(@NonNull View itemView) {
+            super(itemView);
+            txt_district = itemView.findViewById(R.id.txt_district);
+        }
+    }
+
+    class DistrictAdapter extends RecyclerView.Adapter<DistrictViewHolder> {
+
+        @NonNull
+        @Override
+        public DistrictViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(getActivity())
+                    .inflate(R.layout.item_district, parent, false);
+            return new DistrictViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull DistrictViewHolder holder, int position) {
+
+            holder.txt_district.setText(districts.get(position).toString());
+            holder.txt_district.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    edit_txt_district.setText(districts.get(position).toString());
+                    districtBottomSheet.dismiss();
+                }
+            });
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return districts.size();
+        }
     }
 
 }

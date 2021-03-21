@@ -7,11 +7,12 @@
     <string name="REVERSE_GEO">https://maps.googleapis.com/maps/api/geocode/json</string>
 
 
-    <string name="BASE_URL">http://192.168.43.136:8000/v1/getsafe/api</string>
+    <string name="BASE_URL">http://192.168.1.3:8000/v1/getsafe/api</string>
     <string name="SAVE_DRIVER">/newdriver/save</string>
     <string name="DRIVER_OTP">/driverlogin/sendotp</string>
     <string name="DRIVER_VALIDATE_OTP">/driverlogin/validateotp</string>
     <string name="UPDATE_FCM">/fcmtoken/add</string>
+    <string name="ADD_DRIVER_DISTRICT">/newdriver/destrict</string>
     <string name="GET_ALL_PASSENGER_FOR_DRIVER">/driver/journey/passengers/all</string>
     <string name="GET_ALL_ABSENT_PASSENGER_FOR_DRIVER">/absent/driver/get/all</string>
 

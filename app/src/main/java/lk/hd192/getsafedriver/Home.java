@@ -35,8 +35,8 @@ public class Home extends GetSafeDriverBase {
 //        recyclerHome.setLayoutManager(staggeredGridLayoutManager);
 //        recyclerHome.getAdapter().notifyDataSetChanged();
 
-        tinyDB.putBoolean("isStaffDriver", true);
-        tinyDB.putString("token", "5|XkywkZhKzlZGupMrlWwY3qhoAQpndqaIPiGWJMnU");
+        tinyDB.putBoolean("isStaffDriver", false);
+        tinyDB.putString("token", "5|FCvVjDwVYsfKctZy3wqjhU2MngV8UwTJtBWRqBdY");
 
 
         homeRoutes();

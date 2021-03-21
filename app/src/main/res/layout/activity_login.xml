@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/img_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
         android:src="@drawable/logo_home" />
@@ -183,7 +183,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp"
         android:fontFamily="@font/nunito_regular"
-        android:text="New user ?"
+        android:text="New Driver ?"
         android:textSize="15sp" />
 
     <Button
@@ -196,6 +196,7 @@
         android:background="@drawable/bg_btn_ok"
         android:fontFamily="@font/nunito_regular"
         android:text="Register"
+        android:textAllCaps="false"
         android:textColor="@color/black"
 
         android:textSize="16sp" />

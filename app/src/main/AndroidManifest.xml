@@ -21,6 +21,8 @@
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:usesCleartextTraffic="true">
         <activity android:name=".NewRequest"></activity>
         <activity android:name=".Payment" />

@@ -57,10 +57,12 @@ class SplashScreen extends GetSafeDriverBase {
 
                 try {
 
-                    if (result.getBoolean("logged-in-status"))
+                    if (result.getBoolean("logged-in-status")){
 
 
                         startActivity(new Intent(SplashScreen.this, Home.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
+
+                    tinyDB.putString("driver_id",result.getJSONObject("driver").getString("id"));}
                     else {
 
                         startActivity(new Intent(SplashScreen.this, Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT));
@@ -71,6 +73,7 @@ class SplashScreen extends GetSafeDriverBase {
 
 
                 } catch (Exception e) {
+                    e.printStackTrace();
 
                 }
 

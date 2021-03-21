@@ -42,6 +42,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -128,11 +129,12 @@ TextView txt_error;
 
         findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
 
+        tinyDB.putString("driver_id","5");
 
-        if (!tinyDB.getBoolean("isSchoolDriver"))
-            locationRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Location");
+        if (tinyDB.getBoolean("isStaffDriver"))
+            locationRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("driver_id")).child(tinyDB.getString("driver_id")).child("Location");
         else
-            locationRef = mRootRef.child("School_Drivers").child("add_driver_id_here").child("Location");
+            locationRef = mRootRef.child("School_Drivers").child(tinyDB.getString("driver_id")).child(tinyDB.getString("driver_id")).child("Location");
 
 
         if (ActivityCompat.checkSelfPermission(Map.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Map.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -226,7 +228,7 @@ TextView txt_error;
                     tinyDB.putBoolean("isTripStart", true);
 
 
-                    btn_start_trip.setText("End Trip");
+
                     Log.e("drop offs", tinyDB.getListString("tripRoute") + "");
                     btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_stop));
                     if (timeOfDay >= 0 && timeOfDay < 12) {
@@ -237,7 +239,8 @@ TextView txt_error;
                     }
 
                     notifyTripStart();
-                    locationRef.child("Status").setValue("end");
+                    btn_start_trip.setText("End Trip");
+                    locationRef.child("status").setValue(btn_start_trip.getText().toString());
 
                 } else {
 
@@ -250,9 +253,10 @@ TextView txt_error;
                     duration.clear();
                     tinyDB.putBoolean("isTripStart", false);
                     tinyDB.remove("tripRoute");
-                    btn_start_trip.setText("Start Trip");
+
                     btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_ok));
-                    locationRef.child("Status").setValue("started");
+                    btn_start_trip.setText("Start Trip");
+                    locationRef.child("status").setValue(btn_start_trip.getText().toString());
 
                 }
 
@@ -263,11 +267,18 @@ TextView txt_error;
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                Log.e("onLocationChanged", "exe");
 
+//                LocationUpdates locationUpdates= new LocationUpdates( location.getLatitude(), location.getLongitude());
+//                locationRef.setValue(locationUpdates);
+
+//                locationRef.child("latitude").setValue(location.getLatitude());
+//                locationRef.child("longitude").setValue(location.getLongitude());
+                // pushId++;
                 java.util.Map messageMap = new HashMap();
-                messageMap.put("Latitude", location.getLatitude());
-                messageMap.put("Longitude", location.getLongitude());
+                messageMap.put("latitude", location.getLatitude());
+                messageMap.put("longitude", location.getLongitude());
+                messageMap.put("status", btn_start_trip.getText().toString());
+
 
                 locationRef.updateChildren(messageMap, new DatabaseReference.CompletionListener() {
                     @Override
@@ -277,6 +288,7 @@ TextView txt_error;
                         }
                     }
                 });
+
             }
 
             @Override
@@ -312,16 +324,9 @@ TextView txt_error;
         }
         locationManagerSender.requestLocationUpdates(LocationManager.GPS_PROVIDER, 12000, 0, locationListener);
 
-
-        locationRef.child("Latitude").addChildEventListener(new ChildEventListener() {
+        locationRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
                     Log.e("onChildChanged", "exe");
                     LocationUpdates locationUpdates = snapshot.getValue(LocationUpdates.class);
@@ -336,20 +341,12 @@ TextView txt_error;
             }
 
             @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
+
+
 
 
         try {
@@ -380,21 +377,21 @@ TextView txt_error;
         super.onResume();
         if (tinyDB.getBoolean("isTripStart")) {
 
-            btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_stop));
-            btn_start_trip.setText("End Trip");
-            txt_error.setVisibility(View.GONE);
-            lnr_trip_details.setVisibility(View.VISIBLE);
-            dropOffLocations = new ArrayList<>();
-//            for (String s :  tinyDB.getListString("tripRoute")) {
-////                Object o=s;
-////                userLocation.fo
+//            btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_stop));
+//            btn_start_trip.setText("End Trip");
+//            txt_error.setVisibility(View.GONE);
+//            lnr_trip_details.setVisibility(View.VISIBLE);
+//            dropOffLocations = new ArrayList<>();
+////            for (String s :  tinyDB.getListString("tripRoute")) {
+//////                Object o=s;
+//////                userLocation.fo
+////
+////            }
+//            dropOffLocations.add(new UserLocation(tinyDB.getListString("tripRoute").get(0)));
 //
-//            }
-            dropOffLocations.add(new UserLocation(tinyDB.getListString("tripRoute").get(0)));
-
-            Log.e("FROM string",  tinyDB.getListString("tripRoute").get(0)+"");
-            Log.e("formt iny",  dropOffLocations.get(0).getDropLatitude()+"");
-            drawMapPolyline(new LatLng(currentLat, currentLon));
+//            Log.e("FROM string",  tinyDB.getListString("tripRoute").get(0)+"");
+//            Log.e("formt iny",  dropOffLocations.get(0).getDropLatitude()+"");
+//            drawMapPolyline(new LatLng(currentLat, currentLon));
 
 
         }

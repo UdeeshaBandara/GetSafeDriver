@@ -46,7 +46,7 @@ import lk.hd192.getsafedriver.Utils.TinyDB;
 import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 
 
-public class    Login extends GetSafeDriverBase {
+public class Login extends GetSafeDriverBase {
 
     EditText one, two, three, four, five, six, seven, eight, nine;
     ImageView img_head;
@@ -103,7 +103,7 @@ public class    Login extends GetSafeDriverBase {
                     YoYo.with(Techniques.Bounce)
                             .duration(2500)
                             .playOn(findViewById(R.id.lnr_number));
-                    startActivity(new Intent(getApplicationContext(),Home.class));
+                    startActivity(new Intent(getApplicationContext(), Home.class));
                     finish();
 //                    captureImageCameraOrGallery();
                     getDeviceToken();
@@ -116,7 +116,7 @@ public class    Login extends GetSafeDriverBase {
         findViewById(R.id.btn_register).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Register.class));
+                startActivity(new Intent(getApplicationContext(), Register.class));
             }
         });
     }
@@ -361,7 +361,7 @@ public class    Login extends GetSafeDriverBase {
                                 eight.getText().toString() +
                                 nine.getText().toString());
 
-                        startActivity(new Intent(getApplicationContext(),OTP.class));
+                        startActivity(new Intent(getApplicationContext(), OTP.class));
                         finish();
                     }
 //                        showToast(dialog, "Something went wrong. Please try again", 0);
@@ -375,6 +375,7 @@ public class    Login extends GetSafeDriverBase {
         });
 
     }
+
     public void getDeviceToken() {
 
 
@@ -390,7 +391,7 @@ public class    Login extends GetSafeDriverBase {
 
 
                         } else {
-                            Log.e("htok",task.getResult().getToken());
+                            Log.e("htok", task.getResult().getToken());
 
 //                            updateUserFcmToken();
 
