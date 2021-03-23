@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import lk.hd192.getsafedriver.Absence;
+import lk.hd192.getsafedriver.Login;
 import lk.hd192.getsafedriver.R;
 
 public class GetSafeDriverBase extends AppCompatActivity {
@@ -115,6 +118,12 @@ public class GetSafeDriverBase extends AppCompatActivity {
             case 2:
                 dialog.setContentView(R.layout.toast_layout_success);
                 break;
+            case 3:
+                dialog.setContentView(R.layout.logout_popup);
+                break;
+            case 4:
+                dialog.setContentView(R.layout.logout_popup);
+                break;
 
 
         }
@@ -131,6 +140,27 @@ public class GetSafeDriverBase extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+        if (type == 3) {
+            Button btnSignOut = dialog.findViewById(R.id.btn_sign_out);
+            btnSignOut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    tinyDB.clear();
+                    startActivity(new Intent(getApplicationContext(), Login.class));
+                    finishAffinity();
+                }
+            });
+        }else if (type == 4) {
+            Button btnSignOut = dialog.findViewById(R.id.btn_sign_out);
+            btnSignOut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" + Absence.tel));
+                    startActivity(intent);
+                }
+            });
+        }
         msgToShow.setText(msg);
 
         dialog.show();

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,11 +31,12 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import lk.hd192.getsafedriver.Utils.AppBarStateChangeListener;
+import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
 import lk.hd192.getsafedriver.Utils.GetSafeDriverServices;
 import lk.hd192.getsafedriver.Utils.TinyDB;
 import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 
-public class Absence extends AppCompatActivity {
+public class Absence extends GetSafeDriverBase {
 
     RecyclerView recycler_absence;
     RelativeLayout status_bar;
@@ -46,7 +48,9 @@ public class Absence extends AppCompatActivity {
     Dialog dialog;
     TinyDB tinyDB;
     JSONArray absentReview;
-    String selectedDate;
+    String selectedDate, name;
+
+    public static String tel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,12 +120,14 @@ public class Absence extends AppCompatActivity {
     class AbsenceUserViewHolder extends RecyclerView.ViewHolder {
         TextView passenger_name, passenger_school;
         ImageView mark;
+        RelativeLayout rlt_root;
 
         public AbsenceUserViewHolder(@NonNull View itemView) {
             super(itemView);
             passenger_school = itemView.findViewById(R.id.passenger_school);
             passenger_name = itemView.findViewById(R.id.passenger_name);
             mark = itemView.findViewById(R.id.mark);
+            rlt_root = itemView.findViewById(R.id.rlt_root);
         }
     }
 
@@ -138,15 +144,23 @@ public class Absence extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull AbsenceUserViewHolder holder, int position) {
             try {
-
+                tel = absentReview.getJSONObject(position).getString("phone_no");
+                name = absentReview.getJSONObject(position).getString("name");
                 if (!absentReview.getJSONObject(position).getBoolean("absent"))
                     holder.mark.setImageDrawable(getResources().getDrawable(R.drawable.icon_check));
                 else
                     holder.mark.setImageDrawable(getResources().getDrawable(R.drawable.icon_false));
+                holder.rlt_root.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
+                        showToast(dialog, "Call to " + name, 4);
 
-                holder.passenger_name.setText(absentReview.getJSONObject(position).getString("name"));
-                holder.passenger_school.setText(absentReview.getJSONObject(position).getString("phone_no"));
+                    }
+                });
+
+                holder.passenger_name.setText(name);
+                holder.passenger_school.setText(tel);
             } catch (Exception e) {
                 e.printStackTrace();
             }

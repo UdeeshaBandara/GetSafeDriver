@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lnr_bg_toast"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_toast"
+    android:backgroundTint="#7F6583">
+
+
+    <ImageView
+        android:id="@+id/need_location_animation"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentTop="true"
+
+       android:src="@drawable/logout"
+         />
+
+    <TextView
+        android:id="@+id/toast_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/need_location_animation"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="15dp"
+        android:fontFamily="@font/nunito_regular"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toast_message"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_btn_ok"
+            android:fontFamily="@font/nunito_regular"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btn_sign_out"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="5"
+            android:background="@drawable/bg_singout"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/nunito_regular"
+            android:text="Yes, Please"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+</RelativeLayout>

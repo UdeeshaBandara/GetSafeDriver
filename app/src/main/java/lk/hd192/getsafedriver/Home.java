@@ -3,9 +3,11 @@ package lk.hd192.getsafedriver;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
 import lk.hd192.getsafedriver.Utils.TinyDB;
@@ -15,6 +17,8 @@ public class Home extends GetSafeDriverBase {
     //    RecyclerView recyclerHome;
     StaggeredGridLayoutManager staggeredGridLayoutManager;
     TinyDB tinyDB;
+    ImageView logout;
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +26,17 @@ public class Home extends GetSafeDriverBase {
         setContentView(R.layout.activity_home);
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow_te));
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-
+        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         tinyDB = new TinyDB(getApplicationContext());
+        logout = findViewById(R.id.logout);
+
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showToast(dialog,"Are sure you want to logout?",3);
+            }
+        });
 
 //        recyclerHome = findViewById(R.id.recycler_home);
 

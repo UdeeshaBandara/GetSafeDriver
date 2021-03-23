@@ -16,6 +16,18 @@
         android:scaleType="centerCrop"
         android:src="@drawable/logo_home" />
 
+    <ImageView
+        android:id="@+id/logout"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:padding="15dp"
+        android:scaleType="centerCrop"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/turn_off" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

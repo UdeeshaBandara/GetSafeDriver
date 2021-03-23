@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlt_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-android:padding="15dp"
+    android:layout_marginHorizontal="15dp"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
-    android:layout_marginHorizontal="15dp"
     android:background="@drawable/custom_edit_text"
-    >
+    android:padding="15dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,10 +31,10 @@ android:padding="15dp"
         <TextView
             android:id="@+id/passenger_school"
             android:layout_width="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/passenger_name"
             android:layout_gravity="center_vertical"
+            android:layout_marginTop="5dp"
 
             android:fontFamily="@font/nunito_semibold"
             android:gravity="center_vertical"
