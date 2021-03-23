@@ -106,7 +106,7 @@ public class NewRequest extends GetSafeDriverBase {
                     holder.passenger_name.setText(requestList.getJSONObject(position).getJSONObject("user").getString("name"));
                 }else{
                     holder.parent_name.setText("Parent : "+requestList.getJSONObject(position).getJSONObject("user").getString("name"));
-                    holder.student_school.setText(requestList.getJSONObject(position).getJSONObject("child").getString("school_name"));
+                        holder.student_school.setText(requestList.getJSONObject(position).getJSONObject("child").getString("school_name"));
                     holder.passenger_name.setText(requestList.getJSONObject(position).getJSONObject("child").getString("name"));
 
                 }
@@ -164,6 +164,8 @@ public class NewRequest extends GetSafeDriverBase {
         try {
             number=requestList.getJSONObject(selectedIndex).getJSONObject("user").getString("phone_no");
             selectedRequestId=requestList.getJSONObject(selectedIndex).getString("id");
+            txt_pickup.setText(requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("pick_up_add1"));
+            txt_drop.setText(requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("drop_off_add1"));
             txt_number.setText(number);
 
             txt_name.setText(requestList.getJSONObject(selectedIndex).getJSONObject("user").getString("name"));

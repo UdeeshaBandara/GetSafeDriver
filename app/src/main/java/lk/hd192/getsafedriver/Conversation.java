@@ -63,11 +63,11 @@ public class Conversation extends AppCompatActivity {
     private MessageAdapter mAdapter;
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private int mCurrentPage = 1;
-    private DatabaseReference mRootRef, messageRef, keyRef;
+    private DatabaseReference mRootRef, messageRef;
     private RecyclerView mMessageList, chatMessageView;
     TinyDB tinyDB;
     private final List<MsgPoJo> messagesList = new ArrayList<>();
-    Encrypt encrypt;
+
     String childId, id;
 
 
@@ -75,7 +75,7 @@ public class Conversation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
-        encrypt = new Encrypt();
+
         tinyDB = new TinyDB(getApplicationContext());
         txt_user_name = findViewById(R.id.txt_user_name);
 //        try {
@@ -105,8 +105,8 @@ public class Conversation extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        keyRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("key");
-        keyRef.setValue(tinyDB.getString("public_key"));
+//        keyRef = mRootRef.child("Staff_Drivers").child("add_driver_id_here").child("Passengers").child("Add_user_id_here").child("key");
+//        keyRef.setValue(tinyDB.getString("public_key"));
 
         findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
 //        mChatUser = "a0tW1ZdZySMuDb28Za0RyoSDrlz1";
@@ -155,7 +155,7 @@ public class Conversation extends AppCompatActivity {
 
 //            keyBytes= keyRef.get().getResult().getValue().toString().getBytes();
 
-            keyRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            messageRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {

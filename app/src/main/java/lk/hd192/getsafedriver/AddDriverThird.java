@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import lk.hd192.getsafedriver.Utils.GetSafeDriverServices;
 import lk.hd192.getsafedriver.Utils.TinyDB;
@@ -147,6 +148,12 @@ public class AddDriverThird extends Fragment {
                     .playOn(edit_txt_registration_no);
             edit_txt_registration_no.setError("Please enter vehicle registration number");
             
+        } else if (!Pattern.matches("^(([A-Z]{2,3}|\\d{1,3})-[0-9]{4})$", edit_txt_registration_no.getText())) {
+            YoYo.with(Techniques.Bounce)
+                    .duration(1000)
+                    .playOn(edit_txt_registration_no);
+            edit_txt_registration_no.setError("Please enter valid registration number");
+
         } else if (TextUtils.isEmpty(edit_txt_seating.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)

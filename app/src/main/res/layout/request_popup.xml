@@ -41,10 +41,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/nunito_regular"
                 android:text="Name"
-                android:layout_marginStart="2dp"
                 android:textColor="@color/colorPrimary" />
 
             <TextView
@@ -57,10 +57,10 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/nunito_regular"
                 android:gravity="center_vertical"
-                android:paddingStart="10dp"
                 android:inputType="textPostalAddress"
                 android:maxLines="1"
                 android:paddingHorizontal="10dp"
+                android:paddingStart="10dp"
 
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -68,10 +68,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/nunito_regular"
                 android:text="Pick-up Location"
-                android:layout_marginStart="2dp"
                 android:textColor="@color/colorPrimary" />
 
             <TextView
@@ -84,12 +84,12 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/nunito_regular"
                 android:gravity="center_vertical"
-                android:paddingStart="10dp"
-
-
                 android:inputType="textPostalAddress"
+
+
                 android:maxLines="1"
                 android:paddingHorizontal="10dp"
+                android:paddingStart="10dp"
 
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -97,10 +97,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/nunito_regular"
                 android:text="Drop-off Location"
-                android:layout_marginStart="2dp"
                 android:textColor="@color/colorPrimary" />
 
             <TextView
@@ -113,10 +113,10 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/nunito_regular"
                 android:gravity="center_vertical"
-                android:paddingStart="10dp"
                 android:inputType="textPostalAddress"
                 android:maxLines="1"
                 android:paddingHorizontal="10dp"
+                android:paddingStart="10dp"
 
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -124,10 +124,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/nunito_regular"
                 android:text="Telephone Number"
-                android:layout_marginStart="2dp"
                 android:textColor="@color/colorPrimary" />
 
             <TextView
@@ -140,10 +140,10 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/nunito_regular"
                 android:gravity="center_vertical"
-                android:paddingStart="10dp"
                 android:inputType="textPostalAddress"
                 android:maxLines="1"
                 android:paddingHorizontal="10dp"
+                android:paddingStart="10dp"
 
                 android:textSize="14sp"
                 android:textStyle="bold" />

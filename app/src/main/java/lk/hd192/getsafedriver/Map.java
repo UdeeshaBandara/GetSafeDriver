@@ -84,7 +84,7 @@ public class Map extends GetSafeDriverBase {
 
     String wayPoints;
     LinearLayout lnr_trip_details;
-TextView txt_error;
+    TextView txt_error;
     JSONArray passengerList;
     Polyline polyline;
     LocationListener locationListener;
@@ -129,7 +129,7 @@ TextView txt_error;
 
         findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
 
-        tinyDB.putString("driver_id","5");
+        tinyDB.putString("driver_id", "5");
 
         if (tinyDB.getBoolean("isStaffDriver"))
             locationRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("driver_id")).child(tinyDB.getString("driver_id")).child("Location");
@@ -177,7 +177,7 @@ TextView txt_error;
                         isPickingCompleted = true;
                 }
 
-                Log.e("trip status absent",isPickingCompleted+"");
+                Log.e("trip status absent", isPickingCompleted + "");
 
             }
         });
@@ -211,7 +211,7 @@ TextView txt_error;
                     drawMapPolyline(new LatLng(currentLat, currentLon));
 
 
-                Log.e("trip status pick",isPickingCompleted+"");
+                Log.e("trip status pick", isPickingCompleted + "");
             }
         });
         btn_start_trip.setOnClickListener(new View.OnClickListener() {
@@ -226,7 +226,6 @@ TextView txt_error;
                     txt_error.setVisibility(View.GONE);
                     lnr_trip_details.setVisibility(View.VISIBLE);
                     tinyDB.putBoolean("isTripStart", true);
-
 
 
                     Log.e("drop offs", tinyDB.getListString("tripRoute") + "");
@@ -274,9 +273,11 @@ TextView txt_error;
 //                locationRef.child("latitude").setValue(location.getLatitude());
 //                locationRef.child("longitude").setValue(location.getLongitude());
                 // pushId++;
+                currentLat=location.getLatitude();
+                currentLon=location.getLongitude();
                 java.util.Map messageMap = new HashMap();
-                messageMap.put("latitude", location.getLatitude());
-                messageMap.put("longitude", location.getLongitude());
+                messageMap.put("latitude", currentLat);
+                messageMap.put("longitude", currentLon);
                 messageMap.put("status", btn_start_trip.getText().toString());
 
 
@@ -347,8 +348,6 @@ TextView txt_error;
         });
 
 
-
-
         try {
 
             MapsInitializer.initialize(getApplicationContext());
@@ -373,14 +372,19 @@ TextView txt_error;
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         if (tinyDB.getBoolean("isTripStart")) {
 
-//            btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_stop));
-//            btn_start_trip.setText("End Trip");
-//            txt_error.setVisibility(View.GONE);
-//            lnr_trip_details.setVisibility(View.VISIBLE);
+            btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_stop));
+            btn_start_trip.setText("End Trip");
+            txt_error.setVisibility(View.GONE);
+            lnr_trip_details.setVisibility(View.VISIBLE);
 //            dropOffLocations = new ArrayList<>();
 ////            for (String s :  tinyDB.getListString("tripRoute")) {
 //////                Object o=s;
@@ -394,8 +398,7 @@ TextView txt_error;
 //            drawMapPolyline(new LatLng(currentLat, currentLon));
 
 
-        }
-        else{
+        } else {
 
             txt_error.setVisibility(View.VISIBLE);
             lnr_trip_details.setVisibility(View.GONE);
@@ -555,7 +558,7 @@ TextView txt_error;
 //    }
 
     public void drawMapPolyline(LatLng origin) {
-        Log.e("draw polyline","exe");
+        Log.e("draw polyline", "exe");
         try {
 
             for (int f = 0; f < distance.size(); f++) {
@@ -675,10 +678,9 @@ TextView txt_error;
 
                 downloadTask.execute(url);
             }
-        }
-        catch (Exception e){
-            Log.e("ez",e.getMessage());
-         e.printStackTrace();
+        } catch (Exception e) {
+            Log.e("ez", e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -901,7 +903,7 @@ TextView txt_error;
 
     void getPickupLatLong() {
         try {
-            Log.e("getPickupLatLong","exe");
+            Log.e("getPickupLatLong", "exe");
             for (int jk = 0; jk < passengerList.length(); jk++) {
 
                 dropOffLocations.add(jk, new UserLocation(passengerList.getJSONObject(jk).getString("id"), passengerList.getJSONObject(jk).getString("name"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_longitude"), calculateDistance(currentLat, currentLon, passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude")), false, false, false));

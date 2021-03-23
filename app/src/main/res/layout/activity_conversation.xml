@@ -99,6 +99,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
+
                             android:layout_centerVertical="true"
                             android:src="@drawable/icon_send" />
 
@@ -114,10 +115,11 @@
 
     <ImageView
         android:id="@+id/btn_back"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:padding="15dp"
+        android:layout_marginTop="5dp"
         android:src="@drawable/icon_back" />
 
 </RelativeLayout>
