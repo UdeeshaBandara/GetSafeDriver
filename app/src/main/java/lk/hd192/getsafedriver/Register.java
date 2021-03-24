@@ -84,8 +84,8 @@ public class Register extends GetSafeDriverBase implements AddDriverFirst.Regist
                 if (currentPage == 1)
 
 
-                    addDriverFirst.validateFields();
-//                    showPageTwo();
+//                    addDriverFirst.validateFields();
+                    showPageTwo();
 
                 else if (currentPage == 2)
 
@@ -138,6 +138,7 @@ public class Register extends GetSafeDriverBase implements AddDriverFirst.Regist
         vanAnimation.setVisibility(View.GONE);
         btnNext.setVisibility(View.GONE);
         currentPage = 4;
+        driverAnimation.setVisibility(View.GONE);
 
         btn_done.setVisibility(View.VISIBLE);
 

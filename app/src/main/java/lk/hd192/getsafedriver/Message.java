@@ -182,6 +182,7 @@ public class Message extends GetSafeDriverBase {
                     }
 
                 } catch (Exception e) {
+                    e.printStackTrace();
 
                 }
 

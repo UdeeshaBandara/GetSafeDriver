@@ -338,6 +338,16 @@ public class Login extends GetSafeDriverBase {
                 seven.getText().toString() +
                 eight.getText().toString() +
                 nine.getText().toString());
+
+        tinyDB.putString("phone_no", one.getText().toString() +
+                two.getText().toString() +
+                three.getText().toString() +
+                four.getText().toString() +
+                five.getText().toString() +
+                six.getText().toString() +
+                seven.getText().toString() +
+                eight.getText().toString() +
+                nine.getText().toString());
         //    tempParam.put("fcm_token", token);
 
 
@@ -362,12 +372,14 @@ public class Login extends GetSafeDriverBase {
                                 nine.getText().toString());
 
                         startActivity(new Intent(getApplicationContext(), OTP.class));
-                        finish();
-                    }
-//                        showToast(dialog, "Something went wrong. Please try again", 0);
+
+                    }else
+                        showToast(dialog, result.getString("validation_errors"), 0);
 
 
                 } catch (Exception e) {
+                    e.printStackTrace();
+
 
                 }
 

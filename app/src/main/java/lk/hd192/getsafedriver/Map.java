@@ -77,7 +77,7 @@ public class Map extends GetSafeDriverBase {
     ArrayList<UserLocation> dropOffLocations = new ArrayList<>();
     LocationManager locationManager;
     GetSafeDriverServices getSafeDriverServices;
-    private DatabaseReference mRootRef, locationRef;
+    private DatabaseReference mRootRef, locationRef, driverId;
     String locationProvider = LocationManager.GPS_PROVIDER;
     CameraPosition cameraPosition;
     TextView txt_name, txt_distance, txt_time;
@@ -131,11 +131,14 @@ public class Map extends GetSafeDriverBase {
 
         tinyDB.putString("driver_id", "5");
 
-        if (tinyDB.getBoolean("isStaffDriver"))
-            locationRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("driver_id")).child(tinyDB.getString("driver_id")).child("Location");
-        else
-            locationRef = mRootRef.child("School_Drivers").child(tinyDB.getString("driver_id")).child(tinyDB.getString("driver_id")).child("Location");
-
+        if (tinyDB.getBoolean("isStaffDriver")) {
+            locationRef = mRootRef.child("Staff_Drivers").child(tinyDB.getString("driver_id")).child("Location");
+            driverId = mRootRef.child("Staff_Drivers").child(tinyDB.getString("driver_id")).child("DriverId");
+        } else {
+            locationRef = mRootRef.child("School_Drivers").child(tinyDB.getString("driver_id")).child("Location");
+            driverId = mRootRef.child("School_Drivers").child(tinyDB.getString("driver_id")).child("DriverId");
+        }
+        driverId.setValue(tinyDB.getString("driver_id"));
 
         if (ActivityCompat.checkSelfPermission(Map.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Map.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -148,8 +151,8 @@ public class Map extends GetSafeDriverBase {
         originMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.marker_passenger), 1);
         finalMarker = bitmapSizeByScale(BitmapFactory.decodeResource(getResources(), R.drawable.marker_end), 1);
 
-        currentLat = 6.965495959761049;
-        currentLon = 79.95475497680536;
+        currentLat = 6.906475002896019;
+        currentLon = 79.87047652139896;
 
 //        btnBack.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -273,13 +276,19 @@ public class Map extends GetSafeDriverBase {
 //                locationRef.child("latitude").setValue(location.getLatitude());
 //                locationRef.child("longitude").setValue(location.getLongitude());
                 // pushId++;
-                currentLat=location.getLatitude();
-                currentLon=location.getLongitude();
+                currentLat = location.getLatitude();
+                currentLon = location.getLongitude();
+
+
+                Log.e("curnt loc", currentLat.toString());
+
                 java.util.Map messageMap = new HashMap();
                 messageMap.put("latitude", currentLat);
                 messageMap.put("longitude", currentLon);
                 messageMap.put("status", btn_start_trip.getText().toString());
+                googleMap.clear();
 
+                drawMapPolyline(new LatLng(currentLat, currentLon));
 
                 locationRef.updateChildren(messageMap, new DatabaseReference.CompletionListener() {
                     @Override
@@ -369,11 +378,6 @@ public class Map extends GetSafeDriverBase {
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     @Override
@@ -562,7 +566,7 @@ public class Map extends GetSafeDriverBase {
         try {
 
             for (int f = 0; f < distance.size(); f++) {
-                if (Double.parseDouble(distance.get(f)) < 500)
+                if (dropOffLocations.get(f).getDistance() < 500)
                     informDriverArrival(dropOffLocations.get(f).getId());
 
             }

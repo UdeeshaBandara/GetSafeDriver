@@ -49,6 +49,7 @@
     <string name="VIEW_ONE_REQUEST">/driver/requests/viewone</string>
     <string name="VIEW_ALL_REQUEST">/driver/requests/viewall</string>
     <string name="ABSENT_REVIEW">/driver/journey/passengers/withabsentstatus</string>
+    <string name="PAYMENT">/payment/get/all</string>
 
 
 

@@ -12,14 +12,17 @@
         android:layout_alignParentTop="true"
         android:background="@color/yellow_te">
 
-        <ImageView
+        <TextView
             android:id="@+id/img_head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:fontFamily="@font/nunito_bold"
             android:scaleType="centerCrop"
-            android:src="@drawable/logo" />
-
+            android:text="Payment Details"
+            android:textColor="@color/black"
+            android:layout_marginVertical="38dp"
+            android:textSize="20sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -36,6 +39,24 @@
                 android:layout_marginTop="45dp"
                 android:background="@drawable/bg_messaging">
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_payment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="40dp"
+                    android:overScrollMode="never"
+                    android:scrollbars="none" />
+
+                <TextView
+                    android:id="@+id/msg"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_regular"
+                    android:text="No Payment Details"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
 
             </RelativeLayout>
 
@@ -49,8 +70,8 @@
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_marginLeft="20dp"
-        android:padding="15dp"
         android:layout_marginTop="25dp"
+        android:padding="15dp"
         android:src="@drawable/icon_back" />
     <!--    <ScrollView-->
     <!--        android:layout_width="match_parent"-->

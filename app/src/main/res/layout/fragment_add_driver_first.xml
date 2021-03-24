@@ -340,7 +340,7 @@
                                 app:libIZO_setBorderView="true"
                                 app:libIZO_setClearIconVisible="true"
                                 app:libIZO_setCornerRadius="4dp"
-                                app:libIZO_setPrefix="+91"
+                                app:libIZO_setPrefix="+94"
                                 app:libIZO_setPrefixTextColor="#FF9800"
                                 app:libIZO_setStrokeWidth="1dp" />
 

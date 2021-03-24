@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,9 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,8 +48,9 @@ public class NewRequest extends GetSafeDriverBase {
     Button mConfirm, cancel;
     TextView txt_name, txt_pickup, txt_drop, txt_number, msg;
     ImageView close;
-    String number = "",selectedRequestId="";
-    int selectedIndex=-1;
+    EditText txt_price;
+    String number = "", selectedRequestId = "";
+    int selectedIndex = -1;
 
 
     @Override
@@ -98,15 +104,14 @@ public class NewRequest extends GetSafeDriverBase {
             try {
 
 
-
                 if (tinyDB.getBoolean("isStaffDriver")) {
 
 
                     holder.student_school.setText(requestList.getJSONObject(position).getJSONObject("user").getString("email"));
                     holder.passenger_name.setText(requestList.getJSONObject(position).getJSONObject("user").getString("name"));
-                }else{
-                    holder.parent_name.setText("Parent : "+requestList.getJSONObject(position).getJSONObject("user").getString("name"));
-                        holder.student_school.setText(requestList.getJSONObject(position).getJSONObject("child").getString("school_name"));
+                } else {
+                    holder.parent_name.setText("Parent : " + requestList.getJSONObject(position).getJSONObject("user").getString("name"));
+                    holder.student_school.setText(requestList.getJSONObject(position).getJSONObject("child").getString("school_name"));
                     holder.passenger_name.setText(requestList.getJSONObject(position).getJSONObject("child").getString("name"));
 
                 }
@@ -114,7 +119,7 @@ public class NewRequest extends GetSafeDriverBase {
                     @Override
                     public void onClick(View v) {
 //                    startActivity(new Intent(getApplicationContext(), Conversation.class));
-                        selectedIndex=position;
+                        selectedIndex = position;
                         onCreateRequestPopup(v);
                     }
                 });
@@ -158,12 +163,13 @@ public class NewRequest extends GetSafeDriverBase {
         txt_drop = popupView.findViewById(R.id.txt_drop);
         txt_pickup = popupView.findViewById(R.id.txt_pickup);
         txt_name = popupView.findViewById(R.id.txt_name);
+        txt_price = popupView.findViewById(R.id.txt_price);
         close = popupView.findViewById(R.id.close);
 
 
         try {
-            number=requestList.getJSONObject(selectedIndex).getJSONObject("user").getString("phone_no");
-            selectedRequestId=requestList.getJSONObject(selectedIndex).getString("id");
+            number = requestList.getJSONObject(selectedIndex).getJSONObject("user").getString("phone_no");
+            selectedRequestId = requestList.getJSONObject(selectedIndex).getString("id");
             txt_pickup.setText(requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("pick_up_add1"));
             txt_drop.setText(requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("drop_off_add1"));
             txt_number.setText(number);
@@ -203,7 +209,16 @@ public class NewRequest extends GetSafeDriverBase {
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                acceptRequest();
+
+
+                if (TextUtils.isEmpty(txt_price.getText().toString())) {
+
+                    YoYo.with(Techniques.Bounce)
+                            .duration(1000)
+                            .playOn(txt_price);
+                    showToast(dialog, "Please suggest a price", 0);
+                } else
+                    acceptRequest();
 
                 popupWindow.dismiss();
             }
@@ -242,7 +257,7 @@ public class NewRequest extends GetSafeDriverBase {
                 try {
                     requestList = new JSONArray();
 
-
+                    Log.e("res", result + "");
                     if (result.getBoolean("status")) {
 
                         requestList = result.getJSONArray("requests");
@@ -304,7 +319,7 @@ public class NewRequest extends GetSafeDriverBase {
         HashMap<String, String> tempParam = new HashMap<>();
 
 
-        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.ACCEPT_REQUEST)+"?id="+selectedRequestId, 3, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.ACCEPT_REQUEST) + "?id=" + selectedRequestId, 3, tinyDB.getString("token"), new VolleyJsonCallback() {
 
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -337,7 +352,7 @@ public class NewRequest extends GetSafeDriverBase {
         HashMap<String, String> tempParam = new HashMap<>();
 
 
-        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.DECLINE_REQUEST)+"?id="+selectedRequestId, 4, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.DECLINE_REQUEST) + "?id=" + selectedRequestId, 4, tinyDB.getString("token"), new VolleyJsonCallback() {
 
             @Override
             public void onSuccessResponse(JSONObject result) {

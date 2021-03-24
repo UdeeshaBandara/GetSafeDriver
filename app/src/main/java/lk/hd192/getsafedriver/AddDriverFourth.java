@@ -515,7 +515,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
         tempParam.put("image2", imagesBase64.get(6));
         tempParam.put("image3", imagesBase64.get(7));
         tempParam.put("image4", imagesBase64.get(8));
-        tempParam.put("image5", imagesBase64.get(8));
+//        tempParam.put("image5", imagesBase64.get(8));
 
 
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_VEHICLE_IMAGES), 2, new VolleyJsonCallback() {

@@ -12,7 +12,9 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,7 +40,9 @@ public class OTP extends GetSafeDriverBase {
     GetSafeDriverServices getSafeDriverServices;
     TinyDB tinyDB;
     Dialog dialog;
+    TextView otp_heading;
     private FirebaseAuth mAuth;
+    Button btn_otp_back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,11 +52,20 @@ public class OTP extends GetSafeDriverBase {
         confirmOTP_2 = findViewById(R.id.otp_two);
         confirmOTP_3 = findViewById(R.id.otp_three);
         confirmOTP_4 = findViewById(R.id.otp_four);
+        otp_heading = findViewById(R.id.otp_heading);
+        btn_otp_back = findViewById(R.id.btn_otp_back);
         mAuth = FirebaseAuth.getInstance();
         getSafeDriverServices = new GetSafeDriverServices();
         tinyDB = new TinyDB(getApplicationContext());
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
+
+        btn_otp_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         confirmOTP_1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -73,7 +86,7 @@ public class OTP extends GetSafeDriverBase {
 
             }
         });
-
+        otp_heading.setText("A verification code has been sent to your mobile \n"+tinyDB.getString("phone_no")+"");
 
         confirmOTP_2.addTextChangedListener(new TextWatcher() {
             @Override
