@@ -162,6 +162,7 @@ public class Absence extends GetSafeDriverBase {
 
                         try {
                             tel = absentReview.getJSONObject(position).getString("phone_no");
+                            showPassengerContact(dialog);
 //                            showToast(dialog, "Call to " + absentReview.getJSONObject(position).getString("name"), 4);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -216,7 +217,7 @@ public class Absence extends GetSafeDriverBase {
 
     }
 
-    public void showPassengerContact(final Dialog dialog, String msg) {
+    public void showPassengerContact(final Dialog dialog) {
 
 
         // Setting dialogview
@@ -269,6 +270,6 @@ public class Absence extends GetSafeDriverBase {
     }
 
     private void deletePassenger() {
-        
+
     }
 }
