@@ -35,6 +35,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.json.JSONObject;
 
@@ -52,7 +53,7 @@ public class Login extends GetSafeDriverBase {
     ImageView img_head;
     Dialog dialog;
     RelativeLayout rlt;
-
+    public KProgressHUD hud;
     TinyDB tinyDB;
 
     GetSafeDriverServices getSafeDriverServices;
@@ -78,6 +79,11 @@ public class Login extends GetSafeDriverBase {
         requestFocus();
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 //        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+        hud = KProgressHUD.create(this)
+                .setStyle(KProgressHUD.Style.PIE_DETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
 
         findViewById(R.id.btn_login_next).setOnClickListener(new View.OnClickListener() {
 
@@ -106,7 +112,7 @@ public class Login extends GetSafeDriverBase {
                     startActivity(new Intent(getApplicationContext(), Home.class));
                     finish();
 //                    captureImageCameraOrGallery();
-                    getDeviceToken();
+//                    getDeviceToken();
 
                 }
             }
@@ -325,10 +331,19 @@ public class Login extends GetSafeDriverBase {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (tinyDB.getBoolean("isNewUser")) {
+            showToast(dialog, "Driver Registered, Please login", 2);
+            tinyDB.putBoolean("isNewUser", false);
+        }
+    }
+
     private void driverSendOtp() {
 
         HashMap<String, String> tempParam = new HashMap<>();
-
+        showHUD();
         tempParam.put("phone", one.getText().toString() +
                 two.getText().toString() +
                 three.getText().toString() +
@@ -370,10 +385,11 @@ public class Login extends GetSafeDriverBase {
                                 seven.getText().toString() +
                                 eight.getText().toString() +
                                 nine.getText().toString());
+                        tinyDB.putString("otp_token", result.getString("otp_token"));
 
                         startActivity(new Intent(getApplicationContext(), OTP.class));
 
-                    }else
+                    } else
                         showToast(dialog, result.getString("validation_errors"), 0);
 
 
@@ -382,7 +398,7 @@ public class Login extends GetSafeDriverBase {
 
 
                 }
-
+                hideHUD();
             }
         });
 
@@ -412,6 +428,21 @@ public class Login extends GetSafeDriverBase {
 
                     }
                 });
+    }
+
+    public void showHUD() {
+
+
+        if (hud.isShowing()) {
+            hud.dismiss();
+        }
+        hud.show();
+    }
+
+    public void hideHUD() {
+        if (hud.isShowing()) {
+            hud.dismiss();
+        }
     }
 
 }

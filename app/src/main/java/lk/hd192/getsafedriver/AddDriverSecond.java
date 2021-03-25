@@ -1,5 +1,6 @@
 package lk.hd192.getsafedriver;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -43,6 +44,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.libizo.CustomEditText;
 
 import org.json.JSONArray;
@@ -56,6 +58,7 @@ import java.util.List;
 import java.util.Locale;
 
 import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
+import lk.hd192.getsafedriver.Utils.GetSafeDriverBaseFragment;
 import lk.hd192.getsafedriver.Utils.GetSafeDriverServices;
 import lk.hd192.getsafedriver.Utils.TinyDB;
 import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
@@ -63,7 +66,7 @@ import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 
-public class AddDriverSecond extends Fragment {
+public class AddDriverSecond extends GetSafeDriverBaseFragment {
     CustomEditText editTextAddOne, editTextAddTwo, editTextPick, edit_txt_district;
     GetSafeDriverServices getSafeDriverServices;
 
@@ -77,10 +80,11 @@ public class AddDriverSecond extends Fragment {
     RecyclerView recyclerDistrict;
     Double latitude, longitude;
     GoogleMap googleMap;
-
+    Dialog dialog;
     Button mConfirm;
     LocationManager locationManager;
     ArrayList districts;
+    public KProgressHUD hud;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +103,13 @@ public class AddDriverSecond extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         tinyDB = new TinyDB(getActivity());
+        hud = KProgressHUD.create(getActivity())
+                .setStyle(KProgressHUD.Style.PIE_DETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
+
+        dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         districts = new ArrayList<>();
         districts.add("Colombo");
         districts.add("Gampaha");
@@ -353,7 +364,7 @@ public class AddDriverSecond extends Fragment {
 
     private void driverLocationDetails() {
 
-
+        showHUD();
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("latitude", latitude.toString());
@@ -380,15 +391,16 @@ public class AddDriverSecond extends Fragment {
 
                 }
 
-
+                hideHUD();
             }
+
         });
 
     }
 
     private void driverDistrict() {
 
-
+        showHUD();
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("latitude", latitude.toString());
@@ -407,7 +419,7 @@ public class AddDriverSecond extends Fragment {
                     if (result.getBoolean("status")) {
 
                         ((RegisterCallSecond) getActivity()).showPageThree();
-                    }
+                    } else showToast(dialog, result.getString("validation_errors"), 0);
 
 
                 } catch (JSONException ex) {
@@ -415,7 +427,7 @@ public class AddDriverSecond extends Fragment {
 
                 }
 
-
+                hideHUD();
             }
         });
 
@@ -492,6 +504,21 @@ public class AddDriverSecond extends Fragment {
         @Override
         public int getItemCount() {
             return districts.size();
+        }
+    }
+
+    public void showHUD() {
+
+
+        if (hud.isShowing()) {
+            hud.dismiss();
+        }
+        hud.show();
+    }
+
+    public void hideHUD() {
+        if (hud.isShowing()) {
+            hud.dismiss();
         }
     }
 

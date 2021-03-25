@@ -84,8 +84,8 @@ public class Register extends GetSafeDriverBase implements AddDriverFirst.Regist
                 if (currentPage == 1)
 
 
-//                    addDriverFirst.validateFields();
-                    showPageTwo();
+                    addDriverFirst.validateFields();
+//                    showPageTwo();
 
                 else if (currentPage == 2)
 

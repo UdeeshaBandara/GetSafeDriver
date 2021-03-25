@@ -13,7 +13,7 @@ import lk.hd192.getsafedriver.Home;
 import lk.hd192.getsafedriver.Login;
 import lk.hd192.getsafedriver.R;
 
-class SplashScreen extends GetSafeDriverBase {
+public class SplashScreen extends GetSafeDriverBase {
     GetSafeDriverServices getSafeDriverServices;
     TinyDB tinyDB;
 
@@ -25,7 +25,7 @@ class SplashScreen extends GetSafeDriverBase {
         getSafeDriverServices = new GetSafeDriverServices();
         tinyDB = new TinyDB(getApplicationContext());
 
-
+        tinyDB.putBoolean("isNewUser",false);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Log.e("islogged",tinyDB.getBoolean("isLogged")+"");
 
@@ -51,11 +51,12 @@ class SplashScreen extends GetSafeDriverBase {
 
 
 
-        getSafeDriverServices.networkJsonRequest(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VALIDATE_TOKEN), 1, new VolleyJsonCallback() {
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VALIDATE_TOKEN), 1,tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
+                    Log.e("splash",result+"");
 
                     if (result.getBoolean("logged-in-status")){
 

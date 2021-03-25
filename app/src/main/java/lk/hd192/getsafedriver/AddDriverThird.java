@@ -1,5 +1,6 @@
 package lk.hd192.getsafedriver;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.libizo.CustomEditText;
 
 import org.json.JSONException;
@@ -25,19 +27,21 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+import lk.hd192.getsafedriver.Utils.GetSafeDriverBaseFragment;
 import lk.hd192.getsafedriver.Utils.GetSafeDriverServices;
 import lk.hd192.getsafedriver.Utils.TinyDB;
 import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 
 
-public class AddDriverThird extends Fragment {
-
+public class AddDriverThird extends GetSafeDriverBaseFragment {
+    Dialog dialog;
 
     TextView txtNonAc, txtAc, txtCam, txtNonCam, editTxtRegistrationNo;
     CustomEditText edit_txt_vehicle_type, edit_txt_vehicle_make, edit_txt_vehicle_model, edit_txt_registration_no, edit_txt_seating;
     TypeBottomSheet typeBottomSheet;
     GetSafeDriverServices getSafeDriverServices;
     String isAc = "", isCam = "";
+    public KProgressHUD hud;
     public boolean isThirdValidated = false;
     TinyDB tinyDB;
 
@@ -62,6 +66,7 @@ public class AddDriverThird extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         tinyDB = new TinyDB(getActivity());
         txtAc = view.findViewById(R.id.txt_ac);
         txtNonAc = view.findViewById(R.id.txt_non_ac);
@@ -74,6 +79,11 @@ public class AddDriverThird extends Fragment {
         edit_txt_registration_no = view.findViewById(R.id.edit_txt_registration_no);
         edit_txt_seating = view.findViewById(R.id.edit_txt_seating);
         getSafeDriverServices = new GetSafeDriverServices();
+        hud = KProgressHUD.create(getActivity())
+                .setStyle(KProgressHUD.Style.PIE_DETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
 
         edit_txt_vehicle_type.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,7 +189,7 @@ public class AddDriverThird extends Fragment {
     }
 
     private boolean registerVehicle() {
-
+showHUD();
 
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("id", tinyDB.getString("driver_id"));
@@ -200,15 +210,17 @@ public class AddDriverThird extends Fragment {
                     Log.e("res",result+"");
                     if (result.getBoolean("saved_status")) {
                         isThirdValidated = true;
+
                         ((RegisterCallBack) getActivity()).showPageFour();
                     }
-
+                      else showToast(dialog, result.getString("validation_errors"), 0);
 
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                     isThirdValidated = false;
                 }
 
+                hideHUD();
 
             }
         });
@@ -259,5 +271,19 @@ public class AddDriverThird extends Fragment {
 //
 //            txtSchool.setOnClickListener(new View.OnClickListener());
 
+    }
+    public void showHUD() {
+
+
+        if (hud.isShowing()) {
+            hud.dismiss();
+        }
+        hud.show();
+    }
+
+    public void hideHUD() {
+        if (hud.isShowing()) {
+            hud.dismiss();
+        }
     }
 }

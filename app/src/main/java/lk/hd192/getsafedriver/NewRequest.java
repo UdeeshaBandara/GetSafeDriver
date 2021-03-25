@@ -46,7 +46,7 @@ public class NewRequest extends GetSafeDriverBase {
     JSONArray requestList;
     RecyclerView recycler_students;
     Button mConfirm, cancel;
-    TextView txt_name, txt_pickup, txt_drop, txt_number, msg;
+    TextView txt_name, txt_pickup, txt_drop, msg;
     ImageView close;
     EditText txt_price;
     String number = "", selectedRequestId = "";
@@ -159,7 +159,7 @@ public class NewRequest extends GetSafeDriverBase {
 
         mConfirm = popupView.findViewById(R.id.btn_accept);
         cancel = popupView.findViewById(R.id.btn_cancel);
-        txt_number = popupView.findViewById(R.id.txt_number);
+//        txt_number = popupView.findViewById(R.id.txt_number);
         txt_drop = popupView.findViewById(R.id.txt_drop);
         txt_pickup = popupView.findViewById(R.id.txt_pickup);
         txt_name = popupView.findViewById(R.id.txt_name);
@@ -172,7 +172,7 @@ public class NewRequest extends GetSafeDriverBase {
             selectedRequestId = requestList.getJSONObject(selectedIndex).getString("id");
             txt_pickup.setText(requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("pick_up_add1"));
             txt_drop.setText(requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("drop_off_add1"));
-            txt_number.setText(number);
+//            txt_number.setText(number);
 
             txt_name.setText(requestList.getJSONObject(selectedIndex).getJSONObject("user").getString("name"));
 
@@ -188,14 +188,14 @@ public class NewRequest extends GetSafeDriverBase {
                 return true;
             }
         });
-        txt_number.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + number));
-                startActivity(intent);
-            }
-        });
+//        txt_number.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(Intent.ACTION_DIAL);
+//                intent.setData(Uri.parse("tel:" + number));
+//                startActivity(intent);
+//            }
+//        });
 
 
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {

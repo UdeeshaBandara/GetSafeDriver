@@ -176,7 +176,8 @@ public class OTP extends GetSafeDriverBase {
 
         tempParam.put("otp", confirmOTP_1.getText().toString() + confirmOTP_2.getText().toString() + confirmOTP_3.getText().toString() + confirmOTP_4.getText().toString());
 
-        tempParam.put("otp-token", "");
+        Log.e("otp otken",tinyDB.getString("otp_token"));
+        tempParam.put("otp-token", tinyDB.getString("otp_token"));
 
 
 //        showLoading();
@@ -191,12 +192,14 @@ public class OTP extends GetSafeDriverBase {
                     if (result.getBoolean("otp_token_validity")) {
                         tinyDB.putBoolean("isLogged", true);
                         tinyDB.putString("token", result.getString("access_token"));
+
+                        tinyDB.putString("driver_id", result.getJSONObject("user").getString("id"));
 //                        firebaseLogin();
                         getDeviceToken();
 
 
                     } else
-                        showToast(dialog, "Something went wrong. Please try again", 0);
+                        showToast(dialog, "OTP validation failed", 0);
 
 
                 } catch (Exception e) {

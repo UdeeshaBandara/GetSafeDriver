@@ -11,9 +11,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,6 +27,7 @@ import android.widget.TextView;
 import com.google.android.material.appbar.AppBarLayout;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -48,6 +53,7 @@ public class Absence extends GetSafeDriverBase {
     Dialog dialog;
     TinyDB tinyDB;
     JSONArray absentReview;
+    int count = 0;
     String selectedDate, name;
 
     public static String tel;
@@ -71,7 +77,7 @@ public class Absence extends GetSafeDriverBase {
         selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         getAbsentList();
-
+        txt_current_date.setText(selectedDate);
         recycler_absence.setAdapter(new AbsenceUserAdapter());
         recycler_absence.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
         recycler_absence.setNestedScrollingEnabled(false);
@@ -144,8 +150,8 @@ public class Absence extends GetSafeDriverBase {
         @Override
         public void onBindViewHolder(@NonNull AbsenceUserViewHolder holder, int position) {
             try {
-                tel = absentReview.getJSONObject(position).getString("phone_no");
-                name = absentReview.getJSONObject(position).getString("name");
+
+
                 if (!absentReview.getJSONObject(position).getBoolean("absent"))
                     holder.mark.setImageDrawable(getResources().getDrawable(R.drawable.icon_check));
                 else
@@ -154,13 +160,18 @@ public class Absence extends GetSafeDriverBase {
                     @Override
                     public void onClick(View view) {
 
-                        showToast(dialog, "Call to " + name, 4);
+                        try {
+                            tel = absentReview.getJSONObject(position).getString("phone_no");
+//                            showToast(dialog, "Call to " + absentReview.getJSONObject(position).getString("name"), 4);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                     }
                 });
 
-                holder.passenger_name.setText(name);
-                holder.passenger_school.setText(tel);
+                holder.passenger_name.setText(absentReview.getJSONObject(position).getString("name"));
+                holder.passenger_school.setText(absentReview.getJSONObject(position).getString("phone_no"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -205,5 +216,59 @@ public class Absence extends GetSafeDriverBase {
 
     }
 
+    public void showPassengerContact(final Dialog dialog, String msg) {
 
+
+        // Setting dialogview
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+
+
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setTitle(null);
+
+
+        dialog.setContentView(R.layout.passenger_handling);
+
+
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+//        TextView msgToShow = dialog.findViewById(R.id.toast_message);
+        Button btnOk = dialog.findViewById(R.id.btn_call);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + Absence.tel));
+                startActivity(intent);
+
+            }
+        });
+
+        Button btnSignOut = dialog.findViewById(R.id.btn_remove);
+        btnSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (count == 0) {
+                    count++;
+                    btnSignOut.setText("Press again to remove");
+                } else {
+                    deletePassenger();
+                }
+
+            }
+        });
+
+//        msgToShow.setText(msg);
+
+        dialog.show();
+    }
+
+    private void deletePassenger() {
+        
+    }
 }

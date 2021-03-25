@@ -121,9 +121,7 @@ public class GetSafeDriverBase extends AppCompatActivity {
             case 3:
                 dialog.setContentView(R.layout.logout_popup);
                 break;
-            case 4:
-                dialog.setContentView(R.layout.logout_popup);
-                break;
+
 
 
         }
@@ -148,16 +146,6 @@ public class GetSafeDriverBase extends AppCompatActivity {
                     tinyDB.clear();
                     startActivity(new Intent(getApplicationContext(), Login.class));
                     finishAffinity();
-                }
-            });
-        }else if (type == 4) {
-            Button btnSignOut = dialog.findViewById(R.id.btn_sign_out);
-            btnSignOut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    intent.setData(Uri.parse("tel:" + Absence.tel));
-                    startActivity(intent);
                 }
             });
         }

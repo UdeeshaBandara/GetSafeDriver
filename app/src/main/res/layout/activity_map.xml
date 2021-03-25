@@ -118,7 +118,7 @@
                         android:textSize="15sp" />
 
                     <TextView
-                        android:id="@+id/txt_name"
+                        android:id="@+id/txt_name_map"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -225,9 +225,9 @@
                         android:layout_height="40dp"
                         android:layout_marginLeft="10dp"
                         android:layout_weight="5"
-                        android:background="@drawable/bg_absence"
+                        android:background="@drawable/bg_btn_ok"
                         android:fontFamily="@font/nunito_regular"
-                        android:text="Picked"
+                        android:text="Pick"
                         android:textAllCaps="false"
                         android:textColor="@color/black" />
                 </LinearLayout>

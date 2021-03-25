@@ -4,8 +4,8 @@ public class UserLocation implements Comparable{
 
     String passengerName,id;
     Double pickUpLatitude,pickUpLongitude,dropLatitude,dropLongitude,distance;
-    Boolean isPicked,isAbsent,isDropped;
-    String tempString;
+
+    String status;
 
     UserLocation userLocation;
 
@@ -23,7 +23,7 @@ public class UserLocation implements Comparable{
         return pickUpLatitude;
     }
 
-    public UserLocation(String id,String passengerName, Double pickUpLatitude, Double pickUpLongitude, Double dropLatitude, Double dropLongitude, Double distance, Boolean isPicked, Boolean isAbsent, Boolean isDropped) {
+    public UserLocation(String id,String passengerName, Double pickUpLatitude, Double pickUpLongitude, Double dropLatitude, Double dropLongitude, Double distance,String status) {
         this.id = id;
         this.passengerName = passengerName;
         this.pickUpLatitude = pickUpLatitude;
@@ -31,9 +31,8 @@ public class UserLocation implements Comparable{
         this.dropLatitude = dropLatitude;
         this.dropLongitude = dropLongitude;
         this.distance = distance;
-        this.isPicked = isPicked;
-        this.isAbsent = isAbsent;
-        this.isDropped = isDropped;
+        this.status = status;
+
     }
 
     public Double getPickUpLongitude() {
@@ -60,33 +59,18 @@ public class UserLocation implements Comparable{
         return distance;
     }
 
-    public Boolean getPicked() {
-        return isPicked;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setDistance(Double distance) {
         this.distance = distance;
     }
 
-    public void setPicked(Boolean picked) {
-        isPicked = picked;
-    }
-
-    public Boolean getAbsent() {
-        return isAbsent;
-    }
-
-    public void setAbsent(Boolean absent) {
-        isAbsent = absent;
-    }
-
-    public Boolean getDropped() {
-        return isDropped;
-    }
-
-    public void setDropped(Boolean dropped) {
-        isDropped = dropped;
-    }
 
     @Override
     public int compareTo(Object o) {

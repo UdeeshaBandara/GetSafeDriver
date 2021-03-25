@@ -213,7 +213,7 @@ public class GetSafeDriverServices extends GetSafeDriverBase {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("Bearer", tinyDB.getString("token"));
+                headers.put("Bearer", "");
                 return headers;
             }
         };
@@ -273,7 +273,14 @@ public class GetSafeDriverServices extends GetSafeDriverBase {
                 }
 
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Cookie","laravel_session=LLKt1gLxCazYn080pnhdLWqraKj2kotuoe8EEQkh");
+                return headers;
+            }
+        };
 
         int MY_SOCKET_TIMEOUT_MS = 20000;
         req.setRetryPolicy(new DefaultRetryPolicy(

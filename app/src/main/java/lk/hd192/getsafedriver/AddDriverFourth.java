@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 
 import com.bumptech.glide.load.engine.Resource;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
 import com.vlk.multimager.activities.GalleryActivity;
@@ -62,7 +63,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
     Image[] imagesToUpload = new Image[9];
     TinyDB tinyDB;
     Dialog dialog;
-
+    public KProgressHUD hud;
     GetSafeDriverServices getSafeDriverServices;
     Boolean fromIdOne = false, fromIdTwo = false, fromLicOne = false, fromLicTwo = false, fromDriverPic = false, fromVehicleOne = false, fromVehicleTwo = false, fromVehicleThree = false, fromVehicleOneFour = false;
 
@@ -98,6 +99,13 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
         img_vehicle_one = view.findViewById(R.id.img_vehicle_one);
         img_vehicle_two = view.findViewById(R.id.img_vehicle_two);
         img_vehicle_four = view.findViewById(R.id.img_vehicle_four);
+
+        hud = KProgressHUD.create(getActivity())
+                .setStyle(KProgressHUD.Style.PIE_DETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
+
 
         imagesList = new ArrayList<>();
         imagesBase64 = new ArrayList<>();
@@ -359,6 +367,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
     }
 
     public void convertToBase64AndUpload() throws IOException {
+
         boolean validated = true;
         ((LoadingCall) getActivity()).showLoadingImage();
 //
@@ -397,7 +406,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
         tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(0));
 
-
+        showHUD("Saving");
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_IMAGE), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -405,7 +414,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
                 try {
 
                     if (result.getBoolean("saved_status")) {
-
+                        hideHUD();
                     } else ((LoadingCall) getActivity()).hideLoadingImage();
 
                 } catch (JSONException ex) {
@@ -424,7 +433,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(1));
-
+        showHUD("Saving");
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_IMAGE), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -435,7 +444,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
                     if (result.getBoolean("saved_status")) {
 
                     } else ((LoadingCall) getActivity()).hideLoadingImage();
-
+                    hideHUD();
 
                 } catch (JSONException ex) {
                     ex.printStackTrace();
@@ -454,7 +463,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
         tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(2));
 
-        ((LoadingCall) getActivity()).showLoadingImage();
+        showHUD("Saving");
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_NIC_BACK), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -464,7 +473,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
                     if (result.getBoolean("saved_status")) {
 
                     } else ((LoadingCall) getActivity()).hideLoadingImage();
-
+                    hideHUD();
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }
@@ -483,7 +492,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
         tempParam.put("id", tinyDB.getString("driver_id"));
         tempParam.put("image", imagesBase64.get(3));
 
-
+        showHUD("Saving");
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_LICENCE), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -494,7 +503,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
 
                     } else ((LoadingCall) getActivity()).hideLoadingImage();
 
-
+                    hideHUD();
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }
@@ -517,7 +526,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
         tempParam.put("image4", imagesBase64.get(8));
 //        tempParam.put("image5", imagesBase64.get(8));
 
-
+        showHUD("Saving");
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_VEHICLE_IMAGES), 2, new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
@@ -525,8 +534,10 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
                 try {
                     Log.e("res addDriverLicence", result + "");
                     if (result.getBoolean("saved_status")) {
-                        ((LoadingCall) getActivity()).hideLoadingImage();
-                        showToast(dialog, "Registration Completed. Please login", 2);
+
+//                        showToast(dialog, "Registration Completed. Please login", 2);
+                        hideHUD();
+                        tinyDB.putBoolean("isNewUser",true);
                         startActivity(new Intent(getActivity(), Login.class));
                         getActivity().finishAffinity();
 
@@ -543,5 +554,19 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
         ((LoadingCall) getActivity()).hideLoadingImage();
     }
 
+    public void showHUD(String msg) {
+
+        hud.setLabel(msg);
+        if (hud.isShowing()) {
+            hud.dismiss();
+        }
+        hud.show();
+    }
+
+    public void hideHUD() {
+        if (hud.isShowing()) {
+            hud.dismiss();
+        }
+    }
 
 }

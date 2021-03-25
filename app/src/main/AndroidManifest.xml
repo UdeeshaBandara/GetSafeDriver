@@ -36,12 +36,20 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Message" />
         <activity android:name=".Home" />
-        <activity android:name=".Login">
+        <activity
+            android:name=".Utils.SplashScreen"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".Login">
+
         </activity> <!-- <service -->
         <!-- android:name=".Utils." -->
         <!-- android:exported="false"> -->

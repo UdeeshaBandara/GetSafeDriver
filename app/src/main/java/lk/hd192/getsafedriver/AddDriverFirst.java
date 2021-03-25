@@ -1,5 +1,6 @@
 package lk.hd192.getsafedriver;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.libizo.CustomEditText;
 import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
@@ -39,11 +41,12 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+import lk.hd192.getsafedriver.Utils.GetSafeDriverBaseFragment;
 import lk.hd192.getsafedriver.Utils.GetSafeDriverServices;
 import lk.hd192.getsafedriver.Utils.TinyDB;
 import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 
-public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateSetListener {
+public class AddDriverFirst extends GetSafeDriverBaseFragment implements DatePickerDialog.OnDateSetListener {
 
     int year;
     Register register;
@@ -53,8 +56,9 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
     GetSafeDriverServices getSafeDriverServices;
     SimpleDateFormat simpleDateFormat;
     public static boolean isValidated = false;
-
+    Dialog dialog;
     TinyDB tinyDB;
+    public KProgressHUD hud;
     private DatabaseReference firebaseDatabase;
     private FirebaseAuth mAuth;
     CustomEditText txtDriverBirthday, txtType, edit_txt_name, edit_txt_nic, edit_text_license_no_main, edit_text_telephone, txt_email;
@@ -79,9 +83,14 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         final Calendar c = Calendar.getInstance();
         register=new Register();
+        hud = KProgressHUD.create(getActivity())
+                .setStyle(KProgressHUD.Style.PIE_DETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
 
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
@@ -199,7 +208,7 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
     private void registerDriverBasic() {
 
         Log.e("register", "methd");
-
+showHUD();
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("name", edit_txt_name.getText().toString());
         tempParam.put("nic", edit_txt_nic.getText().toString());
@@ -226,6 +235,9 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
                         isValidated = true;
                         ((RegisterCallBack) getActivity()).showPageTwo();
 
+                    }else{
+
+                        showToast(dialog,result.getString("validation_errors"),0);
                     }
 
 
@@ -234,7 +246,7 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
                     Log.e("ex", ex.getMessage());
                     isValidated = false;
                 }
-
+hideHUD();
 
             }
 
@@ -343,5 +355,19 @@ public class AddDriverFirst extends Fragment implements DatePickerDialog.OnDateS
                 .defaultDate(year, monthOfYear, dayOfMonth)
                 .build()
                 .show();
+    }
+    public void showHUD() {
+
+
+        if (hud.isShowing()) {
+            hud.dismiss();
+        }
+        hud.show();
+    }
+
+    public void hideHUD() {
+        if (hud.isShowing()) {
+            hud.dismiss();
+        }
     }
 }
