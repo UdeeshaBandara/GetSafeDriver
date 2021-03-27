@@ -25,12 +25,12 @@ import lk.hd192.getsafedriver.Utils.VolleyJsonCallback;
 
 public class Payment extends GetSafeDriverBase {
     RecyclerView recycler_payment;
- TextView msg;
+    TextView msg;
     GetSafeDriverServices getSafeDriverServices;
     TinyDB tinyDB;
     Dialog dialog;
     JSONArray paymentList;
-    String []values={"Dilshan Madurange","Saman Perera","Lakshan Silva","Harshana Fernando","Dilshan Madurange","Saman Perera","Lakshan Silva","Harshana Fernando"};
+    String[] values = {"Dilshan Madurange", "Saman Perera", "Lakshan Silva", "Harshana Fernando", "Dilshan Madurange", "Saman Perera", "Lakshan Silva", "Harshana Fernando"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +74,10 @@ public class Payment extends GetSafeDriverBase {
         public void onBindViewHolder(@NonNull PaymentItemHolder holder, int position) {
             try {
 
-                holder.amount.setText("LKR "+paymentList.getJSONObject(position).getString("total_fee"));
-                holder.date.setText(paymentList.getJSONObject(position).getString("datetime").substring(0,10));
+                holder.amount.setText("LKR " + paymentList.getJSONObject(position).getString("total_fee"));
+                holder.date.setText(paymentList.getJSONObject(position).getString("datetime").substring(0, 10));
                 holder.name.setText(values[position]);
 //                holder.name.setText(paymentList.getJSONObject(position).getString("driver_fee"));
-
 
 
             } catch (Exception e) {

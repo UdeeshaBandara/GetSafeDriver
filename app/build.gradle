@@ -69,7 +69,7 @@ dependencies {
 
     //bottom sheet
 
-
+    // Glide photo library
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.kaopiz:kprogresshud:1.2.0'
@@ -79,6 +79,8 @@ dependencies {
     //spinner date picker
     implementation 'com.github.drawers:SpinnerDatePicker:2.0.1'
 
+
+    //driver multi image picker
     implementation 'com.github.vansikrishna:Multimager:1.0.8'
 
 

@@ -85,7 +85,7 @@ public class AddDriverFirst extends GetSafeDriverBaseFragment implements DatePic
         super.onViewCreated(view, savedInstanceState);
         dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         final Calendar c = Calendar.getInstance();
-        register=new Register();
+        register = new Register();
         hud = KProgressHUD.create(getActivity())
                 .setStyle(KProgressHUD.Style.PIE_DETERMINATE)
                 .setCancellable(false)
@@ -134,68 +134,68 @@ public class AddDriverFirst extends GetSafeDriverBaseFragment implements DatePic
                     .duration(1000)
                     .playOn(edit_txt_name);
             edit_txt_name.setError("Please enter name");
-           
+
         } else if (TextUtils.isEmpty(edit_txt_nic.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_txt_nic);
             edit_txt_nic.setError("Please enter NIC number");
-           
+
         } else if (!Pattern.matches("^([0-9]{9}[x|X|v|V]|[0-9]{12})$", edit_txt_nic.getText())) {
 
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_txt_nic);
             edit_txt_nic.setError("Please enter valid NIC number");
-           
+
         } else if (!Pattern.matches("^((B){1}[0-9]{7})$", edit_text_license_no_main.getText())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_text_license_no_main);
             edit_text_license_no_main.setError("Please enter valid License number");
-           
+
         } else if (TextUtils.isEmpty(edit_text_license_no_main.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_text_license_no_main);
             edit_text_license_no_main.setError("Please enter License number");
-           
+
         } else if (TextUtils.isEmpty(edit_text_telephone.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_text_telephone);
             edit_text_telephone.setError("Please enter contact number");
-           
+
         } else if (edit_text_telephone.getText().toString().length() != 9) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_text_telephone);
             edit_text_telephone.setError("Please enter correct number");
-           
+
         } else if (TextUtils.isEmpty(txtDriverBirthday.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(txtDriverBirthday);
             txtDriverBirthday.setError("Please select birthday");
-           
+
         } else if (TextUtils.isEmpty(txt_email.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_txt_name);
             txt_email.setError("Please enter email");
-           
+
         } else if (!Patterns.EMAIL_ADDRESS.matcher(txt_email.getText()).matches()) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(edit_txt_name);
             txt_email.setError("Please enter correct email");
-           
+
         } else if (TextUtils.isEmpty(txtType.getText().toString())) {
             YoYo.with(Techniques.Bounce)
                     .duration(1000)
                     .playOn(txtType);
             txtType.setError("Please select transport type");
-           
+
         } else {
 
             registerDriverBasic();
@@ -208,7 +208,7 @@ public class AddDriverFirst extends GetSafeDriverBaseFragment implements DatePic
     private void registerDriverBasic() {
 
         Log.e("register", "methd");
-showHUD();
+        showHUD();
         HashMap<String, String> tempParam = new HashMap<>();
         tempParam.put("name", edit_txt_name.getText().toString());
         tempParam.put("nic", edit_txt_nic.getText().toString());
@@ -230,23 +230,22 @@ showHUD();
                         tinyDB.putString("driver_id", result.getJSONObject("driver").getString("id"));
                         tinyDB.putString("phone_no", edit_text_telephone.getText().toString());
                         tinyDB.putString("email", txt_email.getText().toString());
-                        tinyDB.putBoolean("isStaffDriver", txtType.getText().toString().equals("School Transport"));
+//                        tinyDB.putBoolean("isStaffDriver", txtType.getText().toString().equals("School Transport"));
 //                        registerFirebaseUser();
                         isValidated = true;
                         ((RegisterCallBack) getActivity()).showPageTwo();
 
-                    }else{
+                    } else {
 
-                        showToast(dialog,result.getString("validation_errors"),0);
+                        showToast(dialog, result.getString("validation_errors"), 0);
                     }
-
 
 
                 } catch (Exception ex) {
                     Log.e("ex", ex.getMessage());
                     isValidated = false;
                 }
-hideHUD();
+                hideHUD();
 
             }
 
@@ -255,6 +254,7 @@ hideHUD();
 
 
     }
+
     public interface RegisterCallBack {
 
         void showPageTwo();
@@ -317,6 +317,7 @@ hideHUD();
                 @Override
                 public void onClick(View v) {
                     txtType.setText("School Transport");
+                    tinyDB.putBoolean("isStaffDriver",false);
                     typeBottomSheet.dismiss();
 
                 }
@@ -325,6 +326,7 @@ hideHUD();
                 @Override
                 public void onClick(View v) {
                     txtType.setText("Office Transport");
+                    tinyDB.putBoolean("isStaffDriver",true);
                     typeBottomSheet.dismiss();
                 }
             });
@@ -356,6 +358,7 @@ hideHUD();
                 .build()
                 .show();
     }
+
     public void showHUD() {
 
 

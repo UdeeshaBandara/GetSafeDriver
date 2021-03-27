@@ -335,7 +335,7 @@ public class Login extends GetSafeDriverBase {
     protected void onResume() {
         super.onResume();
         if (tinyDB.getBoolean("isNewUser")) {
-            showToast(dialog, "Driver Registered, Please login", 2);
+            showToast(dialog, "Driver Details sent for review", 2);
             tinyDB.putBoolean("isNewUser", false);
         }
     }
@@ -389,11 +389,16 @@ public class Login extends GetSafeDriverBase {
 
                         startActivity(new Intent(getApplicationContext(), OTP.class));
 
-                    } else
-                        showToast(dialog, result.getString("validation_errors"), 0);
+                    } else if (result.getJSONObject("registration_status").getBoolean("driver_image") || result.getJSONObject("registration_status").getBoolean("driver_nic_front") ||
+                            result.getJSONObject("registration_status").getBoolean("driver_nic_back") || result.getJSONObject("registration_status").getBoolean("driver_license") ||
+                            result.getJSONObject("registration_status").getBoolean("driver_location") || result.getJSONObject("registration_status").getBoolean("driver_destrict") ||
+                            result.getJSONObject("registration_status").getBoolean("driver_vehicle_details") || result.getJSONObject("registration_status").getBoolean("driver_vehicle_images"))
+                        showToast(dialog, "Driver not verified yet", 0);
+//                    else if(result.getBoolean("otp_sent_status"))
 
 
                 } catch (Exception e) {
+                    showToast(dialog, "Something went wrong", 0);
                     e.printStackTrace();
 
 

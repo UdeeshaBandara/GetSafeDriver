@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="#EBEBE0"
     tools:context=".Absence">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -68,17 +68,16 @@
                     android:background="@drawable/bg_action_bar">
 
 
-
                     <TextView
                         android:id="@+id/img_head"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
+                        android:layout_marginTop="32dp"
                         android:fontFamily="@font/nunito_bold"
                         android:scaleType="centerCrop"
                         android:text="Passenger Absents"
                         android:textColor="@color/black"
-                      android:layout_marginTop="32dp"
                         android:textSize="20sp" />
 
                 </RelativeLayout>
@@ -158,26 +157,39 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#EBEBE0"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
         >
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#EBEBE0"
-            android:orientation="vertical">
+            >
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_absence"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/lnr_marks"
+
                 android:layout_marginTop="15dp"
+                android:background="#EBEBE0"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
                 android:paddingBottom="80dp" />
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/nunito_regular"
+                android:visibility="gone"
+                android:layout_marginTop="40dp"
+                android:text="No absents for selected date"
+                android:textColor="@color/black" />
+        </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>
 
@@ -187,8 +199,8 @@
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_marginLeft="20dp"
-        android:padding="15dp"
         android:layout_marginTop="15dp"
+        android:padding="15dp"
         android:src="@drawable/icon_back" />
     <!--    <ScrollView-->
     <!--        android:layout_width="match_parent"-->

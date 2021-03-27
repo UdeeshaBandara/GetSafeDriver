@@ -34,7 +34,7 @@ public class Message extends GetSafeDriverBase {
     RecyclerView recyclerStudents;
     GetSafeDriverServices getSafeDriverServices;
     Dialog dialog;
-    TextView txt_search;
+    TextView txt_search, msg;
     JSONArray passengerList, originalPassengerList;
 
     @Override
@@ -45,6 +45,7 @@ public class Message extends GetSafeDriverBase {
 
         recyclerStudents = findViewById(R.id.recycler_students);
         txt_search = findViewById(R.id.txt_search);
+        msg = findViewById(R.id.msg);
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         passengerList = new JSONArray();
         originalPassengerList = new JSONArray();
@@ -212,9 +213,20 @@ public class Message extends GetSafeDriverBase {
                 try {
                     Log.e("passenger", result + "");
                     if (result.getBoolean("status")) {
+
                         passengerList = result.getJSONArray("model");
-                        originalPassengerList = result.getJSONArray("model");
-                        recyclerStudents.getAdapter().notifyDataSetChanged();
+
+                        if (passengerList.length() != 0) {
+                            Log.e("passengers ","have");
+                            msg.setVisibility(View.GONE);
+                            recyclerStudents.setVisibility(View.VISIBLE);
+                            originalPassengerList = result.getJSONArray("model");
+                            recyclerStudents.getAdapter().notifyDataSetChanged();
+                        } else {
+                            Log.e("passengers ","dont have");
+                            msg.setVisibility(View.VISIBLE);
+                            recyclerStudents.setVisibility(View.GONE);
+                        }
 
                     } else {
                         originalPassengerList = null;

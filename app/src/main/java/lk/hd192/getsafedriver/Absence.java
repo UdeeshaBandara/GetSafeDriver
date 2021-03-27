@@ -54,6 +54,7 @@ public class Absence extends GetSafeDriverBase {
     TinyDB tinyDB;
     JSONArray absentReview;
     int count = 0;
+    TextView msg;
     String selectedDate, name;
 
     public static String tel;
@@ -65,6 +66,7 @@ public class Absence extends GetSafeDriverBase {
         tinyDB = new TinyDB(getApplicationContext());
         absentReview = new JSONArray();
         recycler_absence = findViewById(R.id.recycler_absence);
+        msg = findViewById(R.id.msg);
         appBarLayout = findViewById(R.id.appBar);
         lnrTop = findViewById(R.id.lnrTop);
         status_bar = findViewById(R.id.status_bar);
@@ -77,7 +79,7 @@ public class Absence extends GetSafeDriverBase {
         selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         getAbsentList();
-        txt_current_date.setText(selectedDate);
+        txt_current_date.setText("Selected Date : " + selectedDate);
         recycler_absence.setAdapter(new AbsenceUserAdapter());
         recycler_absence.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
         recycler_absence.setNestedScrollingEnabled(false);
@@ -201,14 +203,22 @@ public class Absence extends GetSafeDriverBase {
                     if (result.getBoolean("status")) {
 
                         absentReview = result.getJSONArray("model");
-                        recycler_absence.getAdapter().notifyDataSetChanged();
-
-
+                        if (absentReview.length() != 0) {
+                            recycler_absence.getAdapter().notifyDataSetChanged();
+                            msg.setVisibility(View.GONE);
+                            recycler_absence.setVisibility(View.VISIBLE);
+                        } else {
+                            msg.setVisibility(View.VISIBLE);
+                            recycler_absence.setVisibility(View.GONE);
+                        }
                     }
+
+
 //                        showToast(dialog, "Something went wrong. Please try again", 0);
 
 
                 } catch (Exception e) {
+                    e.printStackTrace();
 
                 }
 

@@ -171,7 +171,12 @@ public class NewRequest extends GetSafeDriverBase {
             number = requestList.getJSONObject(selectedIndex).getJSONObject("user").getString("phone_no");
             selectedRequestId = requestList.getJSONObject(selectedIndex).getString("id");
             txt_pickup.setText(requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("pick_up_add1"));
-            txt_drop.setText(requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("drop_off_add1"));
+            if (tinyDB.getBoolean("isStaffDriver"))
+                txt_drop.setText(requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("drop_off_add1"));
+
+            else
+                txt_drop.setText(requestList.getJSONObject(selectedIndex).getJSONObject("child").getString("school_name"));
+
 //            txt_number.setText(number);
 
             txt_name.setText(requestList.getJSONObject(selectedIndex).getJSONObject("user").getString("name"));
@@ -282,56 +287,32 @@ public class NewRequest extends GetSafeDriverBase {
 
     }
 
-    private void getRequestDetails() {
-
-        HashMap<String, String> tempParam = new HashMap<>();
-
-
-        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.VIEW_ONE_REQUEST), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
-
-            @Override
-            public void onSuccessResponse(JSONObject result) {
-
-                try {
-                    requestList = new JSONArray();
-                    Log.e("response", result + "");
-
-                    if (result.getBoolean("status")) {
-
-
-                    } else
-                        showToast(dialog, "Something went wrong. Please try again", 0);
-
-
-                } catch (Exception e) {
-
-                    Log.e("ex", e.getMessage());
-                }
-
-            }
-        });
-
-    }
 
 
     private void acceptRequest() {
 
         HashMap<String, String> tempParam = new HashMap<>();
+//        tempParam.put("fee", );
 
 
-        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.ACCEPT_REQUEST) + "?id=" + selectedRequestId, 3, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.ACCEPT_REQUEST) + "?id=" + selectedRequestId+"&fee="+txt_price.getText().toString(), 3, tinyDB.getString("token"), new VolleyJsonCallback() {
 
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
                     requestList = new JSONArray();
+                    Log.e("accept req", result + "");
 
 
                     if (result.getBoolean("status")) {
                         showToast(dialog, "Request Confirmed", 2);
                         requestList.remove(selectedIndex);
                         recycler_students.getAdapter().notifyDataSetChanged();
+                        if(requestList.length()==0){
+                            recycler_students.setVisibility(View.GONE);
+                            msg.setVisibility(View.VISIBLE);
+                        }
 
                     } else
                         showToast(dialog, "Something went wrong. Please try again", 0);
@@ -359,7 +340,7 @@ public class NewRequest extends GetSafeDriverBase {
 
                 try {
                     requestList = new JSONArray();
-
+                    Log.e("decline req", result + "");
 
                     if (result.getBoolean("status")) {
                         showToast(dialog, "Request Canceled", 2);
