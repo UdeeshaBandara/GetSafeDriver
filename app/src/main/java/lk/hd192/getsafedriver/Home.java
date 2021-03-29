@@ -26,7 +26,8 @@ public class Home extends GetSafeDriverBase {
     //    RecyclerView recyclerHome;
     StaggeredGridLayoutManager staggeredGridLayoutManager;
     TinyDB tinyDB;
-    ImageView logout;
+    ImageView settings;
+
     Dialog dialog;
     GetSafeDriverServices getSafeDriverServices;
 
@@ -41,23 +42,26 @@ public class Home extends GetSafeDriverBase {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         tinyDB = new TinyDB(getApplicationContext());
-        logout = findViewById(R.id.logout);
-        Log.e("is staff", tinyDB.getBoolean("isStaffDriver") + "");
+
+        settings=findViewById(R.id.settings);
+
+//        Log.e("is staff", tinyDB.getBoolean("isStaffDriver") + "");
 
         hud = KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.PIE_DETERMINATE)
                 .setCancellable(false)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showToast(dialog, "Are sure you want to logout?", 3);
-            }
-        });
+
 
 //        rec
-        Log.e("token", tinyDB.getString("token"));
+        Log.e("child ", tinyDB.getString("token"));
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),Profile.class));
+            }
+        });
         homeRoutes();
 
 
@@ -115,7 +119,7 @@ public class Home extends GetSafeDriverBase {
                 try {
                     Log.e("passenger", result + "");
                     if (result.getBoolean("status")) {
-                        hideHUD();
+
 //                        passengerList = result.getJSONArray("model");
                         if (result.getJSONArray("model").length() != 0) {
 
@@ -140,7 +144,7 @@ public class Home extends GetSafeDriverBase {
 
                             showToast(dialog, "You have no passengers", 0);
 
-                        }
+                        }  hideHUD();
 
                     } else {
                         hideHUD();

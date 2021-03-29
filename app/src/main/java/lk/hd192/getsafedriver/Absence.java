@@ -126,7 +126,7 @@ public class Absence extends GetSafeDriverBase {
     }
 
     class AbsenceUserViewHolder extends RecyclerView.ViewHolder {
-        TextView passenger_name, passenger_school;
+        TextView passenger_name, passenger_school, session;
         ImageView mark;
         RelativeLayout rlt_root;
 
@@ -135,6 +135,7 @@ public class Absence extends GetSafeDriverBase {
             passenger_school = itemView.findViewById(R.id.passenger_school);
             passenger_name = itemView.findViewById(R.id.passenger_name);
             mark = itemView.findViewById(R.id.mark);
+            session = itemView.findViewById(R.id.session);
             rlt_root = itemView.findViewById(R.id.rlt_root);
         }
     }
@@ -154,10 +155,20 @@ public class Absence extends GetSafeDriverBase {
             try {
 
 
-                if (!absentReview.getJSONObject(position).getBoolean("absent"))
+                if (!absentReview.getJSONObject(position).getBoolean("absent")) {
                     holder.mark.setImageDrawable(getResources().getDrawable(R.drawable.icon_check));
-                else
+                    holder.session.setText("");
+                } else {
+                    if (absentReview.getJSONObject(position).getInt("type") == 1)
+                        holder.session.setText("Absent type - morning");
+                    else if (absentReview.getJSONObject(position).getInt("type") == 2)
+                        holder.session.setText("Absent type - evening");
+                    else if (absentReview.getJSONObject(position).getInt("type") == 3)
+                        holder.session.setText("Absent type - full day");
                     holder.mark.setImageDrawable(getResources().getDrawable(R.drawable.icon_false));
+
+                }
+
                 holder.rlt_root.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

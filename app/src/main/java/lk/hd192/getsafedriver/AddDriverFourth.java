@@ -373,7 +373,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
 
 //        outputStreamWriter.close();
         //Base64.de
-        return "data:image/jpeg;base64," + encImage;
+        return "data:image/jpg;base64," + encImage;
 
     }
 

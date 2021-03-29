@@ -40,6 +40,18 @@
             android:gravity="center_vertical"
             android:text="Nice School" />
 
+        <TextView
+            android:id="@+id/session"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/passenger_name"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="5dp"
+
+            android:fontFamily="@font/nunito_semibold"
+            android:gravity="center_vertical"
+            />
+
 
     </LinearLayout>
 

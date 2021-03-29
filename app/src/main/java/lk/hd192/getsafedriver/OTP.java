@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.json.JSONObject;
 
@@ -43,6 +44,8 @@ public class OTP extends GetSafeDriverBase {
     TextView otp_heading;
     private FirebaseAuth mAuth;
     Button btn_otp_back;
+    public KProgressHUD hud;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +61,11 @@ public class OTP extends GetSafeDriverBase {
         getSafeDriverServices = new GetSafeDriverServices();
         tinyDB = new TinyDB(getApplicationContext());
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+        hud = KProgressHUD.create(this)
+                .setStyle(KProgressHUD.Style.PIE_DETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
 
 
         btn_otp_back.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +94,7 @@ public class OTP extends GetSafeDriverBase {
 
             }
         });
-        otp_heading.setText("A verification code has been sent to your mobile \n"+tinyDB.getString("phone_no")+"");
+        otp_heading.setText("A verification code has been sent to your mobile \n" + tinyDB.getString("phone_no") + "");
 
         confirmOTP_2.addTextChangedListener(new TextWatcher() {
             @Override
@@ -170,22 +178,23 @@ public class OTP extends GetSafeDriverBase {
             }
         });
     }
+
     private void validateOTP() {
 
         HashMap<String, String> tempParam = new HashMap<>();
 
         tempParam.put("otp", confirmOTP_1.getText().toString() + confirmOTP_2.getText().toString() + confirmOTP_3.getText().toString() + confirmOTP_4.getText().toString());
 
-        Log.e("otp otken",tinyDB.getString("otp_token"));
+        Log.e("otp otken", tinyDB.getString("otp_token"));
         tempParam.put("otp-token", tinyDB.getString("otp_token"));
 
-
+        showHUD();
 //        showLoading();
         getSafeDriverServices.networkJsonRequestWithoutHeader(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_VALIDATE_OTP), 2, new VolleyJsonCallback() {
 
             @Override
             public void onSuccessResponse(JSONObject result) {
-//                hideLoading();
+                hideHUD();
                 try {
                     Log.e("response", result + "");
 
@@ -204,7 +213,7 @@ public class OTP extends GetSafeDriverBase {
 
                 } catch (Exception e) {
 
-                    Log.e("ex", e.getMessage());
+                    e.printStackTrace();
                 }
 
             }
@@ -212,14 +221,15 @@ public class OTP extends GetSafeDriverBase {
 
 
     }
-    private void firebaseLogin(){
 
-        mAuth.signInWithEmailAndPassword( tinyDB.getString("email"), tinyDB.getString("phone_no")).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+    private void firebaseLogin() {
+
+        mAuth.signInWithEmailAndPassword(tinyDB.getString("email"), tinyDB.getString("phone_no")).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
 
-                    Log.e("firebase login","success");
+                    Log.e("firebase login", "success");
 
                 } else {
 
@@ -228,9 +238,8 @@ public class OTP extends GetSafeDriverBase {
         });
 
 
-
-
     }
+
     public void getDeviceToken() {
 
 
@@ -255,17 +264,19 @@ public class OTP extends GetSafeDriverBase {
                     }
                 });
     }
+
     private void updateUserFcmToken(String fcmToken) {
         HashMap<String, String> tempParam = new HashMap<>();
 
         tempParam.put("fcm_token", fcmToken);
 
-
+        showHUD();
         getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.UPDATE_FCM), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) {
 
                 try {
+                    hideHUD();
 
                     if (result.getBoolean("saved_status")) {
 
@@ -278,13 +289,29 @@ public class OTP extends GetSafeDriverBase {
 
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
+//                    hideHUD();
 
                 }
 
             }
         });
 
+    }
+
+    public void showHUD() {
+
+
+        if (hud.isShowing()) {
+            hud.dismiss();
+        }
+        hud.show();
+    }
+
+    public void hideHUD() {
+        if (hud.isShowing()) {
+            hud.dismiss();
+        }
     }
 
 }

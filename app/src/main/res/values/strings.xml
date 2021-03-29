@@ -7,7 +7,7 @@
     <string name="REVERSE_GEO">https://maps.googleapis.com/maps/api/geocode/json</string>
 
 
-    <string name="BASE_URL">http://192.168.1.6:8000/v1/getsafe/api</string>
+    <string name="BASE_URL">https://dev.viva.echonlabs.com/v1/getsafe/api</string>
     <string name="SAVE_DRIVER">/newdriver/save</string>
     <string name="DRIVER_OTP">/driverlogin/sendotp</string>
     <string name="DRIVER_VALIDATE_OTP">/driverlogin/validateotp</string>
@@ -31,7 +31,6 @@
     <string name="JOURNEY_LIST_EVENING">/driver/journey/list/evening</string>
 
 
-
     <string name="JOURNEY_START">/driver/journey/start</string>
     <string name="JOURNEY_END">/driver/journey/end</string>
 
@@ -50,6 +49,9 @@
     <string name="VIEW_ALL_REQUEST">/driver/requests/viewall</string>
     <string name="ABSENT_REVIEW">/driver/journey/passengers/withabsentstatus</string>
     <string name="PAYMENT">/payment/get/all</string>
+
+
+    <string name="SAVE_RFID">/driver/journey/addrfid</string>
 
 
 

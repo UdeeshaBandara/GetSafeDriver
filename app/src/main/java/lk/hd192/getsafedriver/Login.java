@@ -389,12 +389,20 @@ public class Login extends GetSafeDriverBase {
 
                         startActivity(new Intent(getApplicationContext(), OTP.class));
 
-                    } else if (result.getJSONObject("registration_status").getBoolean("driver_image") || result.getJSONObject("registration_status").getBoolean("driver_nic_front") ||
-                            result.getJSONObject("registration_status").getBoolean("driver_nic_back") || result.getJSONObject("registration_status").getBoolean("driver_license") ||
-                            result.getJSONObject("registration_status").getBoolean("driver_location") || result.getJSONObject("registration_status").getBoolean("driver_destrict") ||
-                            result.getJSONObject("registration_status").getBoolean("driver_vehicle_details") || result.getJSONObject("registration_status").getBoolean("driver_vehicle_images"))
-                        showToast(dialog, "Driver not verified yet", 0);
-//                    else if(result.getBoolean("otp_sent_status"))
+                    } else if (result.getJSONObject("registration_status").getBoolean("driver_image") & result.getJSONObject("registration_status").getBoolean("driver_nic_front") &
+                            result.getJSONObject("registration_status").getBoolean("driver_nic_back") & result.getJSONObject("registration_status").getBoolean("driver_license") &
+                            result.getJSONObject("registration_status").getBoolean("driver_location") & result.getJSONObject("registration_status").getBoolean("driver_destrict") &
+                            result.getJSONObject("registration_status").getBoolean("driver_vehicle_details") & result.getJSONObject("registration_status").getBoolean("driver_vehicle_images"))
+
+                        showToast(dialog, "Your registration request is still under review", 0);
+//
+                    else if (!result.getJSONObject("registration_status").getBoolean("driver_image") || !result.getJSONObject("registration_status").getBoolean("driver_nic_front") ||
+                            !result.getJSONObject("registration_status").getBoolean("driver_nic_back") || !result.getJSONObject("registration_status").getBoolean("driver_license") ||
+                            !result.getJSONObject("registration_status").getBoolean("driver_location") || !result.getJSONObject("registration_status").getBoolean("driver_destrict") ||
+                            !result.getJSONObject("registration_status").getBoolean("driver_vehicle_details") || !result.getJSONObject("registration_status").getBoolean("driver_vehicle_images"))
+
+                        showToast(dialog, "Your registration process is not completed", 0);
+//
 
 
                 } catch (Exception e) {

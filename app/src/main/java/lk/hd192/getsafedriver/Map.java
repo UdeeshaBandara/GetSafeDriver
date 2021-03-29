@@ -157,12 +157,7 @@ public class Map extends GetSafeDriverBase {
         currentLat = 6.906475002896019;
         currentLon = 79.87047652139896;
 
-//        btnBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onBackPressed();
-//            }
-//        });
+
         btn_absent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,35 +165,16 @@ public class Map extends GetSafeDriverBase {
                 for (int n = 0; n < dropOffLocations.size(); n++) {
                     if (dropOffLocations.get(n).getPassengerName().equals(txt_name_map.getText().toString())) {
                         Log.e("selected passenger", dropOffLocations.get(n).getPassengerName());
-//                        dropOffLocations.get(n).setAbsent(true);
+
                         markAbsent(dropOffLocations.get(n).getId());
                         dropOffLocations.remove(n);
                         drawMapPolyline(new LatLng(currentLat, currentLon));
-//                        ArrayList<String> strList = (ArrayList<String>) (ArrayList<?>) (dropOffLocations);
-//                        tinyDB.putListString("tripRoute", strList);
+
                     }
                 }
-//                for (int n = 0; n < dropOffLocations.size(); n++) {
-//                    if (dropOffLocations.get(n).getPassengerName().equals(txt_name_map.getText().toString())) {
-//                        Log.e("selected passenger", dropOffLocations.get(n).getPassengerName());
-//                        dropOffLocations.get(n).setAbsent(true);
-//                        markAbsent(dropOffLocations.get(n).getId());
-//                        ArrayList<String> strList = (ArrayList<String>) (ArrayList<?>) (dropOffLocations);
-//                        tinyDB.putListString("tripRoute", strList);
-//                    }
-//                    if (!dropOffLocations.get(n).getPicked())
-//                        if (dropOffLocations.get(n).getAbsent())
-//
-//                            isPickingCompleted = true;
-//                        else
-//                            isPickingCompleted = false;
-//                    else
-//                        isPickingCompleted = true;
-//
-//                }
 
 
-                Log.e("trip status absent", isPickingCompleted + "");
+
 
             }
         });
@@ -212,10 +188,7 @@ public class Map extends GetSafeDriverBase {
                 int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
                 for (int n = 0; n < dropOffLocations.size(); n++) {
                     if (dropOffLocations.get(n).getPassengerName().equals(txt_name_map.getText().toString())) {
-//                        Log.e("selected passenger", dropOffLocations.get(n).getPassengerName());
-//
-//                        pickUpPassenger(dropOffLocations.get(n).getId());
-
+                        Log.e("pcikn drop","inside if");
 
                         if (btn_dropNPick.getText().equals("Pick")) {
                             if (timeOfDay >= 0 && timeOfDay < 12) {
@@ -251,32 +224,6 @@ public class Map extends GetSafeDriverBase {
 
                     }
                 }
-
-//                for (UserLocation user : dropOffLocations) {
-//                    Log.e("inside for", user.getId().toString());
-//                    if (user.getPassengerName().equals(txt_name_map.getText().toString())) {
-//                        if (user.getPicked()) {
-//                            dropOffPassenger(user.getId());
-//                            user.setDropped(true);
-//                        } else {
-//                            pickUpPassenger(user.getId());
-//                            user.setPicked(true);
-//                        }
-//                        ArrayList<String> strList = (ArrayList<String>) (ArrayList<?>) (dropOffLocations);
-//                        tinyDB.putListString("tripRoute", strList);
-//                    }
-//                    if (!user.getPicked())
-//                        if (user.getAbsent())
-//
-//                            isPickingCompleted = true;
-//                        else
-//                            isPickingCompleted = false;
-//                    else
-//                        isPickingCompleted = true;
-//                }
-//
-//                if (isPickingCompleted)
-//                    drawMapPolyline(new LatLng(currentLat, currentLon));
 
 
                 Log.e("trip status pick", isPickingCompleted + "");
@@ -564,64 +511,6 @@ public class Map extends GetSafeDriverBase {
         }
     }
 
-    //
-//    public void locationAddress(double lat, double lon) {
-//        Geocoder geocoder;
-//        List<Address> addressList;
-//
-//        geocoder = new Geocoder(this, Locale.getDefault());
-//
-//        try {
-//            addressList = geocoder.getFromLocation(lat, lon, 1);
-//
-//            Log.e("address", addressList.size() + " ");
-//
-//            if (addressList.size() == 0) {
-//
-//                showToast(dialog, "Oops.. \nNo Address Found in this Area ", 1);
-//
-//
-//            } else {
-////                mConfirm.setEnabled(true);
-////                LOC_ADDRESS = addressList.get(0).getAddressLine(0);
-//            }
-//
-//
-//        } catch (IOException e) {
-//
-//
-//            showToast(dialog, "Oops.. \nan error occurred ", 0);
-//
-//            e.printStackTrace();
-//        }
-//    }
-
-
-//    float[] result=new float[100];
-//    private void sortLocations() {
-//        try {
-//        result[0]=3;
-//        result[1]=3;
-//        result[2]=3;
-//
-//    for (int counter = 1; counter < dropOffLocations.size() - 1; counter++) {
-//
-//
-//        Location.distanceBetween(dropOffLocations.get(0).getLatitude(),
-//                dropOffLocations.get(0).getLongitude(),
-//                dropOffLocations.get(counter).getLatitude(),
-//                dropOffLocations.get(counter).getLongitude(), result);
-//
-//        Log.e("sorted dis",  counter+"");
-//        Log.e("sorted dis",  result.length+"");
-//        Collections.sort(dropOffLocations);
-//    }
-//
-//}catch (Exception e){
-//    Log.e("sort ex",e.getMessage());
-//}
-//    }
-
 
     public void drawMapPolyline(LatLng origin) {
         Log.e("draw polyline", "exe");
@@ -707,7 +596,11 @@ public class Map extends GetSafeDriverBase {
 //                                    if (dropOffLocations.get(v).getStatus().equals("User has completed evening trip") || dropOffLocations.get(v).getStatus().equals("User has boarded morning trip")) {
 
 
-                                    if (dropOffLocations.get(v).getStatus().equals("User has completed evening trip")) {
+                                    if (dropOffLocations.get(v).getStatus().equals("User has no trips"))
+
+                                        btn_dropNPick.setText("Pick");
+
+                                    else if (dropOffLocations.get(v).getStatus().equals("User has completed evening trip")) {
 
                                         if (timeOfDay >= 0 && timeOfDay < 12) {
 
@@ -752,9 +645,9 @@ public class Map extends GetSafeDriverBase {
 
                                     }
 
-                                    txt_name_map.setText(": " + dropOffLocations.get(v).getPassengerName());
-                                    txt_distance.setText(": " + distance.get(v));
-                                    txt_time.setText(": " + duration.get(v));
+                                    txt_name_map.setText(  dropOffLocations.get(v).getPassengerName());
+                                    txt_distance.setText( distance.get(v));
+                                    txt_time.setText( duration.get(v));
 
                                     break;
 

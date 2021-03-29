@@ -89,6 +89,9 @@ dependencies {
 
     //floating edit text
     implementation 'com.github.thomhurst:ExpandableHintText:1.0.7'
+
+    //RFID animation
+    implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
     
 
 

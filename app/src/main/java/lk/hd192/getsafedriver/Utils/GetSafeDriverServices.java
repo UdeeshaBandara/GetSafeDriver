@@ -78,7 +78,8 @@ public class GetSafeDriverServices extends GetSafeDriverBase {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/json; charset=utf-8");
+//                params.put("Content-Type", "application/json; charset=utf-8");
+                params.put("Accept","application/json");
                 return params;
             }
 
@@ -278,6 +279,7 @@ public class GetSafeDriverServices extends GetSafeDriverBase {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Cookie","laravel_session=LLKt1gLxCazYn080pnhdLWqraKj2kotuoe8EEQkh");
+//                headers.put("Accept","application/json");
                 return headers;
             }
         };
