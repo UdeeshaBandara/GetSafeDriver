@@ -48,6 +48,17 @@
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
+            <ImageView
+                android:id="@+id/stt"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/mic"
+                android:layout_marginEnd="25dp"
+                android:padding="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_alignParentRight="true" />
+
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -30,7 +30,7 @@ public class Payment extends GetSafeDriverBase {
     TinyDB tinyDB;
     Dialog dialog;
     JSONArray paymentList;
-    String[] values = {"Dilshan Madurange", "Saman Perera", "Lakshan Silva", "Harshana Fernando", "Dilshan Madurange", "Saman Perera", "Lakshan Silva", "Harshana Fernando"};
+//    String[] values = {"Dilshan Madurange", "Saman Perera", "Lakshan Silva", "Harshana Fernando", "Dilshan Madurange", "Saman Perera", "Lakshan Silva", "Harshana Fernando"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,7 @@ public class Payment extends GetSafeDriverBase {
         setContentView(R.layout.activity_payment);
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
+        msg = findViewById(R.id.msg);
         recycler_payment = findViewById(R.id.recycler_payment);
         paymentList = new JSONArray();
         tinyDB = new TinyDB(getApplicationContext());
@@ -76,7 +77,7 @@ public class Payment extends GetSafeDriverBase {
 
                 holder.amount.setText("LKR " + paymentList.getJSONObject(position).getString("total_fee"));
                 holder.date.setText(paymentList.getJSONObject(position).getString("datetime").substring(0, 10));
-                holder.name.setText(values[position]);
+                holder.name.setText(paymentList.getJSONObject(position).getJSONObject("paymentable").getString("name"));
 //                holder.name.setText(paymentList.getJSONObject(position).getString("driver_fee"));
 
 

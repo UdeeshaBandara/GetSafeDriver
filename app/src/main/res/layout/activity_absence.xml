@@ -34,7 +34,7 @@
                 android:id="@+id/rlt_calendar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="110dp"
                 android:background="@drawable/bg_messaging">
 
                 <CalendarView
@@ -92,6 +92,7 @@
             android:id="@+id/lnrTop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:background="@drawable/bg_tool_bar_expanded"
             android:orientation="vertical">
 

@@ -170,9 +170,9 @@ public class NewRequest extends GetSafeDriverBase {
         try {
             number = requestList.getJSONObject(selectedIndex).getJSONObject("user").getString("phone_no");
             selectedRequestId = requestList.getJSONObject(selectedIndex).getString("id");
-            txt_pickup.setText(requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("pick_up_add1"));
+            txt_pickup.setText(requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("pick_up_add1")+" "+requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("pick_up_add2"));
             if (tinyDB.getBoolean("isStaffDriver"))
-                txt_drop.setText(requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("drop_off_add1"));
+                txt_drop.setText(requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("drop_off_add1")+" "+requestList.getJSONObject(selectedIndex).getJSONObject("location").getString("drop_off_add2"));
 
             else
                 txt_drop.setText(requestList.getJSONObject(selectedIndex).getJSONObject("child").getString("school_name"));

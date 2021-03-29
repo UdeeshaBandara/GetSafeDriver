@@ -54,6 +54,9 @@
     <string name="SAVE_RFID">/driver/journey/addrfid</string>
 
 
+    <string name="DELETE_PASSENGER">/driver/journey/remove</string>
+
+
 
 
 

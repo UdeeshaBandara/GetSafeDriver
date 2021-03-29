@@ -7,7 +7,9 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,14 +19,18 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -62,6 +68,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import lk.hd192.getsafedriver.Utils.DirectionJSONParser;
 import lk.hd192.getsafedriver.Utils.GetSafeDriverBase;
@@ -90,6 +97,7 @@ public class Map extends GetSafeDriverBase {
     TextView txt_error;
     JSONArray passengerList;
     Polyline polyline;
+    ImageView stt;
     LocationListener locationListener;
     LocationManager locationManagerSender;
     TinyDB tinyDB;
@@ -114,6 +122,7 @@ public class Map extends GetSafeDriverBase {
         tinyDB = new TinyDB(getApplicationContext());
         mapView = findViewById(R.id.mapView);
         btn_start_trip = findViewById(R.id.btn_start_trip);
+        stt = findViewById(R.id.stt);
         txt_time = findViewById(R.id.txt_time);
         txt_distance = findViewById(R.id.txt_distance);
         txt_name_map = findViewById(R.id.txt_name_map);
@@ -132,6 +141,24 @@ public class Map extends GetSafeDriverBase {
 
         findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
 
+        stt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+                        "Need to speak");
+                try {
+                    startActivityForResult(intent, 151);
+                } catch (ActivityNotFoundException a) {
+                    Toast.makeText(getApplicationContext(),
+                            "Sorry your device not supported",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 //        tinyDB.putString("driver_id", "1");
 
         if (tinyDB.getBoolean("isStaffDriver")) {
@@ -174,8 +201,6 @@ public class Map extends GetSafeDriverBase {
                 }
 
 
-
-
             }
         });
 
@@ -188,7 +213,7 @@ public class Map extends GetSafeDriverBase {
                 int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
                 for (int n = 0; n < dropOffLocations.size(); n++) {
                     if (dropOffLocations.get(n).getPassengerName().equals(txt_name_map.getText().toString())) {
-                        Log.e("pcikn drop","inside if");
+                        Log.e("pcikn drop", "inside if");
 
                         if (btn_dropNPick.getText().equals("Pick")) {
                             if (timeOfDay >= 0 && timeOfDay < 12) {
@@ -375,6 +400,76 @@ public class Map extends GetSafeDriverBase {
 
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 151: {
+                if (resultCode == RESULT_OK && null != data) {
+
+                    ArrayList<String> result = data
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+//                    textView.setText(result.get(0));
+                    showConfirmationForVoiceCommand(dialog, result.get(0), 1);
+                    for (int p = 0; p < dropOffLocations.size(); p++) {
+
+                        if (dropOffLocations.get(p).getPassengerName().equalsIgnoreCase("picked " + result.get(0))) {
+                            showConfirmationForVoiceCommand(dialog, result.get(0), 1);
+
+                        } else if (dropOffLocations.get(p).getPassengerName().equalsIgnoreCase("Dropped " + result.get(0))) {
+
+                            showConfirmationForVoiceCommand(dialog, result.get(0), 2);
+                        }
+
+                    }
+
+                }
+                break;
+            }
+        }
+    }
+
+    public void showConfirmationForVoiceCommand(final Dialog dialog, String name, int type) {
+
+
+        // Setting dialog view
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.CENTER);
+
+
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setTitle(null);
+
+        dialog.setContentView(R.layout.voice_recognition_popup);
+
+
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        TextView msgToShow = dialog.findViewById(R.id.name);
+
+        if (type == 1)
+            msgToShow.setText("Picked " + name);
+        else
+            msgToShow.setText("Dropped " + name);
+
+        dialog.show();
+
+
+        Handler mHandler = new Handler();
+        Runnable mRunnable = new Runnable() {
+
+            public void run() {
+                if (dialog != null && dialog.isShowing()) dialog.dismiss();
+            }
+        };
+        mHandler.postDelayed(mRunnable, 6000);
+
 
     }
 
@@ -645,9 +740,9 @@ public class Map extends GetSafeDriverBase {
 
                                     }
 
-                                    txt_name_map.setText(  dropOffLocations.get(v).getPassengerName());
-                                    txt_distance.setText( distance.get(v));
-                                    txt_time.setText( duration.get(v));
+                                    txt_name_map.setText(dropOffLocations.get(v).getPassengerName());
+                                    txt_distance.setText(distance.get(v));
+                                    txt_time.setText(duration.get(v));
 
                                     break;
 
@@ -888,6 +983,7 @@ public class Map extends GetSafeDriverBase {
 
 //            googleMap.addPolyline(lineOptions);
         }
+
     }
 
 
@@ -937,6 +1033,13 @@ public class Map extends GetSafeDriverBase {
 
             }
             Collections.sort(dropOffLocations);
+
+
+            for (int e = 0; e < dropOffLocations.size(); e++) {
+                Log.e("distance ", dropOffLocations.get(e).getDistance() + "");
+
+
+            }
 
             drawMapPolyline(new LatLng(currentLat, currentLon));
 //            ArrayList<String> strList = (ArrayList<String>) (ArrayList<?>) (dropOffLocations);

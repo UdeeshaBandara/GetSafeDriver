@@ -10,6 +10,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -55,7 +56,8 @@ public class Absence extends GetSafeDriverBase {
     JSONArray absentReview;
     int count = 0;
     TextView msg;
-    String selectedDate, name;
+
+    String selectedDate, selectedId;
 
     public static String tel;
 
@@ -157,8 +159,9 @@ public class Absence extends GetSafeDriverBase {
 
                 if (!absentReview.getJSONObject(position).getBoolean("absent")) {
                     holder.mark.setImageDrawable(getResources().getDrawable(R.drawable.icon_check));
-                    holder.session.setText("");
+                    holder.session.setVisibility(View.GONE);
                 } else {
+                    holder.session.setVisibility(View.VISIBLE);
                     if (absentReview.getJSONObject(position).getInt("type") == 1)
                         holder.session.setText("Absent type - morning");
                     else if (absentReview.getJSONObject(position).getInt("type") == 2)
@@ -168,7 +171,7 @@ public class Absence extends GetSafeDriverBase {
                     holder.mark.setImageDrawable(getResources().getDrawable(R.drawable.icon_false));
 
                 }
-
+                selectedId = absentReview.getJSONObject(position).getString("id");
                 holder.rlt_root.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -291,6 +294,46 @@ public class Absence extends GetSafeDriverBase {
     }
 
     private void deletePassenger() {
+        HashMap<String, String> tempParam = new HashMap<>();
 
+
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.DELETE_PASSENGER) + "?id=" + selectedId, 1, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+
+                try {
+
+                    Log.e("result", result + "");
+
+                    if (result.getBoolean("status")) {
+                        showToast(dialog, "Passenger removed", 2);
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                onBackPressed();
+
+
+                            }
+                        }, 3000);
+
+
+                    } else {
+
+                        showToast(dialog, "Something went wrong. Please try again", 0);
+
+                    }
+
+
+//                        showToast(dialog, "Something went wrong. Please try again", 0);
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+
+            }
+        });
     }
 }

@@ -138,7 +138,9 @@ public class Profile extends GetSafeDriverBase {
 
                     holder.student_school.setText(passengerList.getJSONObject(position).getString("school_name"));
 
+
                 }
+                holder.rfid.setText(passengerList.getJSONObject(position).getString("rfid")=="null"?"":passengerList.getJSONObject(position).getString("rfid"));
                 id = passengerList.getJSONObject(position).getString("id");
                 holder.passenger_name.setText(passengerList.getJSONObject(position).getString("name"));
 
@@ -220,7 +222,7 @@ public class Profile extends GetSafeDriverBase {
 
         HashMap<String, String> tempParam = new HashMap<>();
 
-showHUD();
+        showHUD();
         getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.GET_ALL_PASSENGERS), 1, tinyDB.getString("token"), new VolleyJsonCallback() {
 
             @Override
@@ -312,7 +314,9 @@ showHUD();
                 try {
 
                     if (result.getBoolean("status")) {
-
+                        passengerList = new JSONArray();
+                        getAllPassengers();
+                        recycler_rfId.getAdapter().notifyDataSetChanged();
                         showToast(dialog, "RFID saved successfully", 2);
 
                     } else {
