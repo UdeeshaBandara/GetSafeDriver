@@ -61,7 +61,7 @@ public class AddDriverFirst extends GetSafeDriverBaseFragment implements DatePic
     public KProgressHUD hud;
     private DatabaseReference firebaseDatabase;
     private FirebaseAuth mAuth;
-    CustomEditText txtDriverBirthday, txtType, edit_txt_name, edit_txt_nic, edit_text_license_no_main, edit_text_telephone, txt_email;
+    CustomEditText txt_charge,txtDriverBirthday, txtType, edit_txt_name, edit_txt_nic, edit_text_license_no_main, edit_text_telephone, txt_email;
 
     public AddDriverFirst() {
         // Required empty public constructor
@@ -100,6 +100,7 @@ public class AddDriverFirst extends GetSafeDriverBaseFragment implements DatePic
         getSafeDriverServices = new GetSafeDriverServices();
         tinyDB = new TinyDB(getActivity());
         txtDriverBirthday = view.findViewById(R.id.txt_driver_birthday);
+        txt_charge = view.findViewById(R.id.txt_charge);
         txtType = view.findViewById(R.id.txt_type);
         edit_txt_name = view.findViewById(R.id.edit_txt_name);
         edit_txt_nic = view.findViewById(R.id.edit_txt_nic);
@@ -217,6 +218,7 @@ public class AddDriverFirst extends GetSafeDriverBaseFragment implements DatePic
         tempParam.put("birthday", txtDriverBirthday.getText().toString());
         tempParam.put("email", txt_email.getText().toString());
         tempParam.put("type", (txtType.getText().toString().split("\\s+")[0]).toLowerCase());
+        tempParam.put("per_km_charge", txt_charge.getText().toString());
 
 
         getSafeDriverServices.networkJsonRequestWithoutHeader(getActivity(), tempParam, getString(R.string.BASE_URL) + getString(R.string.DRIVER_SAVE), 2, new VolleyJsonCallback() {
@@ -304,7 +306,7 @@ public class AddDriverFirst extends GetSafeDriverBaseFragment implements DatePic
         @Override
         protected void onStart() {
             super.onStart();
-            getBehavior().setPeekHeight(350, true);
+            getBehavior().setPeekHeight(380, true);
             getBehavior().setDraggable(false);
         }
 

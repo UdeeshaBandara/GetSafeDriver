@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -92,6 +93,7 @@ public class Map extends GetSafeDriverBase {
     CameraPosition cameraPosition;
     TextView txt_name_map, txt_distance, txt_time;
     Boolean firstTime = true;
+    TextToSpeech textToSpeech;
     String wayPoints;
     LinearLayout lnr_trip_details;
     TextView txt_error;
@@ -123,6 +125,7 @@ public class Map extends GetSafeDriverBase {
         mapView = findViewById(R.id.mapView);
         btn_start_trip = findViewById(R.id.btn_start_trip);
         stt = findViewById(R.id.stt);
+
         txt_time = findViewById(R.id.txt_time);
         txt_distance = findViewById(R.id.txt_distance);
         txt_name_map = findViewById(R.id.txt_name_map);
@@ -266,6 +269,7 @@ public class Map extends GetSafeDriverBase {
                     txt_error.setVisibility(View.GONE);
                     lnr_trip_details.setVisibility(View.VISIBLE);
                     tinyDB.putBoolean("isTripStart", true);
+                    stt.setVisibility(View.VISIBLE);
 
 
                     Log.e("drop offs", tinyDB.getListString("tripRoute") + "");
@@ -400,6 +404,20 @@ public class Map extends GetSafeDriverBase {
 
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
+        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR) {
+
+                    textToSpeech.setLanguage(Locale.UK);
+
+
+                }
+            }
+
+        });
+//        textToSpeech.setOnUtteranceProgressListener(ttsProgressListener);
+
 
     }
 
@@ -408,31 +426,127 @@ public class Map extends GetSafeDriverBase {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 151: {
-                if (resultCode == RESULT_OK && null != data) {
+                try {
+                    if (resultCode == RESULT_OK && null != data) {
 
-                    ArrayList<String> result = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                        ArrayList<String> result = data
+                                .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 //                    textView.setText(result.get(0));
-                    showConfirmationForVoiceCommand(dialog, result.get(0), 1);
-                    for (int p = 0; p < dropOffLocations.size(); p++) {
 
-                        if (dropOffLocations.get(p).getPassengerName().equalsIgnoreCase("picked " + result.get(0))) {
-                            showConfirmationForVoiceCommand(dialog, result.get(0), 1);
 
-                        } else if (dropOffLocations.get(p).getPassengerName().equalsIgnoreCase("Dropped " + result.get(0))) {
+//                    levenshtein(dropOffLocations.get(0).getPassengerName(), result.get(0));
+                        Calendar c = Calendar.getInstance();
+                        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
 
-                            showConfirmationForVoiceCommand(dialog, result.get(0), 2);
+                        for (int p = 0; p < dropOffLocations.size(); p++) {
+                            if (timeOfDay >= 0 && timeOfDay < 12) {
+
+                                if (result.get(0).equalsIgnoreCase("pickup")) {
+                                    if (dropOffLocations.get(p).getStatus().equals("User has completed evening trip")) {
+                                        continue;
+
+                                    }
+                                    String text = result.get(0) + " " + dropOffLocations.get(p).getPassengerName();
+                                    textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null, null);
+                                    showConfirmationForVoiceCommand(dialog, text);
+                                    pickUpPassenger(dropOffLocations.get(p).getId());
+                                    break;
+                                }else if (result.get(0).equalsIgnoreCase("drop off")) {
+                                    if (dropOffLocations.get(p).getStatus().equals("User has boarded morning trip")) {
+                                        continue;
+
+                                    }
+                                    String text = result.get(0) + " " + dropOffLocations.get(p).getPassengerName();
+                                    textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null, null);
+                                    showConfirmationForVoiceCommand(dialog, text);
+                                    dropOffPassenger(dropOffLocations.get(p).getId());
+                                    break;
+
+
+                                }
+
+                            } else if (timeOfDay >= 12) {
+
+                                if (result.get(0).equalsIgnoreCase("pickup")) {
+                                    if (dropOffLocations.get(p).getStatus().equals("User has completed morning trip")|| dropOffLocations.get(p).getStatus().equals("User has no trips")) {
+                                        continue;
+
+                                    }
+                                    String text = result.get(0) + " " + dropOffLocations.get(p).getPassengerName();
+                                    textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null, null);
+                                    showConfirmationForVoiceCommand(dialog, text);
+                                    pickUpPassenger(dropOffLocations.get(p).getId());
+                                    break;
+
+                                } else if (result.get(0).equalsIgnoreCase("drop off")) {
+                                    if (dropOffLocations.get(p).getStatus().equals("User has boarded evening trip")) {
+                                        continue;
+
+                                    }
+                                    String text = result.get(0) + " " + dropOffLocations.get(p).getPassengerName();
+                                    textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null, null);
+                                    showConfirmationForVoiceCommand(dialog, text);
+                                    dropOffPassenger(dropOffLocations.get(p).getId());
+                                    break;
+                                }
+
+
+                            }
+
                         }
 
                     }
-
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
             }
         }
     }
 
-    public void showConfirmationForVoiceCommand(final Dialog dialog, String name, int type) {
+
+    int levenshtein(String token1, String token2) {
+        int[] distances = new int[token1.length() + 1];
+
+        for (int t1 = 1; t1 <= token1.length(); t1++) {
+            if (token1.charAt(t1 - 1) == token2.charAt(0)) {
+                distances[t1] = calcMin(distances[t1 - 1], t1 - 1, t1);
+            } else {
+                distances[t1] = calcMin(distances[t1 - 1], t1 - 1, t1) + 1;
+            }
+        }
+
+        int dist = 0;
+        for (int t2 = 1; t2 < token2.length(); t2++) {
+            dist = t2 + 1;
+            for (int t1 = 1; t1 <= token1.length(); t1++) {
+                int tempDist;
+                if (token1.charAt(t1 - 1) == token2.charAt(t2)) {
+                    tempDist = calcMin(dist, distances[t1 - 1], distances[t1]);
+                } else {
+                    tempDist = calcMin(dist, distances[t1 - 1], distances[t1]) + 1;
+                }
+                distances[t1 - 1] = dist;
+                dist = tempDist;
+            }
+            distances[token1.length()] = dist;
+        }
+        Log.e("dis string", dist + "");
+        return dist;
+    }
+
+    static int calcMin(int a, int b, int c) {
+        if (a <= b && a <= c) {
+            return a;
+        } else if (b <= a && b <= c) {
+            return b;
+        } else {
+            return c;
+        }
+    }
+
+
+    public void showConfirmationForVoiceCommand(final Dialog dialog, String name) {
 
 
         // Setting dialog view
@@ -453,10 +567,9 @@ public class Map extends GetSafeDriverBase {
 
         TextView msgToShow = dialog.findViewById(R.id.name);
 
-        if (type == 1)
-            msgToShow.setText("Picked " + name);
-        else
-            msgToShow.setText("Dropped " + name);
+
+        msgToShow.setText(name);
+
 
         dialog.show();
 
@@ -480,6 +593,7 @@ public class Map extends GetSafeDriverBase {
 
             btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_stop));
             btn_start_trip.setText("End Trip");
+            stt.setVisibility(View.VISIBLE);
             txt_error.setVisibility(View.GONE);
             lnr_trip_details.setVisibility(View.VISIBLE);
             Calendar c = Calendar.getInstance();
@@ -575,8 +689,7 @@ public class Map extends GetSafeDriverBase {
 
                 } catch (Exception e) {
 
-
-                    //Toast.makeText(getApplicationContext(), "Something Went Wrong in Location Service !", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
 
                 }
 
@@ -690,6 +803,9 @@ public class Map extends GetSafeDriverBase {
                                 if (distance.size() != 0 & duration.size() != 0) {
 //                                    if (dropOffLocations.get(v).getStatus().equals("User has completed evening trip") || dropOffLocations.get(v).getStatus().equals("User has boarded morning trip")) {
 
+                                    txt_name_map.setText(dropOffLocations.get(v).getPassengerName());
+                                    txt_distance.setText(distance.get(v));
+                                    txt_time.setText(duration.get(v));
 
                                     if (dropOffLocations.get(v).getStatus().equals("User has no trips"))
 
@@ -703,12 +819,13 @@ public class Map extends GetSafeDriverBase {
                                         } else if (timeOfDay >= 12) {
                                             btn_dropNPick.setEnabled(false);
                                             btn_dropNPick.setText("Dropped");
+//                                            dropOffLocations.remove(v);
 
                                         }
                                     } else if (dropOffLocations.get(v).getStatus().equals("User has completed morning trip")) {
 
                                         if (timeOfDay >= 0 && timeOfDay < 12) {
-
+//                                            dropOffLocations.remove(v);
                                             btn_dropNPick.setText("Dropped");
                                             btn_dropNPick.setEnabled(false);
                                         } else if (timeOfDay >= 12) {
@@ -740,9 +857,6 @@ public class Map extends GetSafeDriverBase {
 
                                     }
 
-                                    txt_name_map.setText(dropOffLocations.get(v).getPassengerName());
-                                    txt_distance.setText(distance.get(v));
-                                    txt_time.setText(duration.get(v));
 
                                     break;
 
@@ -1025,14 +1139,48 @@ public class Map extends GetSafeDriverBase {
 
     void getPickupLatLong() {
         try {
+            Calendar c = Calendar.getInstance();
+            int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
             Log.e("getPickupLatLong", "exe");
             for (int jk = 0; jk < passengerList.length(); jk++) {
 
+                if (timeOfDay >= 0 && timeOfDay < 12) {
+                    if (passengerList.getJSONObject(jk).getString("status").equalsIgnoreCase("User has completed morning trip"))
+                        continue;
+                    dropOffLocations.add(jk, new UserLocation(passengerList.getJSONObject(jk).getString("id"), passengerList.getJSONObject(jk).getString("name"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_longitude"), calculateDistance(currentLat, currentLon, passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude")), passengerList.getJSONObject(jk).getString("status")));
 
-                dropOffLocations.add(jk, new UserLocation(passengerList.getJSONObject(jk).getString("id"), passengerList.getJSONObject(jk).getString("name"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_longitude"), calculateDistance(currentLat, currentLon, passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude")), passengerList.getJSONObject(jk).getString("status")));
 
+                } else if (timeOfDay >= 12) {
+                    if (passengerList.getJSONObject(jk).getString("status").equalsIgnoreCase("User has completed evening trip"))
+                        continue;
+                    dropOffLocations.add(jk, new UserLocation(passengerList.getJSONObject(jk).getString("id"), passengerList.getJSONObject(jk).getString("name"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("drop_off_longitude"), calculateDistance(currentLat, currentLon, passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_latitude"), passengerList.getJSONObject(jk).getJSONObject("location").getDouble("pick_up_longitude")), passengerList.getJSONObject(jk).getString("status")));
+
+
+                }
             }
-            Collections.sort(dropOffLocations);
+            if (dropOffLocations.size() == 0) {
+                showToast(dialog, "All passengers are dropped off", 0);
+                if (btn_start_trip.getText().toString().equals("End Trip")) {
+                    notifyTripEnd();
+                    stt.setVisibility(View.GONE);
+                    dropOffLocations.clear();
+                    txt_error.setVisibility(View.VISIBLE);
+                    lnr_trip_details.setVisibility(View.GONE);
+                    distance.clear();
+                    googleMap.clear();
+                    duration.clear();
+                    tinyDB.putBoolean("isTripStart", false);
+                    tinyDB.remove("tripRoute");
+
+                    btn_start_trip.setBackground(getResources().getDrawable(R.drawable.bg_btn_ok));
+                    btn_start_trip.setText("Start Trip");
+                    locationRef.child("status").setValue(btn_start_trip.getText().toString());
+
+
+                }
+
+            } else
+                Collections.sort(dropOffLocations);
 
 
             for (int e = 0; e < dropOffLocations.size(); e++) {
@@ -1356,6 +1504,7 @@ public class Map extends GetSafeDriverBase {
             public void onClick(View view) {
                 dialog.dismiss();
                 notifyTripEnd();
+                stt.setVisibility(View.GONE);
                 dropOffLocations.clear();
                 txt_error.setVisibility(View.VISIBLE);
                 lnr_trip_details.setVisibility(View.GONE);

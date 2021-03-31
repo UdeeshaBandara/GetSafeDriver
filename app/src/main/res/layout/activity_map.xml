@@ -55,6 +55,7 @@
                 android:src="@drawable/mic"
                 android:layout_marginEnd="25dp"
                 android:padding="10dp"
+                android:visibility="gone"
                 android:layout_marginTop="5dp"
                 android:layout_alignParentRight="true" />
 

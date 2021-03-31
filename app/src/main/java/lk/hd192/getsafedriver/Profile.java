@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.libizo.CustomEditText;
 import com.ramotion.foldingcell.FoldingCell;
 
 import org.json.JSONArray;
@@ -47,6 +48,7 @@ public class Profile extends GetSafeDriverBase {
     JSONArray passengerList;
     TextView msg;
     String id;
+    CustomEditText charge;
     public KProgressHUD hud;
 
     @Override
@@ -59,6 +61,7 @@ public class Profile extends GetSafeDriverBase {
         tel = findViewById(R.id.tel);
         name = findViewById(R.id.name);
         acc_type = findViewById(R.id.acc_type);
+        charge = findViewById(R.id.txt_charge);
         tinyDB = new TinyDB(getApplicationContext());
         getSafeDriverServices = new GetSafeDriverServices();
         hud = KProgressHUD.create(this)
@@ -318,6 +321,36 @@ public class Profile extends GetSafeDriverBase {
                         getAllPassengers();
                         recycler_rfId.getAdapter().notifyDataSetChanged();
                         showToast(dialog, "RFID saved successfully", 2);
+
+                    } else {
+                        showToast(dialog, "Failed to save RFID", 0);
+
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+
+            }
+        });
+
+    }
+private void updateCharge() {
+
+
+        HashMap<String, String> tempParam = new HashMap<>();
+
+        showHUD();
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.SAVE_RFID), 2, tinyDB.getString("token"), new VolleyJsonCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) {
+                hideHUD();
+                try {
+
+                    if (result.getBoolean("status")) {
+
 
                     } else {
                         showToast(dialog, "Failed to save RFID", 0);

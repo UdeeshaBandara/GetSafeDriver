@@ -136,6 +136,37 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/nunito_semibold"
+                        android:text="Charge per KM"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <com.libizo.CustomEditText
+                        android:id="@+id/txt_charge"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="35dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/nunito_semibold"
+                        android:inputType="number"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:maxLength="3"
+                        app:libIZO_clearIconTint="#8f1f15"
+                        app:libIZO_setBorderColor="#A37C07"
+                        app:libIZO_setBorderView="true"
+                        app:libIZO_setClearIconVisible="true"
+                        app:libIZO_setCornerRadius="4dp"
+                        app:libIZO_setStrokeWidth="1dp" />
+
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1.5dp"
@@ -167,12 +198,13 @@
                         android:id="@+id/msg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
                         android:fontFamily="@font/nunito_regular"
-                        android:visibility="gone"
-                        android:text="No Passenger(s) to message"
-                        android:textColor="@color/black" />
+                        android:gravity="center"
+                        android:text="No Passenger(s) to manage RFIDs"
+                        android:textColor="@color/black"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>

@@ -252,10 +252,13 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
             imagesList = data.getParcelableArrayListExtra(Constants.KEY_BUNDLE_LIST);
             if (fromDriverPic) {
                 imageDriver.setImageURI(imagesList.get(0).uri);
-//                encodeImage(imagesList.get(0).imagePath);
+                encodeImage(imagesList.get(0).imagePath);
                 fromDriverPic = false;
 
-                imagesToUpload[0] = compressImage(imagesList.get(0).uri.toString());
+//                imagesToUpload[0] = compressImage(imagesList.get(0).uri.toString());
+                imagesToUpload[0] = imagesList.get(0).imagePath.toString();
+
+
 //                saveBitmapToFile(new File(imagesToUpload[0].imagePath));
 //                compressImage(imagesToUpload[0].uri.toString());
                 Log.e("1 imagesToUpload", imagesToUpload.length + "");
@@ -269,20 +272,25 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
                     if (fromIdTwo) fromIdTwo = false;
                     else if (fromIdOne) fromIdOne = false;
 
-                    imagesToUpload[1] = compressImage(imagesList.get(0).uri.toString());
-                    imagesToUpload[2] = compressImage(imagesList.get(1).uri.toString());
+//                    imagesToUpload[1] = compressImage(imagesList.get(0).uri.toString());
+//                    imagesToUpload[2] = compressImage(imagesList.get(1).uri.toString());
+                    imagesToUpload[1] = imagesList.get(0).imagePath;
+                    imagesToUpload[2] = imagesList.get(1).imagePath;
+
 
                 } else if (fromIdOne) {
                     imgIdOne.setImageURI(imagesList.get(0).uri);
 
-                    imagesToUpload[1] = compressImage(imagesList.get(0).uri.toString());
+//                    imagesToUpload[1] = compressImage(imagesList.get(0).uri.toString());
+                    imagesToUpload[1] = imagesList.get(0).imagePath;
 
                     fromIdOne = false;
                 } else if (fromIdTwo) {
 
                     imgIdTwo.setImageURI(imagesList.get(0).uri);
                     fromIdTwo = false;
-                    imagesToUpload[2] = compressImage(imagesList.get(0).uri.toString());
+//                    imagesToUpload[2] = compressImage(imagesList.get(0).uri.toString());
+                    imagesToUpload[2] = imagesList.get(0).imagePath;
 
                 }
 
@@ -298,18 +306,22 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
                     else if (fromLicTwo) fromLicTwo = false;
 
 
-                    imagesToUpload[3] = compressImage(imagesList.get(0).uri.toString());
-                    imagesToUpload[4] = compressImage(imagesList.get(1).uri.toString());
+//                    imagesToUpload[3] = compressImage(imagesList.get(0).uri.toString());
+//                    imagesToUpload[4] = compressImage(imagesList.get(1).uri.toString());
+                    imagesToUpload[3] = imagesList.get(1).imagePath;
+                    imagesToUpload[4] = imagesList.get(1).imagePath;
                 } else if (fromLicOne) {
                     imgLicOne.setImageURI(imagesList.get(0).uri);
                     fromLicOne = false;
 
-                    imagesToUpload[3] = compressImage(imagesList.get(0).uri.toString());
+//                    imagesToUpload[3] = compressImage(imagesList.get(0).uri.toString());
+                    imagesToUpload[3] = imagesList.get(0).imagePath;
                 } else if (fromLicTwo) {
                     imgLicTwo.setImageURI(imagesList.get(0).uri);
                     fromLicTwo = false;
 
-                    imagesToUpload[4] = compressImage(imagesList.get(0).uri.toString());
+                    imagesToUpload[4] = imagesList.get(0).imagePath;
+//                    imagesToUpload[4] = compressImage(imagesList.get(0).uri.toString());
 
                 }
 
@@ -324,10 +336,15 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
                     img_vehicle_two.setImageURI(imagesList.get(1).uri);
                     img_vehicle_four.setImageURI(imagesList.get(3).uri);
 
-                    imagesToUpload[5] = compressImage(imagesList.get(0).uri.toString());
-                    imagesToUpload[6] = compressImage(imagesList.get(1).uri.toString());
-                    imagesToUpload[7] = compressImage(imagesList.get(2).uri.toString());
-                    imagesToUpload[8] = compressImage(imagesList.get(3).uri.toString());
+//                    imagesToUpload[5] = compressImage(imagesList.get(0).uri.toString());
+//                    imagesToUpload[6] = compressImage(imagesList.get(1).uri.toString());
+//                    imagesToUpload[7] = compressImage(imagesList.get(2).uri.toString());
+//                    imagesToUpload[8] = compressImage(imagesList.get(3).uri.toString());
+
+                    imagesToUpload[5] = imagesList.get(0).imagePath;
+                    imagesToUpload[6] = imagesList.get(1).imagePath;
+                    imagesToUpload[7] = imagesList.get(2).imagePath;
+                    imagesToUpload[8] = imagesList.get(3).imagePath;
                     fromVehicleOne = false;
                     imagesList.clear();
                 } else
@@ -373,7 +390,7 @@ public class AddDriverFourth extends GetSafeDriverBaseFragment {
 
 //        outputStreamWriter.close();
         //Base64.de
-        return "data:image/jpg;base64," + encImage;
+        return "data:image/jpeg;base64," + encImage;
 
     }
 

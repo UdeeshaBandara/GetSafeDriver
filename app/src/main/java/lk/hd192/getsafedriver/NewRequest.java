@@ -48,7 +48,7 @@ public class NewRequest extends GetSafeDriverBase {
     Button mConfirm, cancel;
     TextView txt_name, txt_pickup, txt_drop, msg;
     ImageView close;
-    EditText txt_price;
+
     String number = "", selectedRequestId = "";
     int selectedIndex = -1;
 
@@ -163,7 +163,7 @@ public class NewRequest extends GetSafeDriverBase {
         txt_drop = popupView.findViewById(R.id.txt_drop);
         txt_pickup = popupView.findViewById(R.id.txt_pickup);
         txt_name = popupView.findViewById(R.id.txt_name);
-        txt_price = popupView.findViewById(R.id.txt_price);
+
         close = popupView.findViewById(R.id.close);
 
 
@@ -216,13 +216,7 @@ public class NewRequest extends GetSafeDriverBase {
             public void onClick(View v) {
 
 
-                if (TextUtils.isEmpty(txt_price.getText().toString())) {
 
-                    YoYo.with(Techniques.Bounce)
-                            .duration(1000)
-                            .playOn(txt_price);
-                    showToast(dialog, "Please suggest a price", 0);
-                } else
                     acceptRequest();
 
                 popupWindow.dismiss();
@@ -295,7 +289,7 @@ public class NewRequest extends GetSafeDriverBase {
 //        tempParam.put("fee", );
 
 
-        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.ACCEPT_REQUEST) + "?id=" + selectedRequestId+"&fee="+txt_price.getText().toString(), 3, tinyDB.getString("token"), new VolleyJsonCallback() {
+        getSafeDriverServices.networkJsonRequestWithHeaders(this, tempParam, getString(R.string.BASE_URL) + getString(R.string.ACCEPT_REQUEST) + "?id=" + selectedRequestId+"&fee=1000", 3, tinyDB.getString("token"), new VolleyJsonCallback() {
 
             @Override
             public void onSuccessResponse(JSONObject result) {

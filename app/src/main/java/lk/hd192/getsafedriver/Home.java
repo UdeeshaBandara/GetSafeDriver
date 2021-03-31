@@ -46,7 +46,7 @@ public class Home extends GetSafeDriverBase {
         settings=findViewById(R.id.settings);
 
 //        Log.e("is staff", tinyDB.getBoolean("isStaffDriver") + "");
-
+//        tinyDB.putBoolean("isStaffDriver",true);
         hud = KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.PIE_DETERMINATE)
                 .setCancellable(false)
@@ -55,7 +55,7 @@ public class Home extends GetSafeDriverBase {
 
 
 //        rec
-        Log.e("child ", tinyDB.getString("token"));
+//        Log.e("child ", tinyDB.getString("token"));
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -200,9 +200,11 @@ public class OTP extends GetSafeDriverBase {
 
                     if (result.getBoolean("otp_token_validity")) {
                         tinyDB.putBoolean("isLogged", true);
+//                        tinyDB.putBoolean("isStaffDriver", true);
                         tinyDB.putString("token", result.getString("access_token"));
-
-                        tinyDB.putString("driver_id", result.getJSONObject("user").getString("id"));
+//                        if (result.getString("type").equals("office-transport"))
+//                            tinyDB.putBoolean("isStaffDriver", true);
+                            tinyDB.putString("driver_id", result.getJSONObject("user").getString("id"));
 //                        firebaseLogin();
                         getDeviceToken();
 
